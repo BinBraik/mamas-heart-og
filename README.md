@@ -24,3 +24,17 @@ You can preview this project locally in either of these ways:
 4. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
 5. Select your branch (commonly `main`) and folder **`/ (root)`**.
 6. Save the settings and wait for deployment to complete.
+
+## How to update branding
+
+When refreshing brand styling or messaging, start with these files and sections first:
+
+1. **`assets/css/styles.css`**
+   - Update `:root` brand, neutral, and semantic tokens at the top of the file.
+   - Review major visual sections (`/* NAV */`, `/* HERO */`, `/* PRODUCTS */`, `/* TESTIMONIALS */`, etc.) to ensure they consume semantic tokens.
+2. **`index.html`**
+   - Update the `<!-- BRAND LOGO -->` block for logo name/tagline changes.
+   - Update product showcase content in `<!-- PRODUCTS GRID -->`.
+   - Update social proof content in `<!-- TESTIMONIALS -->`.
+3. **`assets/js/main.js`**
+   - If branding updates affect interactions, adjust the startup modules (`initMobileMenu`, `initSmoothScroll`, `initAddButtons`, `initScrollReveal`) and keep initialization in one startup block.
