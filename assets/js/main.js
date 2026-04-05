@@ -46,37 +46,29 @@ function initAddButtons() {
 
 
 function initThemeSwitcher() {
-  const themeButtons = document.querySelectorAll('.theme-btn[data-theme]');
+  const themeSelect = document.getElementById('themeSelect');
 
-  if (!themeButtons.length) {
+  if (!themeSelect) {
     return;
   }
 
   const root = document.documentElement;
-  const defaultTheme = 'goldfish';
+  const defaultTheme = 'sunflower';
   const savedTheme = localStorage.getItem('mh-theme');
-  const initialTheme = savedTheme || defaultTheme;
+  const availableThemes = Array.from(themeSelect.options).map((option) => option.value);
+  const initialTheme = availableThemes.includes(savedTheme) ? savedTheme : defaultTheme;
 
   const setTheme = (themeName) => {
     root.setAttribute('data-theme', themeName);
-    themeButtons.forEach((button) => {
-      const isActive = button.dataset.theme === themeName;
-      button.classList.toggle('is-active', isActive);
-      button.setAttribute('aria-pressed', String(isActive));
-    });
+    themeSelect.value = themeName;
   };
 
   setTheme(initialTheme);
 
-  themeButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const selectedTheme = button.dataset.theme;
-      if (!selectedTheme) {
-        return;
-      }
-      setTheme(selectedTheme);
-      localStorage.setItem('mh-theme', selectedTheme);
-    });
+  themeSelect.addEventListener('change', (event) => {
+    const selectedTheme = event.target.value;
+    setTheme(selectedTheme);
+    localStorage.setItem('mh-theme', selectedTheme);
   });
 }
 
