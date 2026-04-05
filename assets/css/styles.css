@@ -89,11 +89,17 @@
     overflow-x: hidden;
   }
 
-  /* ── LOGO SVG inline ── */
+  /* ── LOGO ── */
   .logo-svg {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+  }
+  .logo-img {
+    width: 190px;
+    height: auto;
+    display: block;
+    object-fit: contain;
   }
   .logo-text-main {
     font-family: 'Cormorant Garamond', serif;
@@ -103,14 +109,6 @@
     line-height: 1;
   }
   .logo-text-main .heart-accent { color: var(--brand-accent); }
-  .logo-tagline {
-    font-size: 0.55rem;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--brand-accent);
-    display: block;
-    margin-top: 0.1rem;
-  }
 
   /* ── NAV ── */
   nav {
@@ -244,6 +242,7 @@
     position:relative; z-index:1;
     display:grid;
     grid-template-columns:1fr 1fr;
+    grid-auto-rows: 1fr;
     gap:1rem;
     animation: fadeUp 0.6s 0.15s ease both;
   }
@@ -253,15 +252,29 @@
     box-shadow:0 4px 24px var(--overlay-dark-soft);
     transition:transform 0.3s, box-shadow 0.3s;
     cursor:pointer;
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+    height: 100%;
   }
   .toy-card:hover { transform:translateY(-6px); box-shadow:0 12px 36px var(--overlay-dark-medium); }
-  .toy-card:nth-child(2) { margin-top:1.5rem; background:var(--toy-card-tone-one); }
-  .toy-card:nth-child(3) { background:var(--toy-card-tone-two); }
-  .toy-card:nth-child(4) { margin-top:-1.5rem; background:var(--toy-card-tone-three); }
+  .toy-card.category-montessori { background: #FBF4EE; }
+  .toy-card.category-coding { background: #F3F1FA; }
+  .toy-card.category-early-learning { background: #EEF6FB; }
+  .toy-card.category-steam { background: #F6F0FB; }
+  .toy-thumb {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 0.7rem;
+    box-shadow: 0 3px 12px var(--overlay-dark-light);
+  }
   .toy-icon { font-size:2.6rem; margin-bottom:0.7rem; }
   .toy-card-name {
     font-family:'Cormorant Garamond',serif;
     font-size:1rem; color:var(--text-primary); margin-bottom:0.3rem;
+    min-height: 2.6rem;
   }
   .toy-card-age {
     font-size:0.7rem; color:var(--text-secondary);
@@ -380,13 +393,19 @@
     height:190px;
     display:flex; align-items:center; justify-content:center;
     font-size:4.5rem; position:relative;
+    overflow: hidden;
+    padding: 0.8rem;
   }
-  .p1 { background:linear-gradient(135deg,var(--product-p1-start),var(--product-p1-end)); }
-  .p2 { background:linear-gradient(135deg,var(--product-p2-start),var(--product-p2-end)); }
-  .p3 { background:linear-gradient(135deg,var(--product-p3-start),var(--product-p3-end)); }
-  .p4 { background:linear-gradient(135deg,var(--product-p4-start),var(--product-p4-end)); }
-  .p5 { background:linear-gradient(135deg,var(--product-p5-start),var(--product-p5-end)); }
-  .p6 { background:linear-gradient(135deg,var(--product-p6-start),var(--product-p6-end)); }
+  .product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+  .product-img.category-montessori { background:linear-gradient(135deg, #FAEFE4, #F7DDC5); }
+  .product-img.category-coding { background:linear-gradient(135deg, #F2EFF9, #E3D8F5); }
+  .product-img.category-early-learning { background:linear-gradient(135deg, #EEF7FB, #D5EAF6); }
+  .product-img.category-steam { background:linear-gradient(135deg, #F7EFFB, #E9DAF4); }
   .product-tag {
     position:absolute; top:1rem; left:1rem;
     background:var(--bg-surface); font-size:0.68rem; font-weight:500;
@@ -500,7 +519,10 @@
     display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem;
   }
   .footer-brand .logo-text-main { font-size:1.8rem; color:var(--brand-primary-light); }
-  .footer-brand .logo-tagline { color:var(--brand-accent-light); }
+  .footer-brand .logo-img { width: 220px; }
+  .logo-img-footer {
+    filter: brightness(1.04) saturate(0.95);
+  }
   .footer-brand p { font-size:0.82rem; color:var(--text-on-dark-faint); margin-top:0.8rem; line-height:1.6; max-width:240px; }
   .footer-col h5 { font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:1.2rem; color:var(--text-on-dark-dim); }
   .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:0.6rem; }
@@ -607,9 +629,8 @@
       gap:0.8rem;
     }
     .toy-card { padding:1rem; }
-    .toy-icon { font-size:2rem; }
-    .toy-card:nth-child(2) { margin-top:1rem; }
-    .toy-card:nth-child(4) { margin-top:-1rem; }
+    .toy-card { min-height: 285px; }
+    .toy-thumb { height: 120px; }
 
     /* Trust bar */
     .trust-bar {
