@@ -44,6 +44,42 @@ function initAddButtons() {
   });
 }
 
+
+function initThemeSwitcher() {
+  const themeButtons = document.querySelectorAll('.theme-btn[data-theme]');
+
+  if (!themeButtons.length) {
+    return;
+  }
+
+  const root = document.documentElement;
+  const defaultTheme = 'goldfish';
+  const savedTheme = localStorage.getItem('mh-theme');
+  const initialTheme = savedTheme || defaultTheme;
+
+  const setTheme = (themeName) => {
+    root.setAttribute('data-theme', themeName);
+    themeButtons.forEach((button) => {
+      const isActive = button.dataset.theme === themeName;
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-pressed', String(isActive));
+    });
+  };
+
+  setTheme(initialTheme);
+
+  themeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const selectedTheme = button.dataset.theme;
+      if (!selectedTheme) {
+        return;
+      }
+      setTheme(selectedTheme);
+      localStorage.setItem('mh-theme', selectedTheme);
+    });
+  });
+}
+
 function initScrollReveal() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -67,4 +103,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initAddButtons();
   initScrollReveal();
+  initThemeSwitcher();
 });
