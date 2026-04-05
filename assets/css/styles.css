@@ -258,10 +258,6 @@
     height: 100%;
   }
   .toy-card:hover { transform:translateY(-6px); box-shadow:0 12px 36px var(--overlay-dark-medium); }
-  .toy-card.category-montessori { background: #FBF4EE; }
-  .toy-card.category-coding { background: #F3F1FA; }
-  .toy-card.category-early-learning { background: #EEF6FB; }
-  .toy-card.category-steam { background: #F6F0FB; }
   .toy-thumb {
     width: 100%;
     height: 150px;
@@ -388,10 +384,6 @@
     transition:transform 0.3s, box-shadow 0.3s;
     cursor:pointer;
   }
-  .product-card.category-montessori { background: #FAEFE4; }
-  .product-card.category-coding { background: #F2EFF9; }
-  .product-card.category-early-learning { background: #EEF7FB; }
-  .product-card.category-steam { background: #F7EFFB; }
   .product-card:hover { transform:translateY(-8px); box-shadow:0 16px 40px var(--overlay-dark-strong); }
   .product-img {
     height:190px;
@@ -406,10 +398,6 @@
     object-fit: cover;
     border-radius: 16px;
   }
-  .product-img.category-montessori { background:linear-gradient(135deg, #FAEFE4, #F7DDC5); }
-  .product-img.category-coding { background:linear-gradient(135deg, #F2EFF9, #E3D8F5); }
-  .product-img.category-early-learning { background:linear-gradient(135deg, #EEF7FB, #D5EAF6); }
-  .product-img.category-steam { background:linear-gradient(135deg, #F7EFFB, #E9DAF4); }
   .product-tag {
     position:absolute; top:1rem; left:1rem;
     background:var(--bg-surface); font-size:0.68rem; font-weight:500;
