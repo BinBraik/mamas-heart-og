@@ -287,9 +287,19 @@
     to   { opacity:1; transform:translateY(0); }
   }
 
+
+  /* Defensive cleanup: hide any legacy palette controls if stale markup exists */
+  .theme-picker,
+  .theme-select,
+  #themeSelect {
+    display:none !important;
+  }
+
   /* ── TRUST BAR ── */
   .trust-bar {
-    background:linear-gradient(90deg, var(--brand-primary-dark), var(--brand-accent-dark));
+    background:var(--brand-primary-dark);
+    display:flex !important;
+    visibility:visible;
     padding:1.1rem 5rem;
     display:flex; align-items:center; justify-content:center; gap:4rem;
   }
