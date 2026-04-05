@@ -53,7 +53,7 @@ function initThemeSwitcher() {
   }
 
   const root = document.documentElement;
-  const defaultTheme = 'honey-linen';
+  const defaultTheme = 'cedar-sand';
   const savedTheme = localStorage.getItem('mh-theme');
   const initialTheme = savedTheme || defaultTheme;
 
