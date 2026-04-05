@@ -89,11 +89,17 @@
     overflow-x: hidden;
   }
 
-  /* ── LOGO SVG inline ── */
+  /* ── LOGO ── */
   .logo-svg {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+  }
+  .logo-img {
+    width: 190px;
+    height: auto;
+    display: block;
+    object-fit: contain;
   }
   .logo-text-main {
     font-family: 'Cormorant Garamond', serif;
@@ -258,6 +264,14 @@
   .toy-card:nth-child(2) { margin-top:1.5rem; background:var(--toy-card-tone-one); }
   .toy-card:nth-child(3) { background:var(--toy-card-tone-two); }
   .toy-card:nth-child(4) { margin-top:-1.5rem; background:var(--toy-card-tone-three); }
+  .toy-thumb {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 0.7rem;
+    box-shadow: 0 3px 12px var(--overlay-dark-light);
+  }
   .toy-icon { font-size:2.6rem; margin-bottom:0.7rem; }
   .toy-card-name {
     font-family:'Cormorant Garamond',serif;
@@ -380,6 +394,12 @@
     height:190px;
     display:flex; align-items:center; justify-content:center;
     font-size:4.5rem; position:relative;
+    overflow: hidden;
+  }
+  .product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .p1 { background:linear-gradient(135deg,var(--product-p1-start),var(--product-p1-end)); }
   .p2 { background:linear-gradient(135deg,var(--product-p2-start),var(--product-p2-end)); }
@@ -500,6 +520,10 @@
     display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem;
   }
   .footer-brand .logo-text-main { font-size:1.8rem; color:var(--brand-primary-light); }
+  .footer-brand .logo-img { width: 220px; }
+  .logo-img-footer {
+    filter: brightness(1.04) saturate(0.95);
+  }
   .footer-brand .logo-tagline { color:var(--brand-accent-light); }
   .footer-brand p { font-size:0.82rem; color:var(--text-on-dark-faint); margin-top:0.8rem; line-height:1.6; max-width:240px; }
   .footer-col h5 { font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:1.2rem; color:var(--text-on-dark-dim); }
