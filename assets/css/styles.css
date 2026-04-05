@@ -109,14 +109,6 @@
     line-height: 1;
   }
   .logo-text-main .heart-accent { color: var(--brand-accent); }
-  .logo-tagline {
-    font-size: 0.55rem;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--brand-accent);
-    display: block;
-    margin-top: 0.1rem;
-  }
 
   /* ── NAV ── */
   nav {
@@ -524,7 +516,6 @@
   .logo-img-footer {
     filter: brightness(1.04) saturate(0.95);
   }
-  .footer-brand .logo-tagline { color:var(--brand-accent-light); }
   .footer-brand p { font-size:0.82rem; color:var(--text-on-dark-faint); margin-top:0.8rem; line-height:1.6; max-width:240px; }
   .footer-col h5 { font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:1.2rem; color:var(--text-on-dark-dim); }
   .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:0.6rem; }
