@@ -44,6 +44,34 @@ function initAddButtons() {
   });
 }
 
+
+function initThemeSwitcher() {
+  const themeSelect = document.getElementById('themeSelect');
+
+  if (!themeSelect) {
+    return;
+  }
+
+  const root = document.documentElement;
+  const defaultTheme = 'sunflower';
+  const savedTheme = localStorage.getItem('mh-theme');
+  const availableThemes = Array.from(themeSelect.options).map((option) => option.value);
+  const initialTheme = availableThemes.includes(savedTheme) ? savedTheme : defaultTheme;
+
+  const setTheme = (themeName) => {
+    root.setAttribute('data-theme', themeName);
+    themeSelect.value = themeName;
+  };
+
+  setTheme(initialTheme);
+
+  themeSelect.addEventListener('change', (event) => {
+    const selectedTheme = event.target.value;
+    setTheme(selectedTheme);
+    localStorage.setItem('mh-theme', selectedTheme);
+  });
+}
+
 function initScrollReveal() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -67,4 +95,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initAddButtons();
   initScrollReveal();
+  initThemeSwitcher();
 });
