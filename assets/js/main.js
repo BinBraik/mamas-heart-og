@@ -44,6 +44,7 @@ function initAddButtons() {
   });
 }
 
+
 function initScrollReveal() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
