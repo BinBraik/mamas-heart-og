@@ -388,6 +388,10 @@
     transition:transform 0.3s, box-shadow 0.3s;
     cursor:pointer;
   }
+  .product-card.category-montessori { background: #FAEFE4; }
+  .product-card.category-coding { background: #F2EFF9; }
+  .product-card.category-early-learning { background: #EEF7FB; }
+  .product-card.category-steam { background: #F7EFFB; }
   .product-card:hover { transform:translateY(-8px); box-shadow:0 16px 40px var(--overlay-dark-strong); }
   .product-img {
     height:190px;
