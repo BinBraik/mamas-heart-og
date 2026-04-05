@@ -1,82 +1,82 @@
   :root {
-    /* Brand */
-    --brand-primary: #9A7085;
-    --brand-primary-dark: #6B4A5E;
-    --brand-primary-light: #C4A0B4;
-    --brand-accent: #D4A56A;
-    --brand-accent-light: #EAC98A;
-    --brand-rose: #C47A85;
+    /* Brand — Sunflower Orange + subtle logo green */
+    --brand-primary: #FDAE44;
+    --brand-primary-dark: #D58A23;
+    --brand-primary-light: #FFD08A;
+    --brand-accent: #6F8E63;
+    --brand-accent-light: #A6BE9B;
+    --brand-rose: #CE7D58;
 
     /* Neutrals */
-    --neutral-cream: #FAF6F1;
-    --neutral-warm-white: #FFFCF8;
+    --neutral-cream: #FFF9F1;
+    --neutral-warm-white: #FFFEFB;
     --neutral-white: #FFFFFF;
-    --neutral-blush: #F2E4E1;
-    --neutral-ink: #3D2535;
-    --neutral-ink-soft: #7A5A6A;
+    --neutral-blush: #FAF0E1;
+    --neutral-ink: #3A3127;
+    --neutral-ink-soft: #7B6B59;
 
     /* Semantic text/background tokens */
     --text-primary: var(--neutral-ink);
     --text-secondary: var(--neutral-ink-soft);
-    --text-on-dark: var(--neutral-cream);
+    --text-on-dark: #FFFFFF;
     --bg-page: var(--neutral-cream);
     --bg-surface: var(--neutral-white);
     --bg-surface-warm: var(--neutral-warm-white);
     --bg-section-muted: var(--neutral-blush);
-    --border-subtle: rgba(154,112,133,0.1);
-    --border-soft: rgba(154,112,133,0.2);
-    --border-input: rgba(154,112,133,0.25);
-    --overlay-brand-soft: rgba(154,112,133,0.08);
-    --overlay-brand-medium: rgba(154,112,133,0.12);
-    --overlay-brand-strong: rgba(154,112,133,0.35);
-    --overlay-brand-deep: rgba(107,74,94,0.3);
-    --overlay-brand-hero: rgba(250,246,241,0.9);
-    --overlay-brand-glow: rgba(154,112,133,0.07);
-    --overlay-dark-soft: rgba(61,37,53,0.08);
-    --overlay-dark-card: rgba(61,37,53,0.07);
-    --overlay-dark-medium: rgba(61,37,53,0.14);
-    --overlay-dark-light: rgba(61,37,53,0.06);
-    --overlay-dark-strong: rgba(61,37,53,0.13);
+    --border-subtle: rgba(253,174,68,0.14);
+    --border-soft: rgba(253,174,68,0.22);
+    --border-input: rgba(253,174,68,0.28);
+    --overlay-brand-soft: rgba(253,174,68,0.11);
+    --overlay-brand-medium: rgba(253,174,68,0.18);
+    --overlay-brand-strong: rgba(253,174,68,0.35);
+    --overlay-brand-deep: rgba(213,138,35,0.3);
+    --overlay-brand-hero: rgba(255,249,241,0.92);
+    --overlay-brand-glow: rgba(253,174,68,0.09);
+    --overlay-dark-soft: rgba(58,49,39,0.08);
+    --overlay-dark-card: rgba(58,49,39,0.07);
+    --overlay-dark-medium: rgba(58,49,39,0.14);
+    --overlay-dark-light: rgba(58,49,39,0.06);
+    --overlay-dark-strong: rgba(58,49,39,0.13);
     --overlay-white-soft: rgba(255,255,255,0.07);
     --overlay-white-border: rgba(255,255,255,0.1);
     --overlay-white-hover: rgba(255,255,255,0.12);
     --overlay-white-chip: rgba(255,255,255,0.13);
     --overlay-surface-shadow: rgba(0,0,0,0.08);
     --overlay-black-soft: rgba(0,0,0,0.25);
-    --text-on-dark-muted: rgba(250,246,241,0.85);
-    --text-on-dark-subtle: rgba(250,246,241,0.65);
-    --text-on-dark-faint: rgba(250,246,241,0.5);
-    --text-on-dark-softer: rgba(250,246,241,0.45);
-    --text-on-dark-dim: rgba(250,246,241,0.4);
-    --text-on-dark-quiet: rgba(250,246,241,0.3);
-    --text-on-dark-section: rgba(250,246,241,0.6);
+    --text-on-dark-muted: rgba(255,255,255,0.85);
+    --text-on-dark-subtle: rgba(255,255,255,0.65);
+    --text-on-dark-faint: rgba(255,255,255,0.5);
+    --text-on-dark-softer: rgba(255,255,255,0.45);
+    --text-on-dark-dim: rgba(255,255,255,0.4);
+    --text-on-dark-quiet: rgba(255,255,255,0.3);
+    --text-on-dark-section: rgba(255,255,255,0.7);
 
-    --hero-glow-primary: #F0DDD8;
-    --hero-glow-secondary: #EDD5CE;
-    --hero-accent-soft: rgba(234,201,138,0.13);
-    --hero-accent-faint: rgba(212,165,106,0.07);
-    --toy-card-tone-one: #FDF4F0;
-    --toy-card-tone-two: #FBF7F0;
-    --toy-card-tone-three: #F8F2F6;
-    --badge-mauve-bg: #F2ECF0;
-    --badge-gold-bg: #FAF3E8;
-    --badge-rose-bg: #FAF0F0;
-    --badge-sage-bg: #EFF5F0;
-    --gradient-warm-start: #F5E6E0;
-    --gradient-warm-end: #EDE0EC;
-    --cta-gradient-mid: #FBF4EE;
-    --product-p1-start: #FAF0EE;
-    --product-p1-end: #F5DFD9;
-    --product-p2-start: #F8F3EA;
-    --product-p2-end: #F2E5D0;
-    --product-p3-start: #F5EEF8;
-    --product-p3-end: #EDE0F5;
+    --hero-glow-primary: #FFECCF;
+    --hero-glow-secondary: #FFDDB1;
+    --hero-accent-soft: rgba(111,142,99,0.16);
+    --hero-accent-faint: rgba(111,142,99,0.09);
+    --toy-card-tone-one: #FFF4E4;
+    --toy-card-tone-two: #FFF8E9;
+    --toy-card-tone-three: #F6F2E6;
+    --badge-mauve-bg: #FBF1E2;
+    --badge-gold-bg: #FFF4DE;
+    --badge-rose-bg: #FAEDE4;
+    --badge-sage-bg: #EDF4E9;
+    --gradient-warm-start: #FFF2DF;
+    --gradient-warm-end: #FDE8CB;
+    --cta-gradient-mid: #FFF5E5;
+    --product-p1-start: #FFF0DD;
+    --product-p1-end: #FFE2C0;
+    --product-p2-start: #FFF5E8;
+    --product-p2-end: #FFECD4;
+    --product-p3-start: #F4F6EC;
+    --product-p3-end: #E8EEDC;
     --product-p4-start: #EEF5EE;
-    --product-p4-end: #D8EDD8;
-    --product-p5-start: #FBF0F2;
-    --product-p5-end: #F5DDE0;
-    --product-p6-start: #F0F3FA;
-    --product-p6-end: #DDE4F5;
+    --product-p4-end: #DDEADB;
+    --product-p5-start: #FAEFE5;
+    --product-p5-end: #F3DEC9;
+    --product-p6-start: #F6F8ED;
+    --product-p6-end: #E7EDD9;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -96,7 +96,7 @@
     gap: 0.5rem;
   }
   .logo-img {
-    width: 190px;
+    width: 162px;
     height: auto;
     display: block;
     object-fit: contain;
@@ -134,6 +134,8 @@
     transition: background 0.2s, transform 0.15s;
   }
   .nav-cta:hover { background:var(--brand-primary-dark); transform:translateY(-1px); }
+
+
 
   /* ── HERO ── */
   .hero {
@@ -258,10 +260,6 @@
     height: 100%;
   }
   .toy-card:hover { transform:translateY(-6px); box-shadow:0 12px 36px var(--overlay-dark-medium); }
-  .toy-card.category-montessori { background: #FBF4EE; }
-  .toy-card.category-coding { background: #F3F1FA; }
-  .toy-card.category-early-learning { background: #EEF6FB; }
-  .toy-card.category-steam { background: #F6F0FB; }
   .toy-thumb {
     width: 100%;
     height: 150px;
@@ -388,10 +386,6 @@
     transition:transform 0.3s, box-shadow 0.3s;
     cursor:pointer;
   }
-  .product-card.category-montessori { background: #FAEFE4; }
-  .product-card.category-coding { background: #F2EFF9; }
-  .product-card.category-early-learning { background: #EEF7FB; }
-  .product-card.category-steam { background: #F7EFFB; }
   .product-card:hover { transform:translateY(-8px); box-shadow:0 16px 40px var(--overlay-dark-strong); }
   .product-img {
     height:190px;
@@ -406,10 +400,6 @@
     object-fit: cover;
     border-radius: 16px;
   }
-  .product-img.category-montessori { background:linear-gradient(135deg, #FAEFE4, #F7DDC5); }
-  .product-img.category-coding { background:linear-gradient(135deg, #F2EFF9, #E3D8F5); }
-  .product-img.category-early-learning { background:linear-gradient(135deg, #EEF7FB, #D5EAF6); }
-  .product-img.category-steam { background:linear-gradient(135deg, #F7EFFB, #E9DAF4); }
   .product-tag {
     position:absolute; top:1rem; left:1rem;
     background:var(--bg-surface); font-size:0.68rem; font-weight:500;
@@ -579,7 +569,7 @@
   ══════════════════════════════════════ */
   @media (max-width:1024px) {
     nav { padding:1rem 2.5rem; }
-
+  
     .hero { grid-template-columns:1fr; padding:7rem 2.5rem 4rem; gap:3rem; }
     .hero::before { width:80vw; height:60vh; top:-5%; right:-10%; }
     .hero-visual { grid-template-columns:1fr 1fr; max-width:500px; margin:0 auto; }
@@ -611,7 +601,7 @@
     .nav-links { display:none; }
     .nav-cta { display:none; }
     .hamburger { display:flex; }
-
+      
     /* Hero */
     .hero {
       grid-template-columns:1fr;
