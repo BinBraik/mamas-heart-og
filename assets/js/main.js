@@ -53,7 +53,7 @@ function initThemeSwitcher() {
   }
 
   const root = document.documentElement;
-  const defaultTheme = 'cedar-sand';
+  const defaultTheme = 'goldfish';
   const savedTheme = localStorage.getItem('mh-theme');
   const initialTheme = savedTheme || defaultTheme;
 
