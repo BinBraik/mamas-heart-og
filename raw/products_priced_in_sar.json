@@ -1,0 +1,112 @@
+[
+  {
+    "product_name": "Primo Toys - Cubetto+",
+    "category": "Playset",
+    "price_eur": "249.00",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "1101.17",
+    "product_url": "https://shop.moravia.education/educational-and-interactive-robots/primo-toys/cubettoplus.html",
+    "image_file": "images/cubetto_plus_playset.png",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/c1f214247d33ac5edb947951a751484a/c/u/cubetto_-playset_hero.png"
+  },
+  {
+    "product_name": "Primo - Cubetto Transparent Map 6x6",
+    "category": "Extra / Map",
+    "price_eur": "32.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "145.50",
+    "product_url": "https://shop.moravia.education/primo-transparent-map.html",
+    "image_file": "images/transparent_map_6x6.png",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/m/i/microsoftteams-image_13_.png"
+  },
+  {
+    "product_name": "Primo - Theme cards for a transparent map - Numbers",
+    "category": "Extra Cards",
+    "price_eur": "19.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "88.01",
+    "product_url": "https://shop.moravia.education/themed-cards-numbers.html",
+    "image_file": "images/number_cards.png",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/p/t/pt-cards_123_box.png"
+  },
+  {
+    "product_name": "Cubetto Logic Pack",
+    "category": "Adventure / Logic Pack",
+    "price_eur": "34.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "154.34",
+    "product_url": "https://shop.moravia.education/cubetto-logic-pack.html",
+    "image_file": "images/logic_pack.jpg",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/l/o/logic-pack-1.jpg"
+  },
+  {
+    "product_name": "Primo - Theme cards for a transparent map - Alphabet",
+    "category": "Extra Cards",
+    "price_eur": "19.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "88.01",
+    "product_url": "https://shop.moravia.education/themed-cards-nnumbers.html",
+    "image_file": "images/alphabet_cards.png",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/p/t/pt-cards_abc_box.png"
+  },
+  {
+    "product_name": "Primo - Cubetto Logic Blocks",
+    "category": "Extra Blocks",
+    "price_eur": "32.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "145.50",
+    "product_url": "https://shop.moravia.education/educational-and-interactive-robots/primo-toys/logic-blocks.html",
+    "image_file": "images/logic_blocks.jpg",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/l/o/logic_blocks.jpg"
+  },
+  {
+    "product_name": "Primo - Cubetto Direction Blocks",
+    "category": "Extra Blocks",
+    "price_eur": "32.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "145.50",
+    "product_url": "https://shop.moravia.education/educational-and-interactive-robots/primo-toys/direction-blocks.html",
+    "image_file": "images/direction_blocks.jpg",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/d/i/directional_blocks.jpg"
+  },
+  {
+    "product_name": "Primo - Cubetto Deep Space Adventure Map",
+    "category": "Adventure Pack",
+    "price_eur": "32.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "145.50",
+    "product_url": "https://shop.moravia.education/educational-and-interactive-robots/primo-toys/cubetto-deep-space-adventure-map.html",
+    "image_file": "images/deep_space_adventure_map.jpg",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/s/p/space_pack.jpg"
+  },
+  {
+    "product_name": "Primo - Cubetto Blue Ocean Adventure Map",
+    "category": "Adventure Pack",
+    "price_eur": "32.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "145.50",
+    "product_url": "https://shop.moravia.education/educational-and-interactive-robots/primo-toys/cubetto-adventure-map-blue-ocean.html",
+    "image_file": "images/blue_ocean_adventure_map.jpg",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/o/c/ocean_pack.jpg"
+  },
+  {
+    "product_name": "Primo - Cubetto Ancient Egypt Adventure Map",
+    "category": "Adventure Pack",
+    "price_eur": "32.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "145.50",
+    "product_url": "https://shop.moravia.education/educational-and-interactive-robots/primo-toys/adventure-map-ancient-egypt.html",
+    "image_file": "images/ancient_egypt_adventure_map.jpg",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/e/g/egypt_pack.jpg"
+  },
+  {
+    "product_name": "Primo - Cubetto Big City Adventure Map",
+    "category": "Adventure Pack",
+    "price_eur": "32.90",
+    "eur_to_sar_rate": "4.422375",
+    "price_sar": "145.50",
+    "product_url": "https://shop.moravia.education/educational-and-interactive-robots/primo-toys/adventure-map-big-city.html",
+    "image_file": "images/big_city_adventure_map.jpg",
+    "image_source_url": "https://shop.moravia.education/media/catalog/product/cache/78af1dffb02b2e09845a16da04941475/c/i/city_pack.jpg"
+  }
+]

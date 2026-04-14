@@ -1,0 +1,43 @@
+primotoys_prepped_package
+├── docs
+│   ├── CATEGORY_MAPPING.md
+│   ├── DATA_SCHEMA.md
+│   ├── IMPLEMENTATION_HANDOFF.md
+│   ├── IMPORT_GUIDE.md
+│   └── QA_REPORT.md
+├── images
+│   └── products
+│       ├── educational-kits-alphabet-cards-01.webp
+│       ├── educational-kits-cubetto-plus-playset-01.webp
+│       ├── educational-kits-direction-blocks-01.webp
+│       ├── educational-kits-logic-blocks-01.webp
+│       ├── educational-kits-logic-pack-01.webp
+│       ├── educational-kits-number-cards-01.webp
+│       ├── sensory-development-kits-ancient-egypt-adventure-map-01.webp
+│       ├── sensory-development-kits-big-city-adventure-map-01.webp
+│       ├── sensory-development-kits-blue-ocean-adventure-map-01.webp
+│       ├── sensory-development-kits-deep-space-adventure-map-01.webp
+│       └── sensory-development-kits-transparent-map-6x6-01.webp
+├── normalized
+│   ├── image_manifest.json
+│   ├── products.csv
+│   ├── products.json
+│   ├── source_trace.csv
+│   └── source_trace.json
+└── raw
+    ├── images
+    │   ├── alphabet_cards.png
+    │   ├── ancient_egypt_adventure_map.jpg
+    │   ├── big_city_adventure_map.jpg
+    │   ├── blue_ocean_adventure_map.jpg
+    │   ├── cubetto_plus_playset.png
+    │   ├── deep_space_adventure_map.jpg
+    │   ├── direction_blocks.jpg
+    │   ├── logic_blocks.jpg
+    │   ├── logic_pack.jpg
+    │   ├── number_cards.png
+    │   └── transparent_map_6x6.png
+    ├── index.html
+    ├── products_priced_in_sar.csv
+    ├── products_priced_in_sar.json
+    └── README.txt

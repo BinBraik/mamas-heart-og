@@ -1,0 +1,370 @@
+[
+  {
+    "id": "pt-cubetto-plus-playset",
+    "name": "Cubetto+ Playset",
+    "slug": "cubetto-plus-playset",
+    "category": "Educational Kits",
+    "subcategory": "Playset",
+    "age_min": 3,
+    "age_max": 6,
+    "skills": [
+      "coding basics",
+      "sequencing",
+      "problem solving",
+      "spatial reasoning"
+    ],
+    "sensory_focus": [
+      "tactile",
+      "visual"
+    ],
+    "short_description": "Screen-free coding robot playset for children aged 3+ with hands-on, Montessori-inspired learning.",
+    "long_description": "Cubetto+ is a wooden, screen-free coding robot for children aged 3+ that introduces programming through tactile blocks and imaginative play. The set includes the robot, interface board, 24 coding blocks, a world map, storybook, and charging cable.",
+    "price": 1101.17,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-cubetto-plus-playset-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": true,
+    "tags": [
+      "montessori",
+      "screen-free",
+      "robotics",
+      "coding",
+      "flagship"
+    ]
+  },
+  {
+    "id": "pt-transparent-map-6x6",
+    "name": "Transparent Map 6x6",
+    "slug": "transparent-map-6x6",
+    "category": "Sensory Development Kits",
+    "subcategory": "Transparent Map",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "storytelling",
+      "spatial reasoning",
+      "open-ended play"
+    ],
+    "sensory_focus": [
+      "tactile",
+      "visual",
+      "spatial"
+    ],
+    "short_description": "Transparent map with pockets for themed flashcards so children can build their own adventures.",
+    "long_description": "A soft-touch transparent step map with 6 x 6 pockets for inserting themed flashcards and creating custom routes, stories, and classroom activities. The map measures 100 x 100 cm with a 15 x 15 cm grid and is made from recyclable TPU.",
+    "price": 145.5,
+    "currency": "SAR",
+    "image_main": "images/products/sensory-development-kits-transparent-map-6x6-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "map",
+      "open-ended",
+      "flashcards",
+      "tpu",
+      "custom-play"
+    ]
+  },
+  {
+    "id": "pt-number-cards",
+    "name": "Number Cards",
+    "slug": "number-cards",
+    "category": "Educational Kits",
+    "subcategory": "Cards",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "arithmetic",
+      "number recognition",
+      "symbol recognition"
+    ],
+    "sensory_focus": [
+      "visual",
+      "tactile"
+    ],
+    "short_description": "Special cards for the transparent map that help children practice arithmetic.",
+    "long_description": "A set of 36 double-sided number cards for the transparent map, covering numbers 1–20, multiples of 5, and arithmetic symbols. Designed for tactile, screen-free early numeracy activities.",
+    "price": 88.01,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-number-cards-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "math",
+      "numeracy",
+      "flashcards",
+      "transparent-map"
+    ]
+  },
+  {
+    "id": "pt-logic-pack",
+    "name": "Logic Pack",
+    "slug": "logic-pack",
+    "category": "Educational Kits",
+    "subcategory": "Logic Pack",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "logic",
+      "storytelling",
+      "problem solving",
+      "pattern recognition"
+    ],
+    "sensory_focus": [
+      "visual",
+      "tactile"
+    ],
+    "short_description": "Storybooks and flashcards that extend Logic Blocks with new logical concepts and adventures.",
+    "long_description": "An expansion pack for Cubetto Logic Blocks with four storybooks, 32 illustrated flash cards, and a sticker sheet. It adds guided activities for teaching logical concepts through stories and hands-on play.",
+    "price": 154.34,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-logic-pack-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "logic",
+      "expansion",
+      "storybooks",
+      "flashcards"
+    ]
+  },
+  {
+    "id": "pt-alphabet-cards",
+    "name": "Alphabet Cards",
+    "slug": "alphabet-cards",
+    "category": "Educational Kits",
+    "subcategory": "Cards",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "letter recognition",
+      "reading",
+      "writing",
+      "literacy"
+    ],
+    "sensory_focus": [
+      "visual",
+      "tactile"
+    ],
+    "short_description": "Special cards for the transparent map that help children practice reading and writing.",
+    "long_description": "A set of 36 double-sided alphabet cards for the transparent map with uppercase and lowercase letters, including language-specific characters. Built for screen-free early literacy activities.",
+    "price": 88.01,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-alphabet-cards-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "literacy",
+      "alphabet",
+      "flashcards",
+      "transparent-map"
+    ]
+  },
+  {
+    "id": "pt-logic-blocks",
+    "name": "Logic Blocks",
+    "slug": "logic-blocks",
+    "category": "Educational Kits",
+    "subcategory": "Blocks",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "logic",
+      "sequencing",
+      "conditional thinking",
+      "problem solving"
+    ],
+    "sensory_focus": [
+      "tactile",
+      "visual"
+    ],
+    "short_description": "Extra coding blocks that introduce random, negation, and function concepts for Cubetto.",
+    "long_description": "An expansion block set for Cubetto that introduces negation, random, and function blocks. It extends tactile coding play with more advanced sequencing and logic combinations.",
+    "price": 145.5,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-logic-blocks-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "coding",
+      "logic",
+      "expansion-blocks",
+      "functions"
+    ]
+  },
+  {
+    "id": "pt-direction-blocks",
+    "name": "Direction Blocks",
+    "slug": "direction-blocks",
+    "category": "Educational Kits",
+    "subcategory": "Blocks",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "sequencing",
+      "directional reasoning",
+      "motor planning",
+      "coding basics"
+    ],
+    "sensory_focus": [
+      "tactile",
+      "visual"
+    ],
+    "short_description": "Physical direction blocks for steering Cubetto through adventures, now including backward movement.",
+    "long_description": "A tactile coding block set that includes backward, left, right, and forward commands for Cubetto. It helps children understand movement, direction, and sequencing through physical play.",
+    "price": 145.5,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-direction-blocks-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "coding",
+      "movement",
+      "direction",
+      "expansion-blocks"
+    ]
+  },
+  {
+    "id": "pt-deep-space-adventure-map",
+    "name": "Deep Space Adventure Map",
+    "slug": "deep-space-adventure-map",
+    "category": "Sensory Development Kits",
+    "subcategory": "Adventure Map",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "storytelling",
+      "spatial reasoning",
+      "navigation",
+      "imaginative play"
+    ],
+    "sensory_focus": [
+      "visual",
+      "tactile",
+      "spatial"
+    ],
+    "short_description": "A deep-space themed adventure map for exploring planets, the ISS, and the solar system with Cubetto.",
+    "long_description": "A themed fabric adventure map that takes children through the solar system with imaginative screen-free missions. Designed to support tactile route planning, storytelling, and spatial play with Cubetto.",
+    "price": 145.5,
+    "currency": "SAR",
+    "image_main": "images/products/sensory-development-kits-deep-space-adventure-map-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "space",
+      "map",
+      "adventure",
+      "storytelling"
+    ]
+  },
+  {
+    "id": "pt-blue-ocean-adventure-map",
+    "name": "Blue Ocean Adventure Map",
+    "slug": "blue-ocean-adventure-map",
+    "category": "Sensory Development Kits",
+    "subcategory": "Adventure Map",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "storytelling",
+      "spatial reasoning",
+      "navigation",
+      "imaginative play"
+    ],
+    "sensory_focus": [
+      "visual",
+      "tactile",
+      "spatial"
+    ],
+    "short_description": "An ocean-themed adventure map for underwater journeys, treasures, and marine exploration.",
+    "long_description": "A themed fabric map that invites children to guide Cubetto through underwater adventures featuring volcanoes, treasures, and icy seas. It supports tactile navigation and imaginative storytelling.",
+    "price": 145.5,
+    "currency": "SAR",
+    "image_main": "images/products/sensory-development-kits-blue-ocean-adventure-map-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "ocean",
+      "map",
+      "adventure",
+      "storytelling"
+    ]
+  },
+  {
+    "id": "pt-ancient-egypt-adventure-map",
+    "name": "Ancient Egypt Adventure Map",
+    "slug": "ancient-egypt-adventure-map",
+    "category": "Sensory Development Kits",
+    "subcategory": "Adventure Map",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "storytelling",
+      "spatial reasoning",
+      "navigation",
+      "historical exploration"
+    ],
+    "sensory_focus": [
+      "visual",
+      "tactile",
+      "spatial"
+    ],
+    "short_description": "A historical adventure map that takes children through pyramids, treasures, and ancient mysteries.",
+    "long_description": "A themed map for Cubetto that centers on pyramids, hieroglyphics, treasures, and historical storytelling. It supports route planning and imaginative play through tactile exploration.",
+    "price": 145.5,
+    "currency": "SAR",
+    "image_main": "images/products/sensory-development-kits-ancient-egypt-adventure-map-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "egypt",
+      "history",
+      "map",
+      "adventure"
+    ]
+  },
+  {
+    "id": "pt-big-city-adventure-map",
+    "name": "Big City Adventure Map",
+    "slug": "big-city-adventure-map",
+    "category": "Sensory Development Kits",
+    "subcategory": "Adventure Map",
+    "age_min": 3,
+    "age_max": null,
+    "skills": [
+      "storytelling",
+      "spatial reasoning",
+      "navigation",
+      "urban exploration"
+    ],
+    "sensory_focus": [
+      "visual",
+      "tactile",
+      "spatial"
+    ],
+    "short_description": "A city-themed adventure map with traffic, landmarks, parks, and urban routes to explore.",
+    "long_description": "A themed fabric map for navigating a busy city full of streets, skyscrapers, landmarks, and markets. It encourages tactile route planning, observation, and imaginative city-based stories.",
+    "price": 145.5,
+    "currency": "SAR",
+    "image_main": "images/products/sensory-development-kits-big-city-adventure-map-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "city",
+      "urban",
+      "map",
+      "adventure"
+    ]
+  }
+]
