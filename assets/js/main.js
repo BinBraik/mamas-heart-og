@@ -212,8 +212,13 @@ function getPreferredLanguage() {
 
 function setLanguage(language) {
   languageState.current = SUPPORTED_LANGUAGES.has(language) ? language : DEFAULT_LANGUAGE;
-  document.documentElement.lang = languageState.current;
-  document.documentElement.dir = languageState.current === 'ar' ? 'rtl' : 'ltr';
+  if (languageState.current === 'ar') {
+    document.documentElement.setAttribute('lang', 'ar');
+    document.documentElement.setAttribute('dir', 'rtl');
+  } else {
+    document.documentElement.setAttribute('lang', 'en');
+    document.documentElement.setAttribute('dir', 'ltr');
+  }
   localStorage.setItem('language', languageState.current);
   updateLanguageToggleState();
   applyStaticTranslations();
