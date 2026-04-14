@@ -192,6 +192,12 @@
     </div>
     <button class="btn-outline">View All Toys →</button>
   </div>
+  <div class="product-filters" id="productFilters" role="group" aria-label="Product categories">
+    <button class="filter-chip is-active" type="button" data-category="all" aria-pressed="true">All</button>
+    <button class="filter-chip" type="button" data-category="Educational Kits" aria-pressed="false">Educational Kits</button>
+    <button class="filter-chip" type="button" data-category="Sensory Development Kits" aria-pressed="false">Sensory Development Kits</button>
+    <span class="filter-count" id="filterCount" aria-live="polite"></span>
+  </div>
   <!-- PRODUCTS GRID -->
   <div class="products-grid" id="productsGrid" aria-live="polite" aria-busy="true"></div>
 </section>
