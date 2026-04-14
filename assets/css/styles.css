@@ -82,12 +82,19 @@
 
   /* ── DARK MODE OVERRIDES ── */
   html[data-theme="dark"] {
-    --neutral-cream: #1C1814;
-    --neutral-warm-white: #211B14;
-    --neutral-white: #26200E;
-    --neutral-blush: #201A12;
-    --neutral-ink: #F0E6D3;
-    --neutral-ink-soft: #A89070;
+    --brand-primary: #FFBE63;
+    --brand-primary-dark: #E39A33;
+    --brand-primary-light: #FFD99C;
+    --brand-accent: #8DB989;
+    --brand-accent-light: #BED7B5;
+    --brand-rose: #E39A86;
+
+    --neutral-cream: #141624;
+    --neutral-warm-white: #1B1B2B;
+    --neutral-white: #232234;
+    --neutral-blush: #1B1A2A;
+    --neutral-ink: #F4EEFF;
+    --neutral-ink-soft: #D1C3EA;
 
     --text-primary: var(--neutral-ink);
     --text-secondary: var(--neutral-ink-soft);
@@ -96,41 +103,57 @@
     --bg-surface-warm: var(--neutral-warm-white);
     --bg-section-muted: var(--neutral-blush);
 
-    --border-subtle: rgba(253,174,68,0.18);
-    --border-soft: rgba(253,174,68,0.26);
-    --border-input: rgba(253,174,68,0.32);
+    --border-subtle: rgba(255,190,99,0.22);
+    --border-soft: rgba(255,190,99,0.32);
+    --border-input: rgba(255,190,99,0.40);
+    --overlay-brand-hero: rgba(20,22,36,0.84);
+    --overlay-brand-soft: rgba(255,190,99,0.16);
+    --overlay-brand-medium: rgba(255,190,99,0.25);
+    --overlay-brand-strong: rgba(255,190,99,0.42);
+    --overlay-brand-deep: rgba(227,154,51,0.36);
+    --overlay-brand-glow: rgba(255,190,99,0.14);
     --overlay-dark-soft: rgba(255,255,255,0.06);
     --overlay-dark-card: rgba(255,255,255,0.05);
     --overlay-dark-medium: rgba(255,255,255,0.10);
     --overlay-dark-light: rgba(255,255,255,0.04);
     --overlay-dark-strong: rgba(255,255,255,0.09);
     --overlay-surface-shadow: rgba(0,0,0,0.35);
+    --overlay-black-soft: rgba(9,12,24,0.86);
+    --text-on-dark-muted: rgba(255,255,255,0.92);
+    --text-on-dark-subtle: rgba(255,255,255,0.78);
+    --text-on-dark-faint: rgba(255,255,255,0.66);
+    --text-on-dark-softer: rgba(255,255,255,0.58);
+    --text-on-dark-dim: rgba(255,255,255,0.53);
+    --text-on-dark-quiet: rgba(255,255,255,0.72);
+    --text-on-dark-section: rgba(255,255,255,0.84);
 
-    --hero-glow-primary: #2E2318;
-    --hero-glow-secondary: #352918;
-    --toy-card-tone-one: #2A2016;
-    --toy-card-tone-two: #2E2418;
-    --toy-card-tone-three: #252018;
-    --badge-mauve-bg: #2A2016;
-    --badge-gold-bg: #2E2318;
-    --badge-rose-bg: #2A1E14;
-    --badge-sage-bg: #1C2318;
+    --hero-glow-primary: #2C2953;
+    --hero-glow-secondary: #3A3368;
+    --hero-accent-soft: rgba(141,185,137,0.24);
+    --hero-accent-faint: rgba(141,185,137,0.13);
+    --toy-card-tone-one: #2A2648;
+    --toy-card-tone-two: #312A52;
+    --toy-card-tone-three: #26223E;
+    --badge-mauve-bg: #352C58;
+    --badge-gold-bg: #453351;
+    --badge-rose-bg: #4A2F49;
+    --badge-sage-bg: #263C3A;
 
-    --gradient-warm-start: #2A2016;
-    --gradient-warm-end: #352A18;
-    --cta-gradient-mid: #2E2318;
-    --product-p1-start: #2E2416;
-    --product-p1-end: #3A2E1A;
-    --product-p2-start: #2A2018;
-    --product-p2-end: #352A1E;
-    --product-p3-start: #1E2216;
-    --product-p3-end: #252C18;
-    --product-p4-start: #1A2218;
-    --product-p4-end: #202C1E;
-    --product-p5-start: #2A1E16;
-    --product-p5-end: #352518;
-    --product-p6-start: #1E2416;
-    --product-p6-end: #252E18;
+    --gradient-warm-start: #2E274C;
+    --gradient-warm-end: #49385E;
+    --cta-gradient-mid: #5E4166;
+    --product-p1-start: #332957;
+    --product-p1-end: #59406A;
+    --product-p2-start: #2D2A56;
+    --product-p2-end: #50466A;
+    --product-p3-start: #233246;
+    --product-p3-end: #2F4B5D;
+    --product-p4-start: #223A40;
+    --product-p4-end: #2E5A5A;
+    --product-p5-start: #3A284D;
+    --product-p5-end: #68446B;
+    --product-p6-start: #253548;
+    --product-p6-end: #365B67;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
