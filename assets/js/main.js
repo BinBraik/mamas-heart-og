@@ -68,23 +68,31 @@ function initDarkModeToggle() {
   const icon = toggle?.querySelector('.toggle-icon');
   if (!toggle) return;
 
+  const setToggleState = (isDark) => {
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      if (icon) icon.textContent = '🌙';
+      toggle.setAttribute('aria-label', 'Switch to light mode');
+      return;
+    }
+
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+    if (icon) icon.textContent = '☀️';
+    toggle.setAttribute('aria-label', 'Switch to dark mode');
+  };
+
   const saved = localStorage.getItem('theme');
   if (saved === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    if (icon) icon.textContent = '☽';
+    setToggleState(true);
+  } else {
+    setToggleState(false);
   }
 
   toggle.addEventListener('click', () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'light');
-      if (icon) icon.textContent = '☀';
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-      if (icon) icon.textContent = '☽';
-    }
+    setToggleState(!isDark);
   });
 }
 
