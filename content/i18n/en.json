@@ -1,0 +1,191 @@
+{
+  "meta": {
+    "title": "Mama's Heart — Made with Love",
+    "description": "Mama's Heart creates expert-designed educational toys for children ages 4–6, made with love to support creativity, learning, and joyful development.",
+    "ogTitle": "Mama's Heart — Made with Love",
+    "ogDescription": "Discover educational toys for ages 4–6 designed by mothers and backed by child development experts."
+  },
+  "nav": {
+    "shopByCategory": "Shop by Category",
+    "gifting": "Gifting",
+    "books": "Books",
+    "ourPromise": "Our Promise",
+    "mamasSay": "Mamas Say",
+    "about": "About",
+    "shopNow": "Shop Now ♡",
+    "openMenu": "Open menu",
+    "languageSwitcher": "Language switcher"
+  },
+  "themeToggle": {
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "hero": {
+    "badge": "♡ Trusted by 12,000+ loving families",
+    "title": "Award-Winning Coding Products for Kids Aged 3+",
+    "subtitle": "Mama's Heart creates educational toys that nurture the curious, creative minds of children aged 4–6 — designed by mothers, backed by experts, made with love.",
+    "actions": {
+      "explore": "Explore Our Toys",
+      "story": "See our story"
+    },
+    "stats": {
+      "happyMamas": "Happy mamas",
+      "awardWinning": "Award-winning toys",
+      "ageRange": "Perfect age range"
+    },
+    "loadingTitle": "Loading featured toys…",
+    "loadingDescription": "Please wait"
+  },
+  "trust": {
+    "expertDesigned": "Expert-Designed Toys",
+    "ecoFriendly": "Eco-Friendly & Non-Toxic",
+    "safetyCertified": "Safety Certified",
+    "madeByMamas": "Made by Mamas, for Mamas",
+    "guarantee": "30-Day Love Guarantee"
+  },
+  "why": {
+    "tag": "Our Promise to You",
+    "title": "Toys made from the <em style=\"font-style:italic;color:var(--brand-primary)\">heart</em>",
+    "subtitle": "Every Mama's Heart toy is crafted to support your child's development naturally — turning everyday play into meaningful milestones.",
+    "features": {
+      "experts": {
+        "title": "Developed with Child Experts",
+        "description": "Our toys are co-created with early childhood psychologists to hit exactly the right developmental targets for ages 4–6."
+      },
+      "safe": {
+        "title": "Safe & Sustainable",
+        "description": "Non-toxic, BPA-free, and made from sustainably sourced wood and recycled materials — safe for your child and the planet."
+      },
+      "built": {
+        "title": "Built by Mamas",
+        "description": "Our founding team are mothers themselves. Every product passes the ultimate test: would we give this to our own children?"
+      },
+      "grows": {
+        "title": "Grows With Your Child",
+        "description": "Progressive challenge levels keep each toy fresh and stimulating as your little one develops new skills every month."
+      }
+    },
+    "ages": {
+      "age4": {
+        "title": "Age 4 — Curious Explorer",
+        "description": "Building curiosity, shapes & early problem-solving",
+        "badge": "New"
+      },
+      "age5": {
+        "title": "Age 5 — Creative Builder",
+        "description": "Logic, patterns, storytelling & imagination",
+        "badge": "Popular"
+      },
+      "age6": {
+        "title": "Age 6 — Little Learner",
+        "description": "Early literacy, numeracy & social development",
+        "badge": "Top Rated"
+      }
+    }
+  },
+  "products": {
+    "sectionTag": "Our Collection",
+    "freeCopy": "Get your FREE copy with Every Purchase",
+    "title": "Bestselling Toys",
+    "viewAll": "View All Toys →",
+    "categoriesLabel": "Product categories",
+    "filters": {
+      "all": "All Toys",
+      "educationalKits": "Educational Kits",
+      "sensoryDevelopment": "Sensory Development"
+    },
+    "count": {
+      "one": "{count} product",
+      "other": "{count} products"
+    },
+    "empty": {
+      "title": "No products in this category yet",
+      "description": "Please switch tabs to explore the rest of our catalog."
+    },
+    "featured": {
+      "label": "Featured product",
+      "badge": "Featured",
+      "loadingTitle": "Featured toys are loading soon",
+      "loadingDescription": "Please explore our catalog below"
+    },
+    "addToCartAria": "Add {name} to cart",
+    "loadError": {
+      "title": "Products are temporarily unavailable",
+      "description": "We couldn’t load the catalog right now. Please refresh to try again."
+    },
+    "age": {
+      "all": "All ages",
+      "range": "Age {min}–{max}",
+      "min": "Age {min}+",
+      "max": "Up to age {max}"
+    },
+    "stockStatus": {
+      "in_stock": "In stock",
+      "low_stock": "Low stock",
+      "out_of_stock": "Out of stock",
+      "preorder": "Preorder"
+    }
+  },
+  "testimonials": {
+    "tag": "Real Mamas, Real Love",
+    "title": "What families are saying",
+    "items": {
+      "sarah": {
+        "text": "\"My daughter asks for the Little Artist Set every single morning. I've never seen her so focused and happy at the same time.\"",
+        "role": "Mama of Lily, age 5"
+      },
+      "jessica": {
+        "text": "\"The Little Explorer Set was the best birthday gift we ever gave. He spent the whole day in the garden discovering bugs!\"",
+        "role": "Mama of Noah, age 6"
+      },
+      "amanda": {
+        "text": "\"As a teacher and a mother, I recommend Mama's Heart to every family I know. The care in every toy is genuinely felt.\"",
+        "role": "Teacher & Mama of two"
+      }
+    }
+  },
+  "cta": {
+    "tag": "Begin the journey",
+    "title": "Give your child the gift of <em style=\"font-style:italic;color:var(--brand-primary)\">joyful learning</em>",
+    "subtitle": "Join over 12,000 families who have made playtime smarter, more meaningful, and full of love — with Mama's Heart.",
+    "actions": {
+      "shop": "Shop the Collection ♡",
+      "find": "Find the Perfect Toy →"
+    }
+  },
+  "newsletter": {
+    "title": "Join the Mama's Heart family ♡",
+    "subtitle": "Get activity ideas, parenting tips, and exclusive offers — delivered with love.",
+    "emailPlaceholder": "Your email address",
+    "subscribe": "Subscribe →"
+  },
+  "footer": {
+    "description": "Educational toys for curious little minds aged 4–6. Designed by mothers, backed by experts.",
+    "shop": {
+      "title": "Shop",
+      "allToys": "All Toys",
+      "age4": "Age 4",
+      "age5": "Age 5",
+      "age6": "Age 6",
+      "giftSets": "Gift Sets"
+    },
+    "learn": {
+      "title": "Learn",
+      "ourStory": "Our Story",
+      "theScience": "The Science",
+      "activityGuides": "Activity Guides",
+      "blog": "Mama's Blog"
+    },
+    "support": {
+      "title": "Support",
+      "faq": "FAQ",
+      "contact": "Contact Us",
+      "shipping": "Shipping Info",
+      "returns": "Returns"
+    },
+    "bottom": {
+      "rights": "© 2025 Mama's Heart. All rights reserved.",
+      "madeWithLove": "Made with ♡ for every mama"
+    }
+  }
+}

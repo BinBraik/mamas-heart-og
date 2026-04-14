@@ -80,14 +80,14 @@ function initDarkModeToggle() {
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
       if (icon) icon.textContent = '🌙';
-      toggle.setAttribute('aria-label', 'Switch to light mode');
+      toggle.setAttribute('aria-label', translate('themeToggle.switchToLight'));
       return;
     }
 
     document.documentElement.removeAttribute('data-theme');
     localStorage.setItem('theme', 'light');
     if (icon) icon.textContent = '☀️';
-    toggle.setAttribute('aria-label', 'Switch to dark mode');
+    toggle.setAttribute('aria-label', translate('themeToggle.switchToDark'));
   };
 
   const saved = localStorage.getItem('theme');
@@ -105,10 +105,87 @@ function initDarkModeToggle() {
 
 const DEFAULT_LANGUAGE = 'en';
 const SUPPORTED_LANGUAGES = new Set(['en', 'ar']);
+const FALLBACK_LANGUAGE = 'en';
 
 const languageState = {
   current: DEFAULT_LANGUAGE,
+  dictionaries: {},
 };
+
+const INTERPOLATION_TOKEN_REGEX = /\{(\w+)\}/g;
+
+function deepGet(source, path) {
+  if (!source) return undefined;
+  return path.split('.').reduce((value, segment) => {
+    if (value == null || typeof value !== 'object') {
+      return undefined;
+    }
+    return value[segment];
+  }, source);
+}
+
+function interpolate(template, replacements = {}) {
+  return String(template).replace(INTERPOLATION_TOKEN_REGEX, (_, token) => (
+    replacements[token] == null ? '' : String(replacements[token])
+  ));
+}
+
+function translate(key, replacements = {}) {
+  const activeDictionary = languageState.dictionaries[languageState.current];
+  const fallbackDictionary = languageState.dictionaries[FALLBACK_LANGUAGE];
+  const activeValue = deepGet(activeDictionary, key);
+  const fallbackValue = deepGet(fallbackDictionary, key);
+  const resolved = typeof activeValue === 'string' ? activeValue : fallbackValue;
+  if (typeof resolved !== 'string') {
+    return key;
+  }
+  return interpolate(resolved, replacements);
+}
+
+function applyStaticTranslations(root = document) {
+  root.querySelectorAll('[data-i18n]').forEach((element) => {
+    element.textContent = translate(element.dataset.i18n);
+  });
+
+  root.querySelectorAll('[data-i18n-html]').forEach((element) => {
+    element.innerHTML = translate(element.dataset.i18nHtml);
+  });
+
+  root.querySelectorAll('[data-i18n-placeholder]').forEach((element) => {
+    element.setAttribute('placeholder', translate(element.dataset.i18nPlaceholder));
+  });
+
+  root.querySelectorAll('[data-i18n-aria-label]').forEach((element) => {
+    element.setAttribute('aria-label', translate(element.dataset.i18nAriaLabel));
+  });
+
+  document.title = translate('meta.title');
+  const metaDescription = document.getElementById('metaDescription');
+  if (metaDescription) {
+    metaDescription.setAttribute('content', translate('meta.description'));
+  }
+  const metaOgTitle = document.getElementById('metaOgTitle');
+  if (metaOgTitle) {
+    metaOgTitle.setAttribute('content', translate('meta.ogTitle'));
+  }
+  const metaOgDescription = document.getElementById('metaOgDescription');
+  if (metaOgDescription) {
+    metaOgDescription.setAttribute('content', translate('meta.ogDescription'));
+  }
+}
+
+async function loadDictionaries() {
+  const dictionaryEntries = await Promise.all([...SUPPORTED_LANGUAGES].map(async (language) => {
+    const response = await fetch(`./content/i18n/${language}.json`);
+    if (!response.ok) {
+      throw new Error(`Unable to load dictionary for ${language}: ${response.status}`);
+    }
+    const dictionary = await response.json();
+    return [language, dictionary];
+  }));
+
+  languageState.dictionaries = Object.fromEntries(dictionaryEntries);
+}
 
 function getLanguageFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -133,50 +210,13 @@ function getPreferredLanguage() {
   return DEFAULT_LANGUAGE;
 }
 
-function getLocalizedCopy() {
-  if (languageState.current === 'ar') {
-    return {
-      productCount: (count) => `${count} منتج${count === 1 ? '' : 'ات'}`,
-      noProductsTitle: 'لا توجد منتجات في هذا التصنيف حالياً',
-      noProductsDescription: 'يرجى تغيير التصنيف لاستكشاف بقية مجموعتنا.',
-      featuredProductLabel: 'منتج مميز',
-      featuredBadge: 'مميز',
-      addToCartAriaLabel: (name) => `أضف ${name} إلى السلة`,
-      loadErrorTitle: 'المنتجات غير متاحة مؤقتاً',
-      loadErrorDescription: 'تعذر تحميل المنتجات الآن. يرجى تحديث الصفحة والمحاولة مرة أخرى.',
-      allAges: 'مناسب لجميع الأعمار',
-      ageRange: (ageMin, ageMax) => `العمر ${ageMin}–${ageMax}`,
-      ageMin: (ageMin) => `العمر ${ageMin}+`,
-      ageMax: (ageMax) => `حتى عمر ${ageMax}`,
-      featuredLoadingTitle: 'سيتم عرض المنتجات المميزة قريباً',
-      featuredLoadingDescription: 'يرجى استكشاف مجموعتنا أدناه',
-    };
-  }
-
-  return {
-    productCount: (count) => `${count} product${count === 1 ? '' : 's'}`,
-    noProductsTitle: 'No products in this category yet',
-    noProductsDescription: 'Please switch tabs to explore the rest of our catalog.',
-    featuredProductLabel: 'Featured product',
-    featuredBadge: 'Featured',
-    addToCartAriaLabel: (name) => `Add ${name} to cart`,
-    loadErrorTitle: 'Products are temporarily unavailable',
-    loadErrorDescription: 'We couldn’t load the catalog right now. Please refresh to try again.',
-    allAges: 'All ages',
-    ageRange: (ageMin, ageMax) => `Age ${ageMin}–${ageMax}`,
-    ageMin: (ageMin) => `Age ${ageMin}+`,
-    ageMax: (ageMax) => `Up to age ${ageMax}`,
-    featuredLoadingTitle: 'Featured toys are loading soon',
-    featuredLoadingDescription: 'Please explore our catalog below',
-  };
-}
-
 function setLanguage(language) {
   languageState.current = SUPPORTED_LANGUAGES.has(language) ? language : DEFAULT_LANGUAGE;
   document.documentElement.lang = languageState.current;
   document.documentElement.dir = languageState.current === 'ar' ? 'rtl' : 'ltr';
   localStorage.setItem('language', languageState.current);
   updateLanguageToggleState();
+  applyStaticTranslations();
 }
 
 function updateLanguageToggleState() {
@@ -231,20 +271,19 @@ function formatPrice(price, currency) {
 }
 
 function formatAgeRange(ageMin, ageMax) {
-  const copy = getLocalizedCopy();
   if (ageMin == null && ageMax == null) {
-    return copy.allAges;
+    return translate('products.age.all');
   }
 
   if (ageMin != null && ageMax != null) {
-    return copy.ageRange(ageMin, ageMax);
+    return translate('products.age.range', { min: ageMin, max: ageMax });
   }
 
   if (ageMin != null) {
-    return copy.ageMin(ageMin);
+    return translate('products.age.min', { min: ageMin });
   }
 
-  return copy.ageMax(ageMax);
+  return translate('products.age.max', { max: ageMax });
 }
 
 function escapeHtml(value) {
@@ -283,6 +322,12 @@ function formatStockStatus(stockStatus) {
     return '';
   }
 
+  const statusKey = `products.stockStatus.${stockStatus}`;
+  const localizedStatus = translate(statusKey);
+  if (localizedStatus !== statusKey) {
+    return localizedStatus;
+  }
+
   const readable = String(stockStatus).replaceAll('_', ' ');
   return readable.charAt(0).toUpperCase() + readable.slice(1);
 }
@@ -307,7 +352,6 @@ function getRandomDistinctProducts(products, count) {
 }
 
 function renderHeroProducts(products) {
-  const copy = getLocalizedCopy();
   const heroContainer = document.getElementById('heroProductCards');
   if (!heroContainer) return;
 
@@ -316,8 +360,8 @@ function renderHeroProducts(products) {
   if (!products.length) {
     heroContainer.innerHTML = `
       <article class="toy-card">
-        <div class="toy-card-name">${copy.featuredLoadingTitle}</div>
-        <div class="toy-card-age">${copy.featuredLoadingDescription}</div>
+        <div class="toy-card-name">${translate('products.featured.loadingTitle')}</div>
+        <div class="toy-card-age">${translate('products.featured.loadingDescription')}</div>
         <div class="toy-card-price">♡</div>
       </article>
     `;
@@ -385,7 +429,6 @@ function applyFilters() {
 }
 
 function updateFilterControls() {
-  const copy = getLocalizedCopy();
   const chips = document.querySelectorAll('.filter-chip');
   chips.forEach((chip) => {
     const isActive = chip.dataset.category === productState.activeCategory;
@@ -397,7 +440,8 @@ function updateFilterControls() {
   const filterCount = document.getElementById('filterCount');
   if (filterCount) {
     const count = getFilteredProducts().length;
-    filterCount.textContent = copy.productCount(count);
+    const countKey = count === 1 ? 'products.count.one' : 'products.count.other';
+    filterCount.textContent = translate(countKey, { count });
   }
 }
 
@@ -419,7 +463,6 @@ function initCategoryFilters() {
 }
 
 function renderProducts(products) {
-  const copy = getLocalizedCopy();
   const productsGrid = document.getElementById('productsGrid');
   if (!productsGrid) return;
 
@@ -429,8 +472,8 @@ function renderProducts(products) {
     productsGrid.innerHTML = `
       <article class="product-card">
         <div class="product-body">
-          <div class="product-name">${copy.noProductsTitle}</div>
-          <div class="product-desc">${copy.noProductsDescription}</div>
+          <div class="product-name">${translate('products.empty.title')}</div>
+          <div class="product-desc">${translate('products.empty.description')}</div>
         </div>
       </article>
     `;
@@ -444,7 +487,7 @@ function renderProducts(products) {
     const imagePath = getProductImagePath(product.image_main);
     const productTag = `${product.category} · ${product.subcategory}`;
     const featuredBadge = isFeaturedProduct(product)
-      ? `<div class="product-featured-badge" aria-label="${copy.featuredProductLabel}">${copy.featuredBadge}</div>`
+      ? `<div class="product-featured-badge" aria-label="${translate('products.featured.label')}">${translate('products.featured.badge')}</div>`
       : '';
     const stockLabel = formatStockStatus(product.stock_status);
     const stockMarkup = stockLabel
@@ -472,7 +515,7 @@ function renderProducts(products) {
               <div class="product-age-tag">${escapeHtml(ageLabel)}</div>
               ${stockMarkup}
             </div>
-            <button class="add-btn" aria-label="${escapeHtml(copy.addToCartAriaLabel(product.name))}">+</button>
+            <button class="add-btn" aria-label="${escapeHtml(translate('products.addToCartAria', { name: product.name }))}">+</button>
           </div>
         </div>
       </article>
@@ -486,7 +529,6 @@ function renderProducts(products) {
 }
 
 function renderProductLoadError() {
-  const copy = getLocalizedCopy();
   const productsGrid = document.getElementById('productsGrid');
   if (!productsGrid) return;
 
@@ -494,8 +536,8 @@ function renderProductLoadError() {
   productsGrid.innerHTML = `
     <article class="product-card">
       <div class="product-body">
-        <div class="product-name">${copy.loadErrorTitle}</div>
-        <div class="product-desc">${copy.loadErrorDescription}</div>
+        <div class="product-name">${translate('products.loadError.title')}</div>
+        <div class="product-desc">${translate('products.loadError.description')}</div>
       </div>
     </article>
     <article class="product-card" aria-hidden="true">
@@ -542,7 +584,17 @@ async function loadProducts() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    await loadDictionaries();
+  } catch (error) {
+    console.error('Unable to load translation dictionaries', error);
+    languageState.dictionaries = {
+      en: {},
+      ar: {},
+    };
+  }
+
   setLanguage(getPreferredLanguage());
   initMobileMenu();
   initSmoothScroll();
