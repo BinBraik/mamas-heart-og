@@ -509,7 +509,7 @@
     align-items:center;
     justify-content:space-between;
     flex-wrap:wrap;
-    margin-bottom:1.5rem;
+    margin-bottom:1.25rem;
   }
   .product-filters {
     display:inline-flex;
@@ -546,80 +546,6 @@
   .filter-count {
     font-size:0.8rem;
     color:var(--text-secondary);
-  }
-  .advanced-filters {
-    display:grid;
-    grid-template-columns:repeat(4, minmax(0, 1fr));
-    gap:0.9rem;
-    margin-bottom:1.5rem;
-    align-items:end;
-  }
-  .filter-field {
-    display:flex;
-    flex-direction:column;
-    gap:0.35rem;
-  }
-  .filter-field > span {
-    font-size:0.75rem;
-    color:var(--text-secondary);
-  }
-  .filter-field select,
-  .filter-field input {
-    border:1px solid var(--border-input);
-    border-radius:10px;
-    padding:0.55rem 0.75rem;
-    background:var(--bg-surface);
-    color:var(--text-primary);
-    font-family:'Jost',sans-serif;
-    font-size:0.84rem;
-  }
-  .filter-field select:focus,
-  .filter-field input:focus {
-    outline:none;
-    border-color:var(--brand-primary);
-    box-shadow:0 0 0 3px var(--overlay-brand-glow);
-  }
-  .filter-search { grid-column:span 2; }
-  .filter-skills { grid-column:1 / -1; }
-  .skills-chip-list {
-    display:flex;
-    flex-wrap:wrap;
-    gap:0.45rem;
-  }
-  .skills-chip {
-    border:1px solid var(--border-input);
-    background:var(--bg-surface);
-    color:var(--text-secondary);
-    border-radius:999px;
-    padding:0.35rem 0.75rem;
-    font-family:'Jost',sans-serif;
-    font-size:0.75rem;
-    cursor:pointer;
-    transition:all 0.2s ease;
-  }
-  .skills-chip:hover {
-    border-color:var(--brand-primary);
-    color:var(--brand-primary);
-  }
-  .skills-chip.is-active {
-    background:var(--brand-primary);
-    color:var(--text-on-dark);
-    border-color:var(--brand-primary);
-  }
-  .clear-filters-btn {
-    justify-self:start;
-    border:1px solid var(--border-input);
-    background:transparent;
-    color:var(--brand-primary);
-    border-radius:999px;
-    padding:0.45rem 0.9rem;
-    font-family:'Jost',sans-serif;
-    font-size:0.8rem;
-    cursor:pointer;
-  }
-  .clear-filters-btn:hover {
-    border-color:var(--brand-primary);
-    background:var(--overlay-brand-glow);
   }
   .products-grid {
     display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem;
