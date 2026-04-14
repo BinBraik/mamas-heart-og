@@ -118,12 +118,13 @@
     --overlay-dark-light: rgba(255,255,255,0.04);
     --overlay-dark-strong: rgba(255,255,255,0.09);
     --overlay-surface-shadow: rgba(0,0,0,0.35);
+    --overlay-black-soft: rgba(9,12,24,0.86);
     --text-on-dark-muted: rgba(255,255,255,0.92);
     --text-on-dark-subtle: rgba(255,255,255,0.78);
     --text-on-dark-faint: rgba(255,255,255,0.66);
     --text-on-dark-softer: rgba(255,255,255,0.58);
     --text-on-dark-dim: rgba(255,255,255,0.53);
-    --text-on-dark-quiet: rgba(255,255,255,0.46);
+    --text-on-dark-quiet: rgba(255,255,255,0.72);
     --text-on-dark-section: rgba(255,255,255,0.84);
 
     --hero-glow-primary: #2C2953;
