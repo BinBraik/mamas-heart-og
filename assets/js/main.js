@@ -31,8 +31,8 @@ function initSmoothScroll() {
   });
 }
 
-function initAddButtons() {
-  document.querySelectorAll('.add-btn').forEach((button) => {
+function initAddButtons(root = document) {
+  root.querySelectorAll('.add-btn').forEach((button) => {
     button.addEventListener('click', function addButtonAnimation() {
       this.textContent = '♡';
       this.style.background = 'var(--brand-rose)';
@@ -44,8 +44,7 @@ function initAddButtons() {
   });
 }
 
-
-function initScrollReveal() {
+function initScrollReveal(elements = document.querySelectorAll('.product-card, .testimonial-card, .why-feature, .age-card')) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -55,7 +54,7 @@ function initScrollReveal() {
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.product-card, .testimonial-card, .why-feature, .age-card').forEach((element) => {
+  elements.forEach((element) => {
     element.style.opacity = '0';
     element.style.transform = 'translateY(28px)';
     element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
@@ -96,10 +95,130 @@ function initDarkModeToggle() {
   });
 }
 
+function formatPrice(price, currency) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency || 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(price);
+}
+
+function formatAgeRange(ageMin, ageMax) {
+  if (ageMin == null && ageMax == null) {
+    return 'All ages';
+  }
+
+  if (ageMin != null && ageMax != null && ageMax !== ageMin) {
+    return `Age ${ageMin}–${ageMax}`;
+  }
+
+  if (ageMin != null) {
+    return `Age ${ageMin}+`;
+  }
+
+  return `Up to age ${ageMax}`;
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function renderProducts(products) {
+  const productsGrid = document.getElementById('productsGrid');
+  if (!productsGrid) return;
+
+  productsGrid.setAttribute('aria-busy', 'true');
+
+  const cards = products.map((product) => {
+    const priceLabel = formatPrice(product.price, product.currency);
+    const ageLabel = formatAgeRange(product.age_min, product.age_max);
+    const imagePath = product.image_main ? `./${product.image_main}` : './assets/img/products/Cubetto1.jpg';
+    const productTag = product.featured
+      ? '⭐ Featured'
+      : `${product.category} · ${product.subcategory}`;
+
+    return `
+      <article class="product-card" data-product-id="${escapeHtml(product.id)}">
+        <div class="product-img">
+          <img src="${escapeHtml(imagePath)}" alt="${escapeHtml(product.name)}">
+          <div class="product-tag">${escapeHtml(productTag)}</div>
+        </div>
+        <div class="product-body">
+          <div class="product-name">${escapeHtml(product.name)}</div>
+          <div class="product-desc">${escapeHtml(product.short_description)}</div>
+          <div class="product-footer">
+            <div>
+              <div class="product-price">${escapeHtml(priceLabel)}</div>
+              <div class="product-age-tag">${escapeHtml(ageLabel)}</div>
+            </div>
+            <button class="add-btn" aria-label="Add ${escapeHtml(product.name)} to cart">+</button>
+          </div>
+        </div>
+      </article>
+    `;
+  });
+
+  productsGrid.innerHTML = cards.join('');
+  productsGrid.setAttribute('aria-busy', 'false');
+  initAddButtons(productsGrid);
+  initScrollReveal(productsGrid.querySelectorAll('.product-card'));
+}
+
+function renderProductLoadError() {
+  const productsGrid = document.getElementById('productsGrid');
+  if (!productsGrid) return;
+
+  productsGrid.setAttribute('aria-busy', 'false');
+  productsGrid.innerHTML = `
+    <article class="product-card">
+      <div class="product-body">
+        <div class="product-name">Products are temporarily unavailable</div>
+        <div class="product-desc">We couldn’t load the catalog right now. Please refresh to try again.</div>
+      </div>
+    </article>
+    <article class="product-card" aria-hidden="true">
+      <div class="product-body">
+        <div class="product-name">&nbsp;</div>
+        <div class="product-desc">&nbsp;</div>
+      </div>
+    </article>
+    <article class="product-card" aria-hidden="true">
+      <div class="product-body">
+        <div class="product-name">&nbsp;</div>
+        <div class="product-desc">&nbsp;</div>
+      </div>
+    </article>
+  `;
+
+  initScrollReveal(productsGrid.querySelectorAll('.product-card'));
+}
+
+async function loadProducts() {
+  try {
+    const response = await fetch('./normalized/products.json');
+
+    if (!response.ok) {
+      throw new Error(`Request failed: ${response.status}`);
+    }
+
+    const products = await response.json();
+    renderProducts(products);
+  } catch (error) {
+    console.error('Unable to load products from normalized/products.json', error);
+    renderProductLoadError();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initSmoothScroll();
-  initAddButtons();
   initScrollReveal();
   initDarkModeToggle();
+  loadProducts();
 });
