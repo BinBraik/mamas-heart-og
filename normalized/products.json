@@ -85,7 +85,7 @@
       "tactile"
     ],
     "short_description": "Special cards for the transparent map that help children practice arithmetic.",
-    "long_description": "A set of 36 double-sided number cards for the transparent map, covering numbers 1–20, multiples of 5, and arithmetic symbols. Designed for tactile, screen-free early numeracy activities.",
+    "long_description": "A set of 36 double-sided number cards for the transparent map, covering numbers 1\u201320, multiples of 5, and arithmetic symbols. Designed for tactile, screen-free early numeracy activities.",
     "price": 88.01,
     "currency": "SAR",
     "image_main": "images/products/educational-kits-number-cards-01.webp",
@@ -365,6 +365,141 @@
       "urban",
       "map",
       "adventure"
+    ]
+  },
+  {
+    "id": "legacy-matata-studio-coding-set-pro",
+    "name": "MatataStudio Coding Set Pro",
+    "slug": "matata-studio-coding-set-pro",
+    "category": "Educational Kits",
+    "subcategory": "Coding Set",
+    "age_min": 5,
+    "age_max": null,
+    "skills": [
+      "sequencing",
+      "logic",
+      "debugging",
+      "computational thinking"
+    ],
+    "sensory_focus": [
+      "tactile",
+      "visual",
+      "spatial"
+    ],
+    "short_description": "Screen-free coding set that teaches sequencing, logic, conditions, and debugging with physical coding blocks.",
+    "long_description": "A hands-on coding kit for early-primary learners that uses physical blocks and guided challenges to teach sequencing, conditions, and debugging without screens.",
+    "price": 1085.95,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-matata-studio-coding-set-pro-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "legacy-placeholder",
+      "screen-free",
+      "coding",
+      "early-primary"
+    ]
+  },
+  {
+    "id": "legacy-sphero-indi-student-kit",
+    "name": "Sphero indi Student Kit",
+    "slug": "sphero-indi-student-kit",
+    "category": "Educational Kits",
+    "subcategory": "Robot Kit",
+    "age_min": 4,
+    "age_max": null,
+    "skills": [
+      "sequencing",
+      "maze solving",
+      "computational thinking",
+      "problem solving"
+    ],
+    "sensory_focus": [
+      "visual",
+      "tactile",
+      "spatial"
+    ],
+    "short_description": "Color-tile coding robot for sequencing, mazes, and early computational thinking for younger learners.",
+    "long_description": "A classroom-ready coding robot kit that uses color tiles and challenge cards to build foundational programming and problem-solving skills in pre-K through grade 3.",
+    "price": 993.0,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-sphero-indi-student-kit-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "legacy-placeholder",
+      "robotics",
+      "coding",
+      "pre-k"
+    ]
+  },
+  {
+    "id": "legacy-lego-spike-essential",
+    "name": "LEGO SPIKE Essential",
+    "slug": "lego-spike-essential",
+    "category": "Educational Kits",
+    "subcategory": "STEAM Set",
+    "age_min": 6,
+    "age_max": null,
+    "skills": [
+      "engineering",
+      "block coding",
+      "creativity",
+      "collaboration"
+    ],
+    "sensory_focus": [
+      "tactile",
+      "visual"
+    ],
+    "short_description": "Hands-on STEAM set with hub, motors, sensors, and block coding for creative engineering projects.",
+    "long_description": "A LEGO Education kit combining programmable hardware, motors, and sensors with block-based coding to support guided STEAM exploration and creative builds.",
+    "price": 2147.0,
+    "currency": "SAR",
+    "image_main": "images/products/educational-kits-lego-spike-essential-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "legacy-placeholder",
+      "steam",
+      "robotics",
+      "classroom"
+    ]
+  },
+  {
+    "id": "legacy-makeblock-mtiny-discover-kit",
+    "name": "Makeblock mTiny Discover Kit",
+    "slug": "makeblock-mtiny-discover-kit",
+    "category": "Sensory Development Kits",
+    "subcategory": "Robot Kit",
+    "age_min": 4,
+    "age_max": null,
+    "skills": [
+      "logic",
+      "sequencing",
+      "numeracy",
+      "language development"
+    ],
+    "sensory_focus": [
+      "tactile",
+      "auditory",
+      "visual"
+    ],
+    "short_description": "Screen-free panda robot with coding cards, maps, and tap-pen activities for logic, math, and language play.",
+    "long_description": "A playful screen-free robotics kit with coding cards, map-based missions, and interactive activities designed to blend logic, early math, and language learning.",
+    "price": 831.0,
+    "currency": "SAR",
+    "image_main": "images/products/sensory-development-kits-makeblock-mtiny-discover-kit-01.webp",
+    "image_gallery": [],
+    "stock_status": "unknown",
+    "featured": false,
+    "tags": [
+      "legacy-placeholder",
+      "screen-free",
+      "robotics",
+      "early-learning"
     ]
   }
 ]
