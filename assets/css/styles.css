@@ -80,6 +80,9 @@
     --footer-bg: #4A3D32;
     --footer-bottom-bg: #3A3127;
     --footer-bottom-text: rgba(255,255,255,0.78);
+    --font-body-latin: 'Jost', 'Segoe UI', Tahoma, Arial, sans-serif;
+    --font-heading-latin: 'Cormorant Garamond', serif;
+    --font-body-arabic: 'Cairo', 'Noto Naskh Arabic', 'Noto Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
   }
 
 
@@ -166,7 +169,7 @@
   html { scroll-behavior:smooth; }
 
   body {
-    font-family: 'Jost', sans-serif;
+    font-family: var(--font-body-latin);
     background: var(--bg-page);
     color: var(--text-primary);
     overflow-x: hidden;
@@ -186,7 +189,7 @@
     object-fit: contain;
   }
   .logo-text-main {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-heading-latin);
     font-style: italic;
     font-size: 1.5rem;
     color: var(--brand-primary);
@@ -311,7 +314,7 @@
   }
 
   h1 {
-    font-family:'Cormorant Garamond', serif;
+    font-family:var(--font-heading-latin);
     font-size: clamp(2.8rem, 4.5vw, 4rem);
     font-weight:600; line-height:1.1;
     color:var(--text-primary);
@@ -359,7 +362,7 @@
     border-top:1px solid var(--overlay-brand-medium);
   }
   .stat-num {
-    font-family:'Cormorant Garamond', serif;
+    font-family:var(--font-heading-latin);
     font-size:2rem; color:var(--brand-primary); font-weight:600;
   }
   .stat-label { font-size:0.75rem; color:var(--text-secondary); margin-top:0.1rem; letter-spacing:0.3px; }
@@ -395,7 +398,7 @@
   }
   .toy-icon { font-size:2.6rem; margin-bottom:0.7rem; }
   .toy-card-name {
-    font-family:'Cormorant Garamond',serif;
+    font-family:var(--font-heading-latin);
     font-size:1rem; color:var(--text-primary); margin-bottom:0.3rem;
     min-height: 2.6rem;
   }
@@ -494,7 +497,7 @@
     margin-bottom:0.8rem;
   }
   .section-title {
-    font-family:'Cormorant Garamond',serif;
+    font-family:var(--font-heading-latin);
     font-size:clamp(2rem,3.5vw,2.8rem);
     color:var(--text-primary); line-height:1.2;
     margin-bottom:1.2rem;
@@ -522,7 +525,7 @@
   .why-icon.rose  { background:var(--badge-rose-bg); }
   .why-icon.sage  { background:var(--badge-sage-bg); }
   .why-feature h4 {
-    font-family:'Cormorant Garamond',serif;
+    font-family:var(--font-heading-latin);
     font-size:1.05rem; margin-bottom:0.25rem; color:var(--text-primary);
   }
   .why-feature p { font-size:0.85rem; color:var(--text-secondary); line-height:1.6; }
@@ -662,7 +665,7 @@
     gap:0.45rem;
   }
   .product-name {
-    font-family:'Cormorant Garamond',serif;
+    font-family:var(--font-heading-latin);
     font-size:1.1rem; margin-bottom:0.3rem; color:var(--text-primary);
     min-height:2.3rem;
   }
@@ -720,7 +723,7 @@
   .testimonial-card:hover { background:var(--overlay-white-hover); }
   .stars { color:var(--brand-accent-light); font-size:0.85rem; margin-bottom:1rem; letter-spacing:2px; }
   .testimonial-text {
-    font-family:'Cormorant Garamond',serif;
+    font-family:var(--font-heading-latin);
     font-style:italic; font-size:1.05rem; line-height:1.7;
     color:var(--bg-page); margin-bottom:1.5rem;
   }
@@ -765,7 +768,7 @@
     gap:3rem; padding:4rem 5rem;
   }
   .newsletter h3 {
-    font-family:'Cormorant Garamond',serif;
+    font-family:var(--font-heading-latin);
     font-size:1.6rem; color:var(--text-primary);
   }
   .newsletter p { font-size:0.88rem; color:var(--text-secondary); margin-top:0.3rem; }
@@ -831,7 +834,7 @@
   }
   .mobile-menu.open { display:flex; }
   .mobile-menu a {
-    font-family:'Cormorant Garamond',serif;
+    font-family:var(--font-heading-latin);
     font-size:2rem; font-style:italic;
     color:var(--brand-primary); text-decoration:none;
     transition:color 0.2s;
@@ -845,6 +848,86 @@
   html[dir="rtl"] .newsletter-form { flex-direction:row-reverse; }
   html[dir="rtl"] .product-footer { flex-direction:row-reverse; }
   html[dir="rtl"] .mobile-menu { text-align:center; }
+
+  html[lang="ar"] body {
+    font-family: var(--font-body-arabic);
+    line-height: 1.7;
+  }
+  html[lang="ar"] h1,
+  html[lang="ar"] .section-title,
+  html[lang="ar"] .product-name,
+  html[lang="ar"] .toy-card-name,
+  html[lang="ar"] .why-feature h4,
+  html[lang="ar"] .newsletter h3 {
+    font-family: var(--font-body-arabic);
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.35;
+  }
+  html[lang="ar"] h1 {
+    font-size: clamp(2.5rem, 4.3vw, 3.5rem);
+  }
+  html[lang="ar"] .section-title {
+    font-size: clamp(1.9rem, 3.2vw, 2.5rem);
+  }
+  html[lang="ar"] .hero-sub,
+  html[lang="ar"] .section-sub,
+  html[lang="ar"] .product-desc,
+  html[lang="ar"] .testimonial-text {
+    line-height: 1.95;
+    letter-spacing: 0;
+  }
+  html[lang="ar"] .testimonial-text {
+    font-style: normal;
+  }
+
+  html[lang="ar"] .nav-links a,
+  html[lang="ar"] .nav-cta,
+  html[lang="ar"] .btn-primary,
+  html[lang="ar"] .btn-outline,
+  html[lang="ar"] .filter-chip {
+    letter-spacing: 0;
+    white-space: normal;
+    line-height: 1.45;
+  }
+  html[lang="ar"] .nav-links a {
+    display: inline-block;
+    padding-block: 0.1rem;
+  }
+  html[lang="ar"] .nav-cta,
+  html[lang="ar"] .btn-primary,
+  html[lang="ar"] .btn-outline {
+    min-height: 2.7rem;
+    inline-size: auto;
+  }
+  html[lang="ar"] .product-name {
+    min-height: 3.2rem;
+  }
+  html[lang="ar"] .product-desc {
+    min-height: 4.6rem;
+  }
+  html[lang="ar"] .toy-card-name {
+    min-height: 3rem;
+  }
+  html[lang="ar"] .product-tag,
+  html[lang="ar"] .product-featured-badge {
+    max-inline-size: calc(100% - 2rem);
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  html[lang="ar"] .product-price,
+  html[lang="ar"] .toy-card-price,
+  html[lang="ar"] .stat-num {
+    direction: ltr;
+    unicode-bidi: isolate;
+    display: inline-block;
+  }
+
+  @media (max-width:680px) {
+    html[lang="ar"] h1 { font-size: 2.1rem; }
+    html[lang="ar"] .section-title { font-size: 1.75rem; }
+    html[lang="ar"] .filter-chip { font-size: 0.78rem; }
+  }
 
   /* ══════════════════════════════════════
      TABLET  (≤ 1024px)
