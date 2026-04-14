@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "shopByCategory": "Shop by Category",
+    "gifting": "Gifting",
+    "books": "Books",
+    "ourPromise": "Our Promise",
+    "mamasSay": "Mamas Say",
+    "about": "About",
+    "shopNow": "Shop Now ♡",
+    "openMenu": "Open menu",
+    "languageSwitcher": "Language switcher"
+  },
+  "themeToggle": {
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "hero": {
+    "loadingTitle": "Loading featured toys…",
+    "loadingDescription": "Please wait"
+  },
+  "products": {
+    "sectionTag": "Our Collection",
+    "freeCopy": "Get your FREE copy with Every Purchase",
+    "title": "Bestselling Toys",
+    "viewAll": "View All Toys →",
+    "categoriesLabel": "Product categories",
+    "filters": {
+      "all": "All Toys",
+      "educationalKits": "Educational Kits",
+      "sensoryDevelopment": "Sensory Development"
+    },
+    "count": {
+      "one": "{count} product",
+      "other": "{count} products"
+    },
+    "empty": {
+      "title": "No products in this category yet",
+      "description": "Please switch tabs to explore the rest of our catalog."
+    },
+    "featured": {
+      "label": "Featured product",
+      "badge": "Featured",
+      "loadingTitle": "Featured toys are loading soon",
+      "loadingDescription": "Please explore our catalog below"
+    },
+    "addToCartAria": "Add {name} to cart",
+    "loadError": {
+      "title": "Products are temporarily unavailable",
+      "description": "We couldn’t load the catalog right now. Please refresh to try again."
+    },
+    "age": {
+      "all": "All ages",
+      "range": "Age {min}–{max}",
+      "min": "Age {min}+",
+      "max": "Up to age {max}"
+    }
+  }
+}

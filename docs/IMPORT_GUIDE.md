@@ -84,3 +84,14 @@ If implementation needs to trace back to the source package:
 - Use `slug` for route generation or frontend keys.
 - Treat `stock_status == "unknown"` as a neutral display state, not out-of-stock.
 - Do not infer gallery images unless new assets are added later.
+
+## Translation key naming convention
+UI copy is stored in `content/i18n/<lang>.json` and should follow these rules:
+
+- Use lower camelCase segments joined by dots: `<area>.<subArea>.<label>`.
+  - Example: `products.filters.educationalKits`.
+- Group keys by page area first (`nav`, `hero`, `products`, etc.) to keep lookups predictable.
+- Prefer reusable placeholders for runtime values instead of string concatenation.
+  - Example: `"products.addToCartAria": "Add {name} to cart"`.
+- Always add new keys to `content/i18n/en.json` first (source of truth), then mirror in other locales.
+- Arabic may ship partial coverage; rendering logic must fall back to English when an Arabic key is missing.
