@@ -80,6 +80,59 @@
   }
 
 
+  /* ── DARK MODE OVERRIDES ── */
+  html[data-theme="dark"] {
+    --neutral-cream: #1C1814;
+    --neutral-warm-white: #211B14;
+    --neutral-white: #26200E;
+    --neutral-blush: #201A12;
+    --neutral-ink: #F0E6D3;
+    --neutral-ink-soft: #A89070;
+
+    --text-primary: var(--neutral-ink);
+    --text-secondary: var(--neutral-ink-soft);
+    --bg-page: var(--neutral-cream);
+    --bg-surface: var(--neutral-white);
+    --bg-surface-warm: var(--neutral-warm-white);
+    --bg-section-muted: var(--neutral-blush);
+
+    --border-subtle: rgba(253,174,68,0.18);
+    --border-soft: rgba(253,174,68,0.26);
+    --border-input: rgba(253,174,68,0.32);
+    --overlay-dark-soft: rgba(255,255,255,0.06);
+    --overlay-dark-card: rgba(255,255,255,0.05);
+    --overlay-dark-medium: rgba(255,255,255,0.10);
+    --overlay-dark-light: rgba(255,255,255,0.04);
+    --overlay-dark-strong: rgba(255,255,255,0.09);
+    --overlay-surface-shadow: rgba(0,0,0,0.35);
+
+    --hero-glow-primary: #2E2318;
+    --hero-glow-secondary: #352918;
+    --toy-card-tone-one: #2A2016;
+    --toy-card-tone-two: #2E2418;
+    --toy-card-tone-three: #252018;
+    --badge-mauve-bg: #2A2016;
+    --badge-gold-bg: #2E2318;
+    --badge-rose-bg: #2A1E14;
+    --badge-sage-bg: #1C2318;
+
+    --gradient-warm-start: #2A2016;
+    --gradient-warm-end: #352A18;
+    --cta-gradient-mid: #2E2318;
+    --product-p1-start: #2E2416;
+    --product-p1-end: #3A2E1A;
+    --product-p2-start: #2A2018;
+    --product-p2-end: #352A1E;
+    --product-p3-start: #1E2216;
+    --product-p3-end: #252C18;
+    --product-p4-start: #1A2218;
+    --product-p4-end: #202C1E;
+    --product-p5-start: #2A1E16;
+    --product-p5-end: #352518;
+    --product-p6-start: #1E2416;
+    --product-p6-end: #252E18;
+  }
+
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; }
 
@@ -288,11 +341,25 @@
   }
 
 
-  /* Defensive cleanup: hide any legacy palette controls if stale markup exists */
-  .theme-picker,
-  .theme-select,
-  #themeSelect {
-    display:none !important;
+  /* ── DARK MODE TOGGLE BUTTON ── */
+  .dark-mode-toggle {
+    background: var(--overlay-dark-soft);
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .dark-mode-toggle:hover {
+    background: var(--overlay-brand-soft);
+    border-color: var(--brand-primary);
   }
 
   /* ── TRUST BAR ── */

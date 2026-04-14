@@ -63,10 +63,35 @@ function initScrollReveal() {
   });
 }
 
+function initDarkModeToggle() {
+  const toggle = document.getElementById('darkModeToggle');
+  const icon = toggle?.querySelector('.toggle-icon');
+  if (!toggle) return;
+
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (icon) icon.textContent = '☽';
+  }
+
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+      if (icon) icon.textContent = '☀';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      if (icon) icon.textContent = '☽';
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initSmoothScroll();
   initAddButtons();
   initScrollReveal();
-  initThemeSwitcher();
+  initDarkModeToggle();
 });
