@@ -45,6 +45,14 @@ function initAddButtons(root = document) {
 }
 
 function initScrollReveal(elements = document.querySelectorAll('.product-card, .testimonial-card, .why-feature, .age-card')) {
+  if (typeof IntersectionObserver !== 'function') {
+    elements.forEach((element) => {
+      element.style.opacity = '1';
+      element.style.transform = 'translateY(0)';
+    });
+    return;
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -397,8 +405,14 @@ function renderProductLoadError() {
 }
 
 async function loadProducts() {
+  const abortController = new AbortController();
+  const requestTimeoutMs = 8000;
+  const timeout = setTimeout(() => {
+    abortController.abort('Product request timed out');
+  }, requestTimeoutMs);
+
   try {
-    const response = await fetch('./normalized/products.json');
+    const response = await fetch('./normalized/products.json', { signal: abortController.signal });
 
     if (!response.ok) {
       throw new Error(`Request failed: ${response.status}`);
@@ -412,16 +426,18 @@ async function loadProducts() {
     console.error('Unable to load products from normalized/products.json', error);
     renderHeroProductsFallback();
     renderProductLoadError();
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initSmoothScroll();
-  initScrollReveal();
   initDarkModeToggle();
   productState.activeCategory = getCategoryFromUrl();
   initCategoryFilters();
   updateFilterControls();
   loadProducts();
+  initScrollReveal();
 });
