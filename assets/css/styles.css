@@ -361,6 +361,27 @@
     background: var(--overlay-brand-soft);
     border-color: var(--brand-primary);
   }
+  .dark-mode-toggle:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--overlay-brand-glow);
+  }
+  html[data-theme="dark"] .dark-mode-toggle {
+    background: rgba(253,174,68,0.18);
+    border-color: #f5be71;
+    box-shadow: 0 0 0 1px rgba(253,174,68,0.35), 0 0 12px rgba(253,174,68,0.24);
+  }
+  html[data-theme="dark"] .dark-mode-toggle:hover {
+    background: rgba(253,174,68,0.24);
+    border-color: #ffd08a;
+  }
+  html[data-theme="dark"] .dark-mode-toggle .toggle-icon {
+    color: #fff2c5;
+  }
+  html[data-theme="dark"] .dark-mode-toggle:focus-visible {
+    outline-color: #ffd08a;
+    box-shadow: 0 0 0 2px rgba(28,24,20,0.9), 0 0 0 4px rgba(253,174,68,0.5), 0 0 16px rgba(253,174,68,0.35);
+  }
 
   /* ── TRUST BAR ── */
   .trust-bar {
