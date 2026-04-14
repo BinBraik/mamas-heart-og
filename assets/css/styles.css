@@ -218,6 +218,47 @@
   }
   .nav-cta:hover { background:var(--brand-primary-dark); transform:translateY(-1px); }
 
+  .language-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.24rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--overlay-dark-soft);
+    direction: ltr;
+    flex-shrink: 0;
+  }
+  .language-toggle > span {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    opacity: 0.8;
+  }
+  .language-option {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 999px;
+    padding: 0.24rem 0.45rem;
+    cursor: pointer;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .language-option:hover {
+    color: var(--text-primary);
+    background: var(--overlay-brand-soft);
+  }
+  .language-option.is-active {
+    color: var(--text-primary);
+    background: var(--overlay-brand-medium);
+  }
+  .language-option:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 2px;
+  }
 
 
   /* ── HERO ── */
@@ -410,6 +451,24 @@
   html[data-theme="dark"] .dark-mode-toggle:focus-visible {
     outline-color: #ffe0ad;
     box-shadow: 0 0 0 2px rgba(52, 42, 32, 0.55), 0 0 0 4px rgba(255, 208, 138, 0.48), 0 0 14px rgba(255, 221, 177, 0.28);
+  }
+  html[data-theme="dark"] .language-toggle {
+    background: rgba(255, 236, 207, 0.18);
+    border-color: rgba(255, 208, 138, 0.62);
+    box-shadow: 0 0 0 1px rgba(255, 208, 138, 0.2);
+  }
+  html[data-theme="dark"] .language-toggle > span {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  html[data-theme="dark"] .language-option {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  html[data-theme="dark"] .language-option:hover {
+    background: rgba(255, 236, 207, 0.18);
+  }
+  html[data-theme="dark"] .language-option.is-active {
+    background: rgba(255, 208, 138, 0.42);
+    color: #fff6e4;
   }
 
   /* ── TRUST BAR ── */
@@ -818,6 +877,7 @@
     .logo-img { width:130px; }
     .nav-links { display:none; }
     .nav-cta { display:none; }
+    .language-toggle { margin-inline-start: auto; }
     .hamburger { display:flex; }
       
     /* Hero */
