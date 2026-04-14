@@ -103,20 +103,126 @@ function initDarkModeToggle() {
   });
 }
 
+const DEFAULT_LANGUAGE = 'en';
+const SUPPORTED_LANGUAGES = new Set(['en', 'ar']);
+
+const languageState = {
+  current: DEFAULT_LANGUAGE,
+};
+
+function getLanguageFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const language = params.get('lang');
+  if (!SUPPORTED_LANGUAGES.has(language)) {
+    return null;
+  }
+  return language;
+}
+
+function getPreferredLanguage() {
+  const languageFromQuery = getLanguageFromUrl();
+  if (languageFromQuery) {
+    return languageFromQuery;
+  }
+
+  const savedLanguage = localStorage.getItem('language');
+  if (SUPPORTED_LANGUAGES.has(savedLanguage)) {
+    return savedLanguage;
+  }
+
+  return DEFAULT_LANGUAGE;
+}
+
+function getLocalizedCopy() {
+  if (languageState.current === 'ar') {
+    return {
+      productCount: (count) => `${count} منتج${count === 1 ? '' : 'ات'}`,
+      noProductsTitle: 'لا توجد منتجات في هذا التصنيف حالياً',
+      noProductsDescription: 'يرجى تغيير التصنيف لاستكشاف بقية مجموعتنا.',
+      featuredProductLabel: 'منتج مميز',
+      featuredBadge: 'مميز',
+      addToCartAriaLabel: (name) => `أضف ${name} إلى السلة`,
+      loadErrorTitle: 'المنتجات غير متاحة مؤقتاً',
+      loadErrorDescription: 'تعذر تحميل المنتجات الآن. يرجى تحديث الصفحة والمحاولة مرة أخرى.',
+      allAges: 'مناسب لجميع الأعمار',
+      ageRange: (ageMin, ageMax) => `العمر ${ageMin}–${ageMax}`,
+      ageMin: (ageMin) => `العمر ${ageMin}+`,
+      ageMax: (ageMax) => `حتى عمر ${ageMax}`,
+      featuredLoadingTitle: 'سيتم عرض المنتجات المميزة قريباً',
+      featuredLoadingDescription: 'يرجى استكشاف مجموعتنا أدناه',
+    };
+  }
+
+  return {
+    productCount: (count) => `${count} product${count === 1 ? '' : 's'}`,
+    noProductsTitle: 'No products in this category yet',
+    noProductsDescription: 'Please switch tabs to explore the rest of our catalog.',
+    featuredProductLabel: 'Featured product',
+    featuredBadge: 'Featured',
+    addToCartAriaLabel: (name) => `Add ${name} to cart`,
+    loadErrorTitle: 'Products are temporarily unavailable',
+    loadErrorDescription: 'We couldn’t load the catalog right now. Please refresh to try again.',
+    allAges: 'All ages',
+    ageRange: (ageMin, ageMax) => `Age ${ageMin}–${ageMax}`,
+    ageMin: (ageMin) => `Age ${ageMin}+`,
+    ageMax: (ageMax) => `Up to age ${ageMax}`,
+    featuredLoadingTitle: 'Featured toys are loading soon',
+    featuredLoadingDescription: 'Please explore our catalog below',
+  };
+}
+
+function setLanguage(language) {
+  languageState.current = SUPPORTED_LANGUAGES.has(language) ? language : DEFAULT_LANGUAGE;
+  document.documentElement.lang = languageState.current;
+  document.documentElement.dir = languageState.current === 'ar' ? 'rtl' : 'ltr';
+  localStorage.setItem('language', languageState.current);
+  updateLanguageToggleState();
+}
+
+function updateLanguageToggleState() {
+  const languageButtons = document.querySelectorAll('.language-option');
+  languageButtons.forEach((button) => {
+    const isActive = button.dataset.lang === languageState.current;
+    button.classList.toggle('is-active', isActive);
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+}
+
+function initLanguageToggle() {
+  const languageToggle = document.getElementById('languageToggle');
+  if (!languageToggle) {
+    return;
+  }
+
+  languageToggle.addEventListener('click', (event) => {
+    const target = event.target.closest('.language-option');
+    if (!target) {
+      return;
+    }
+    const selectedLanguage = target.dataset.lang;
+    if (selectedLanguage === languageState.current) {
+      return;
+    }
+    setLanguage(selectedLanguage);
+    applyFilters();
+  });
+}
+
 function formatPrice(price, currency) {
+  const locale = languageState.current === 'ar' ? 'ar-SA' : 'en-US';
   if (currency === 'SAR') {
     const sarValue = Number(price);
     if (!Number.isFinite(sarValue)) {
       return 'SAR —';
     }
 
-    return `SAR ${new Intl.NumberFormat('en-US', {
+    return `SAR ${new Intl.NumberFormat(locale, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(sarValue)}`;
   }
 
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency || 'USD',
     minimumFractionDigits: 0,
@@ -125,19 +231,20 @@ function formatPrice(price, currency) {
 }
 
 function formatAgeRange(ageMin, ageMax) {
+  const copy = getLocalizedCopy();
   if (ageMin == null && ageMax == null) {
-    return 'All ages';
+    return copy.allAges;
   }
 
   if (ageMin != null && ageMax != null) {
-    return `Age ${ageMin}–${ageMax}`;
+    return copy.ageRange(ageMin, ageMax);
   }
 
   if (ageMin != null) {
-    return `Age ${ageMin}+`;
+    return copy.ageMin(ageMin);
   }
 
-  return `Up to age ${ageMax}`;
+  return copy.ageMax(ageMax);
 }
 
 function escapeHtml(value) {
@@ -200,6 +307,7 @@ function getRandomDistinctProducts(products, count) {
 }
 
 function renderHeroProducts(products) {
+  const copy = getLocalizedCopy();
   const heroContainer = document.getElementById('heroProductCards');
   if (!heroContainer) return;
 
@@ -208,8 +316,8 @@ function renderHeroProducts(products) {
   if (!products.length) {
     heroContainer.innerHTML = `
       <article class="toy-card">
-        <div class="toy-card-name">Featured toys are loading soon</div>
-        <div class="toy-card-age">Please explore our catalog below</div>
+        <div class="toy-card-name">${copy.featuredLoadingTitle}</div>
+        <div class="toy-card-age">${copy.featuredLoadingDescription}</div>
         <div class="toy-card-price">♡</div>
       </article>
     `;
@@ -277,6 +385,7 @@ function applyFilters() {
 }
 
 function updateFilterControls() {
+  const copy = getLocalizedCopy();
   const chips = document.querySelectorAll('.filter-chip');
   chips.forEach((chip) => {
     const isActive = chip.dataset.category === productState.activeCategory;
@@ -288,7 +397,7 @@ function updateFilterControls() {
   const filterCount = document.getElementById('filterCount');
   if (filterCount) {
     const count = getFilteredProducts().length;
-    filterCount.textContent = `${count} product${count === 1 ? '' : 's'}`;
+    filterCount.textContent = copy.productCount(count);
   }
 }
 
@@ -310,6 +419,7 @@ function initCategoryFilters() {
 }
 
 function renderProducts(products) {
+  const copy = getLocalizedCopy();
   const productsGrid = document.getElementById('productsGrid');
   if (!productsGrid) return;
 
@@ -319,8 +429,8 @@ function renderProducts(products) {
     productsGrid.innerHTML = `
       <article class="product-card">
         <div class="product-body">
-          <div class="product-name">No products in this category yet</div>
-          <div class="product-desc">Please switch tabs to explore the rest of our catalog.</div>
+          <div class="product-name">${copy.noProductsTitle}</div>
+          <div class="product-desc">${copy.noProductsDescription}</div>
         </div>
       </article>
     `;
@@ -334,7 +444,7 @@ function renderProducts(products) {
     const imagePath = getProductImagePath(product.image_main);
     const productTag = `${product.category} · ${product.subcategory}`;
     const featuredBadge = isFeaturedProduct(product)
-      ? '<div class="product-featured-badge" aria-label="Featured product">Featured</div>'
+      ? `<div class="product-featured-badge" aria-label="${copy.featuredProductLabel}">${copy.featuredBadge}</div>`
       : '';
     const stockLabel = formatStockStatus(product.stock_status);
     const stockMarkup = stockLabel
@@ -362,7 +472,7 @@ function renderProducts(products) {
               <div class="product-age-tag">${escapeHtml(ageLabel)}</div>
               ${stockMarkup}
             </div>
-            <button class="add-btn" aria-label="Add ${escapeHtml(product.name)} to cart">+</button>
+            <button class="add-btn" aria-label="${escapeHtml(copy.addToCartAriaLabel(product.name))}">+</button>
           </div>
         </div>
       </article>
@@ -376,6 +486,7 @@ function renderProducts(products) {
 }
 
 function renderProductLoadError() {
+  const copy = getLocalizedCopy();
   const productsGrid = document.getElementById('productsGrid');
   if (!productsGrid) return;
 
@@ -383,8 +494,8 @@ function renderProductLoadError() {
   productsGrid.innerHTML = `
     <article class="product-card">
       <div class="product-body">
-        <div class="product-name">Products are temporarily unavailable</div>
-        <div class="product-desc">We couldn’t load the catalog right now. Please refresh to try again.</div>
+        <div class="product-name">${copy.loadErrorTitle}</div>
+        <div class="product-desc">${copy.loadErrorDescription}</div>
       </div>
     </article>
     <article class="product-card" aria-hidden="true">
@@ -432,9 +543,11 @@ async function loadProducts() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  setLanguage(getPreferredLanguage());
   initMobileMenu();
   initSmoothScroll();
   initDarkModeToggle();
+  initLanguageToggle();
   productState.activeCategory = getCategoryFromUrl();
   initCategoryFilters();
   updateFilterControls();
