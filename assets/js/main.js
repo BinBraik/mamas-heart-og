@@ -322,6 +322,26 @@ function isFeaturedProduct(product) {
   return Boolean(product?.featured);
 }
 
+function getLocalizedProductField(product, fieldName) {
+  if (!product || typeof product !== 'object') {
+    return '';
+  }
+
+  if (languageState.current === 'ar') {
+    const arabicValue = product[`${fieldName}_ar`];
+    if (typeof arabicValue === 'string' && arabicValue.trim()) {
+      return arabicValue;
+    }
+  }
+
+  const fallbackValue = product[fieldName];
+  if (typeof fallbackValue === 'string') {
+    return fallbackValue;
+  }
+
+  return '';
+}
+
 function formatStockStatus(stockStatus) {
   if (stockStatus === 'unknown' || stockStatus == null || stockStatus === '') {
     return '';
@@ -378,17 +398,18 @@ function renderHeroProducts(products) {
     const imagePath = getProductImagePath(product.image_main);
     const ageLabel = formatAgeRange(product.age_min, product.age_max);
     const priceLabel = formatPrice(product.price, product.currency);
+    const localizedName = getLocalizedProductField(product, 'name');
 
     return `
       <article class="toy-card" data-product-id="${escapeHtml(product.id)}">
         <img
           class="toy-thumb"
           src="${escapeHtml(imagePath)}"
-          alt="${escapeHtml(product.name)}"
+          alt="${escapeHtml(localizedName)}"
           loading="lazy"
           onerror="this.onerror=null;this.src='${FALLBACK_PRODUCT_IMAGE}';"
         >
-        <div class="toy-card-name">${escapeHtml(product.name)}</div>
+        <div class="toy-card-name">${escapeHtml(localizedName)}</div>
         <div class="toy-card-age">${escapeHtml(ageLabel)}</div>
         <div class="toy-card-price">${escapeHtml(priceLabel)}</div>
       </article>
@@ -490,7 +511,10 @@ function renderProducts(products) {
     const priceLabel = formatPrice(product.price, product.currency);
     const ageLabel = formatAgeRange(product.age_min, product.age_max);
     const imagePath = getProductImagePath(product.image_main);
-    const productTag = `${product.category} · ${product.subcategory}`;
+    const localizedName = getLocalizedProductField(product, 'name');
+    const localizedSubcategory = getLocalizedProductField(product, 'subcategory');
+    const localizedShortDescription = getLocalizedProductField(product, 'short_description');
+    const productTag = `${product.category} · ${localizedSubcategory || product.subcategory}`;
     const featuredBadge = isFeaturedProduct(product)
       ? `<div class="product-featured-badge" aria-label="${translate('products.featured.label')}">${translate('products.featured.badge')}</div>`
       : '';
@@ -504,7 +528,7 @@ function renderProducts(products) {
         <div class="product-img">
           <img
             src="${escapeHtml(imagePath)}"
-            alt="${escapeHtml(product.name)}"
+            alt="${escapeHtml(localizedName)}"
             loading="lazy"
             onerror="this.onerror=null;this.src='${FALLBACK_PRODUCT_IMAGE}';"
           >
@@ -512,15 +536,15 @@ function renderProducts(products) {
           ${featuredBadge}
         </div>
         <div class="product-body">
-          <div class="product-name">${escapeHtml(product.name)}</div>
-          <div class="product-desc">${escapeHtml(product.short_description)}</div>
+          <div class="product-name">${escapeHtml(localizedName)}</div>
+          <div class="product-desc">${escapeHtml(localizedShortDescription)}</div>
           <div class="product-footer">
             <div>
               <div class="product-price">${escapeHtml(priceLabel)}</div>
               <div class="product-age-tag">${escapeHtml(ageLabel)}</div>
               ${stockMarkup}
             </div>
-            <button class="add-btn" aria-label="${escapeHtml(translate('products.addToCartAria', { name: product.name }))}">+</button>
+            <button class="add-btn" aria-label="${escapeHtml(translate('products.addToCartAria', { name: localizedName }))}">+</button>
           </div>
         </div>
       </article>
