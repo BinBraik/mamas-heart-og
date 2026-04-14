@@ -1,14 +1,35 @@
 # IMPLEMENTATION_HANDOFF
 
+## File contracts (must remain stable)
+
+### Source of truth
+- **Canonical file:** `normalized/products.json`
+- `normalized/products.csv` is a convenience mirror for spreadsheet/CMS workflows.
+- UI/data integrations should treat JSON as authoritative if there is a mismatch.
+
+### Image path conventions
+- Product images live under: `images/products/`
+- `image_main` must be a relative path beginning with: `images/products/`
+- Recommended filename pattern: `<slug>-01.<ext>`
+  - Example: `images/products/educational-kits-cubetto-plus-playset-01.webp`
+
+### Category value constraints
+`category` is constrained to exactly:
+- `Educational Kits`
+- `Sensory Development Kits`
+
+Any new value should be treated as schema drift and rejected until intentionally approved.
+
 ## Final file paths
 - `raw/` — untouched original export
-- `normalized/products.json` — primary normalized catalog
+- `normalized/products.json` — primary normalized catalog (canonical)
 - `normalized/products.csv` — CSV mirror of normalized catalog
 - `normalized/source_trace.json` — raw-to-normalized provenance
 - `normalized/source_trace.csv` — raw-to-normalized provenance in CSV
 - `normalized/image_manifest.json` — normalized image inventory
 - `images/products/` — renamed normalized product images
 - `docs/` — schema, mapping, import, QA, and this handoff note
+- `scripts/validate_products.py` — lightweight schema/content validator
 
 ## Assumptions made
 1. Top-level categories were forced to only two values exactly as requested.
@@ -28,16 +49,24 @@
 - Gallery assets are unavailable beyond the single provided image per product.
 - Stock status needs a direct commerce-source sync if the frontend will display inventory.
 
-## How to consume data
-- Prefer `normalized/products.json` in application code.
-- Use `id` as the canonical primary key.
-- Use `slug` for routes/URLs.
-- Use `image_main` as the main card/detail image path.
-- Treat `image_gallery` as optional and currently empty.
-- Build filters from `category`, `subcategory`, `skills`, `sensory_focus`, and `tags`.
-- If you need provenance or want to debug a mismatch, join on `id` using `normalized/source_trace.json`.
+## How UI consumes schema fields (developer notes)
+- Product list/card UI should read: `name`, `short_description`, `price`, `currency`, `image_main`, `category`.
+- Product detail UI should additionally read: `long_description`, `image_gallery`, `skills`, `sensory_focus`, `tags`, `age_min`, `age_max`.
+- Routing should use `slug` (keep `id` as immutable internal key).
+- Filtering should use `category`, `subcategory`, `skills`, `sensory_focus`, and `tags`.
+- Availability indicator should map `stock_status`; value `unknown` should render neutral.
+- “Featured” sections should be driven by boolean `featured` only.
 
-## Suggested next steps for the coding chat
+## Content-only update handoff
+For future updates, prefer this flow over code edits:
+1. Edit `normalized/products.json`.
+2. Add/update corresponding files in `images/products/`.
+3. Run `python3 scripts/validate_products.py`.
+4. If validation passes, ship as a content update.
+
+This keeps schema stable and minimizes UI regressions caused by drift.
+
+## Suggested next steps for implementation
 1. Wire the catalog to `normalized/products.json`.
 2. Add filter chips for the two top-level categories first.
 3. Use `subcategory`, `skills`, and `tags` for secondary filters/search.
