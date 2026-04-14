@@ -77,6 +77,9 @@
     --product-p5-end: #F3DEC9;
     --product-p6-start: #F6F8ED;
     --product-p6-end: #E7EDD9;
+    --footer-bg: #4A3D32;
+    --footer-bottom-bg: #3A3127;
+    --footer-bottom-text: rgba(255,255,255,0.78);
   }
 
 
@@ -154,6 +157,9 @@
     --product-p5-end: #68446B;
     --product-p6-start: #253548;
     --product-p6-end: #365B67;
+    --footer-bg: #191D34;
+    --footer-bottom-bg: #0B1020;
+    --footer-bottom-text: rgba(241,236,255,0.82);
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -629,8 +635,8 @@
 
   /* ── FOOTER ── */
   footer {
-    background:var(--text-primary);
-    color:var(--bg-page);
+    background:var(--footer-bg);
+    color:var(--text-on-dark-muted);
     padding:4rem 5rem;
     display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem;
   }
@@ -645,11 +651,11 @@
   .footer-col ul li a { text-decoration:none; color:var(--text-on-dark-subtle); font-size:0.85rem; transition:color 0.2s; }
   .footer-col ul li a:hover { color:var(--brand-accent-light); }
   .footer-bottom {
-    background:var(--overlay-black-soft);
+    background:var(--footer-bottom-bg);
     padding:1.1rem 5rem;
     display:flex; justify-content:space-between; align-items:center;
   }
-  .footer-bottom p { font-size:0.75rem; color:var(--text-on-dark-quiet); }
+  .footer-bottom p { font-size:0.75rem; color:var(--footer-bottom-text); }
   .footer-hearts { color:var(--brand-rose); font-size:0.9rem; }
 
   /* ── HAMBURGER ── */
