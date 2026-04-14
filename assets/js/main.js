@@ -135,6 +135,10 @@ const ALLOWED_CATEGORIES = new Set([CATEGORY_ALL, 'Educational Kits', 'Sensory D
 const productState = {
   allProducts: [],
   activeCategory: CATEGORY_ALL,
+  activeSubcategory: '',
+  activeSensory: '',
+  activeSkill: '',
+  searchTerm: '',
 };
 
 function getCategoryFromUrl() {
@@ -154,12 +158,127 @@ function updateCategoryInUrl(category) {
   window.history.replaceState({}, '', url);
 }
 
-function getFilteredProducts() {
-  if (productState.activeCategory === CATEGORY_ALL) {
-    return productState.allProducts;
+function normalizeList(value) {
+  if (Array.isArray(value)) {
+    return value.filter(Boolean);
   }
 
-  return productState.allProducts.filter((product) => product.category === productState.activeCategory);
+  if (typeof value === 'string' && value.trim()) {
+    return [value.trim()];
+  }
+
+  return [];
+}
+
+function textMatch(value, query) {
+  return String(value ?? '').toLowerCase().includes(query);
+}
+
+function getFilteredProducts() {
+  const query = productState.searchTerm.trim().toLowerCase();
+
+  return productState.allProducts.filter((product) => {
+    if (productState.activeCategory !== CATEGORY_ALL && product.category !== productState.activeCategory) {
+      return false;
+    }
+
+    if (productState.activeSubcategory && product.subcategory !== productState.activeSubcategory) {
+      return false;
+    }
+
+    const sensoryValues = normalizeList(product.sensory_focus);
+    if (productState.activeSensory && !sensoryValues.includes(productState.activeSensory)) {
+      return false;
+    }
+
+    const skillValues = normalizeList(product.skills);
+    if (productState.activeSkill && !skillValues.includes(productState.activeSkill)) {
+      return false;
+    }
+
+    if (!query) {
+      return true;
+    }
+
+    const tags = normalizeList(product.tags);
+    return textMatch(product.name, query) || tags.some((tag) => textMatch(tag, query));
+  });
+}
+
+function getUniqueValues(key) {
+  const values = new Set();
+  productState.allProducts.forEach((product) => {
+    normalizeList(product[key]).forEach((item) => values.add(item));
+  });
+  return [...values].sort((a, b) => a.localeCompare(b));
+}
+
+function populateSelectOptions(selectId, values, label) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+
+  const options = [`<option value="">All ${escapeHtml(label)}</option>`]
+    .concat(values.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`));
+  select.innerHTML = options.join('');
+}
+
+function renderSkillsChips(values) {
+  const list = document.getElementById('skillsChipList');
+  if (!list) return;
+
+  if (!values.length) {
+    list.innerHTML = '<span class="product-desc">No skill metadata available.</span>';
+    return;
+  }
+
+  list.innerHTML = values.map((skill) => {
+    const isActive = productState.activeSkill === skill;
+    return `
+      <button class="skills-chip ${isActive ? 'is-active' : ''}" type="button" data-skill="${escapeHtml(skill)}" aria-pressed="${isActive ? 'true' : 'false'}">
+        ${escapeHtml(skill)}
+      </button>
+    `;
+  }).join('');
+}
+
+function renderAdvancedFilterControls() {
+  const subcategories = getUniqueValues('subcategory');
+  const sensoryFocuses = getUniqueValues('sensory_focus');
+  const skills = getUniqueValues('skills');
+
+  populateSelectOptions('subcategoryFilter', subcategories, 'subcategories');
+  populateSelectOptions('sensoryFilter', sensoryFocuses, 'sensory focus');
+  renderSkillsChips(skills);
+
+  const subcategorySelect = document.getElementById('subcategoryFilter');
+  const sensorySelect = document.getElementById('sensoryFilter');
+  const searchInput = document.getElementById('searchFilter');
+
+  if (subcategorySelect) {
+    subcategorySelect.value = productState.activeSubcategory;
+  }
+  if (sensorySelect) {
+    sensorySelect.value = productState.activeSensory;
+  }
+  if (searchInput) {
+    searchInput.value = productState.searchTerm;
+  }
+}
+
+function applyFilters() {
+  renderProducts(getFilteredProducts());
+  updateFilterControls();
+}
+
+function clearAllFilters() {
+  productState.activeCategory = CATEGORY_ALL;
+  productState.activeSubcategory = '';
+  productState.activeSensory = '';
+  productState.activeSkill = '';
+  productState.searchTerm = '';
+  updateCategoryInUrl(CATEGORY_ALL);
+  renderAdvancedFilterControls();
+  applyFilters();
 }
 
 function updateFilterControls() {
@@ -180,8 +299,7 @@ function updateFilterControls() {
 function applyCategory(category) {
   productState.activeCategory = ALLOWED_CATEGORIES.has(category) ? category : CATEGORY_ALL;
   updateCategoryInUrl(productState.activeCategory);
-  renderProducts(getFilteredProducts());
-  updateFilterControls();
+  applyFilters();
 }
 
 function initCategoryFilters() {
@@ -195,11 +313,61 @@ function initCategoryFilters() {
   });
 }
 
+function initAdvancedFilters() {
+  const subcategorySelect = document.getElementById('subcategoryFilter');
+  const sensorySelect = document.getElementById('sensoryFilter');
+  const searchInput = document.getElementById('searchFilter');
+  const skillsChipList = document.getElementById('skillsChipList');
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+  subcategorySelect?.addEventListener('change', (event) => {
+    productState.activeSubcategory = event.target.value;
+    applyFilters();
+  });
+
+  sensorySelect?.addEventListener('change', (event) => {
+    productState.activeSensory = event.target.value;
+    applyFilters();
+  });
+
+  searchInput?.addEventListener('input', (event) => {
+    productState.searchTerm = event.target.value;
+    applyFilters();
+  });
+
+  skillsChipList?.addEventListener('click', (event) => {
+    const chip = event.target.closest('.skills-chip');
+    if (!chip) return;
+
+    const skill = chip.dataset.skill || '';
+    productState.activeSkill = productState.activeSkill === skill ? '' : skill;
+    renderSkillsChips(getUniqueValues('skills'));
+    applyFilters();
+  });
+
+  clearFiltersBtn?.addEventListener('click', () => {
+    clearAllFilters();
+  });
+}
+
 function renderProducts(products) {
   const productsGrid = document.getElementById('productsGrid');
   if (!productsGrid) return;
 
   productsGrid.setAttribute('aria-busy', 'true');
+
+  if (!products.length) {
+    productsGrid.innerHTML = `
+      <article class="product-card">
+        <div class="product-body">
+          <div class="product-name">No products match your filters</div>
+          <div class="product-desc">Try removing a filter, using a broader search term, or click “Clear all filters” to view the full catalog.</div>
+        </div>
+      </article>
+    `;
+    productsGrid.setAttribute('aria-busy', 'false');
+    return;
+  }
 
   const cards = products.map((product) => {
     const priceLabel = formatPrice(product.price, product.currency);
@@ -275,7 +443,8 @@ async function loadProducts() {
 
     const products = await response.json();
     productState.allProducts = Array.isArray(products) ? products : [];
-    applyCategory(productState.activeCategory);
+    renderAdvancedFilterControls();
+    applyFilters();
   } catch (error) {
     console.error('Unable to load products from normalized/products.json', error);
     renderProductLoadError();
@@ -289,6 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDarkModeToggle();
   productState.activeCategory = getCategoryFromUrl();
   initCategoryFilters();
+  initAdvancedFilters();
   updateFilterControls();
   loadProducts();
 });
