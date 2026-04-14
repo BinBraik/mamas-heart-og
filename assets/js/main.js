@@ -129,6 +129,72 @@ function escapeHtml(value) {
     .replaceAll("'", '&#39;');
 }
 
+const CATEGORY_ALL = 'all';
+const ALLOWED_CATEGORIES = new Set([CATEGORY_ALL, 'Educational Kits', 'Sensory Development Kits']);
+
+const productState = {
+  allProducts: [],
+  activeCategory: CATEGORY_ALL,
+};
+
+function getCategoryFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const category = params.get('category');
+  if (!category) return CATEGORY_ALL;
+  return ALLOWED_CATEGORIES.has(category) ? category : CATEGORY_ALL;
+}
+
+function updateCategoryInUrl(category) {
+  const url = new URL(window.location.href);
+  if (category === CATEGORY_ALL) {
+    url.searchParams.delete('category');
+  } else {
+    url.searchParams.set('category', category);
+  }
+  window.history.replaceState({}, '', url);
+}
+
+function getFilteredProducts() {
+  if (productState.activeCategory === CATEGORY_ALL) {
+    return productState.allProducts;
+  }
+
+  return productState.allProducts.filter((product) => product.category === productState.activeCategory);
+}
+
+function updateFilterControls() {
+  const chips = document.querySelectorAll('.filter-chip');
+  chips.forEach((chip) => {
+    const isActive = chip.dataset.category === productState.activeCategory;
+    chip.classList.toggle('is-active', isActive);
+    chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+
+  const filterCount = document.getElementById('filterCount');
+  if (filterCount) {
+    const count = getFilteredProducts().length;
+    filterCount.textContent = `${count} product${count === 1 ? '' : 's'}`;
+  }
+}
+
+function applyCategory(category) {
+  productState.activeCategory = ALLOWED_CATEGORIES.has(category) ? category : CATEGORY_ALL;
+  updateCategoryInUrl(productState.activeCategory);
+  renderProducts(getFilteredProducts());
+  updateFilterControls();
+}
+
+function initCategoryFilters() {
+  const filtersContainer = document.getElementById('productFilters');
+  if (!filtersContainer) return;
+
+  filtersContainer.addEventListener('click', (event) => {
+    const target = event.target.closest('.filter-chip');
+    if (!target) return;
+    applyCategory(target.dataset.category || CATEGORY_ALL);
+  });
+}
+
 function renderProducts(products) {
   const productsGrid = document.getElementById('productsGrid');
   if (!productsGrid) return;
@@ -208,7 +274,8 @@ async function loadProducts() {
     }
 
     const products = await response.json();
-    renderProducts(products);
+    productState.allProducts = Array.isArray(products) ? products : [];
+    applyCategory(productState.activeCategory);
   } catch (error) {
     console.error('Unable to load products from normalized/products.json', error);
     renderProductLoadError();
@@ -220,5 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initScrollReveal();
   initDarkModeToggle();
+  productState.activeCategory = getCategoryFromUrl();
+  initCategoryFilters();
+  updateFilterControls();
   loadProducts();
 });
