@@ -141,14 +141,22 @@ function escapeHtml(value) {
     .replaceAll("'", '&#39;');
 }
 
-const FALLBACK_PRODUCT_IMAGE = './assets/img/products/Cubetto1.jpg';
+const FALLBACK_PRODUCT_IMAGE = './assets/img/logo/mama-heart-logo.png';
+const CUBETTO_IMAGE_PATH = 'images/products/educational-kits-cubetto-plus-playset-01.webp';
+const CUBETTO_IMAGE_VERSION = '2';
 
 function getProductImagePath(imageMain) {
   if (!imageMain || !String(imageMain).trim()) {
     return FALLBACK_PRODUCT_IMAGE;
   }
 
-  return `./${String(imageMain).trim()}`;
+  const normalizedPath = String(imageMain).trim();
+
+  if (normalizedPath === CUBETTO_IMAGE_PATH) {
+    return `./${normalizedPath}?v=${CUBETTO_IMAGE_VERSION}`;
+  }
+
+  return `./${normalizedPath}`;
 }
 
 function isFeaturedProduct(product) {
