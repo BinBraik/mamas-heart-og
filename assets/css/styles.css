@@ -504,36 +504,46 @@
     display:flex; justify-content:space-between; align-items:flex-end;
     margin-bottom:3rem;
   }
-  .product-filters {
+  .product-filter-shell {
     display:flex;
     align-items:center;
-    gap:0.75rem;
+    justify-content:space-between;
     flex-wrap:wrap;
     margin-bottom:1.5rem;
   }
-  .filter-chip {
+  .product-filters {
+    display:inline-flex;
+    align-items:center;
+    gap:0.4rem;
+    padding:0.35rem;
+    border-radius:999px;
+    background:var(--bg-section-muted);
     border:1px solid var(--border-input);
-    background:var(--bg-surface);
+    box-shadow:0 6px 16px var(--overlay-dark-light);
+  }
+  .filter-chip {
+    border:1px solid transparent;
+    background:transparent;
     color:var(--text-secondary);
     border-radius:999px;
-    padding:0.45rem 0.95rem;
+    padding:0.5rem 1rem;
     font-family:'Jost',sans-serif;
-    font-size:0.8rem;
+    font-size:0.82rem;
+    font-weight:500;
     cursor:pointer;
     transition:all 0.2s ease;
   }
   .filter-chip:hover {
-    border-color:var(--brand-primary);
+    background:var(--bg-surface);
     color:var(--brand-primary);
   }
   .filter-chip.is-active {
-    background:var(--brand-primary);
+    background:linear-gradient(120deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
     color:var(--text-on-dark);
-    border-color:var(--brand-primary);
-    box-shadow:0 6px 18px var(--overlay-brand-medium);
+    border-color:var(--brand-primary-dark);
+    box-shadow:0 8px 20px var(--overlay-brand-medium);
   }
   .filter-count {
-    margin-left:auto;
     font-size:0.8rem;
     color:var(--text-secondary);
   }
@@ -739,7 +749,8 @@
     .why-visual { order:-1; }
 
     .products { padding:5rem 2.5rem; }
-    .filter-count { margin-left:0; width:100%; }
+    .product-filter-shell { gap:0.8rem; }
+    .filter-count { width:100%; }
     .products-grid { grid-template-columns:1fr 1fr; }
 
     .testimonials { padding:5rem 2.5rem; }
@@ -810,7 +821,9 @@
     /* Products */
     .products { padding:4rem 1.5rem; }
     .products-header { flex-direction:column; align-items:flex-start; gap:1rem; }
-    .product-filters { gap:0.55rem; }
+    .product-filter-shell { align-items:flex-start; }
+    .product-filters { width:100%; justify-content:space-between; }
+    .filter-chip { flex:1; text-align:center; padding:0.5rem 0.7rem; font-size:0.75rem; }
     .products-grid { grid-template-columns:1fr; }
     .product-img { height:160px; font-size:3.5rem; }
 

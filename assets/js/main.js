@@ -155,11 +155,17 @@ function updateCategoryInUrl(category) {
 }
 
 function getFilteredProducts() {
-  if (productState.activeCategory === CATEGORY_ALL) {
-    return productState.allProducts;
-  }
+  return productState.allProducts.filter((product) => {
+    if (productState.activeCategory !== CATEGORY_ALL && product.category !== productState.activeCategory) {
+      return false;
+    }
+    return true;
+  });
+}
 
-  return productState.allProducts.filter((product) => product.category === productState.activeCategory);
+function applyFilters() {
+  renderProducts(getFilteredProducts());
+  updateFilterControls();
 }
 
 function updateFilterControls() {
@@ -168,6 +174,7 @@ function updateFilterControls() {
     const isActive = chip.dataset.category === productState.activeCategory;
     chip.classList.toggle('is-active', isActive);
     chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    chip.setAttribute('aria-selected', isActive ? 'true' : 'false');
   });
 
   const filterCount = document.getElementById('filterCount');
@@ -180,8 +187,7 @@ function updateFilterControls() {
 function applyCategory(category) {
   productState.activeCategory = ALLOWED_CATEGORIES.has(category) ? category : CATEGORY_ALL;
   updateCategoryInUrl(productState.activeCategory);
-  renderProducts(getFilteredProducts());
-  updateFilterControls();
+  applyFilters();
 }
 
 function initCategoryFilters() {
@@ -200,6 +206,19 @@ function renderProducts(products) {
   if (!productsGrid) return;
 
   productsGrid.setAttribute('aria-busy', 'true');
+
+  if (!products.length) {
+    productsGrid.innerHTML = `
+      <article class="product-card">
+        <div class="product-body">
+          <div class="product-name">No products in this category yet</div>
+          <div class="product-desc">Please switch tabs to explore the rest of our catalog.</div>
+        </div>
+      </article>
+    `;
+    productsGrid.setAttribute('aria-busy', 'false');
+    return;
+  }
 
   const cards = products.map((product) => {
     const priceLabel = formatPrice(product.price, product.currency);
@@ -275,7 +294,7 @@ async function loadProducts() {
 
     const products = await response.json();
     productState.allProducts = Array.isArray(products) ? products : [];
-    applyCategory(productState.activeCategory);
+    applyFilters();
   } catch (error) {
     console.error('Unable to load products from normalized/products.json', error);
     renderProductLoadError();
