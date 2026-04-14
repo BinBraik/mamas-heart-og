@@ -147,9 +147,31 @@ function applyStaticTranslations(root = document) {
     element.textContent = translate(element.dataset.i18n);
   });
 
+  root.querySelectorAll('[data-i18n-html]').forEach((element) => {
+    element.innerHTML = translate(element.dataset.i18nHtml);
+  });
+
+  root.querySelectorAll('[data-i18n-placeholder]').forEach((element) => {
+    element.setAttribute('placeholder', translate(element.dataset.i18nPlaceholder));
+  });
+
   root.querySelectorAll('[data-i18n-aria-label]').forEach((element) => {
     element.setAttribute('aria-label', translate(element.dataset.i18nAriaLabel));
   });
+
+  document.title = translate('meta.title');
+  const metaDescription = document.getElementById('metaDescription');
+  if (metaDescription) {
+    metaDescription.setAttribute('content', translate('meta.description'));
+  }
+  const metaOgTitle = document.getElementById('metaOgTitle');
+  if (metaOgTitle) {
+    metaOgTitle.setAttribute('content', translate('meta.ogTitle'));
+  }
+  const metaOgDescription = document.getElementById('metaOgDescription');
+  if (metaOgDescription) {
+    metaOgDescription.setAttribute('content', translate('meta.ogDescription'));
+  }
 }
 
 async function loadDictionaries() {
@@ -298,6 +320,12 @@ function isFeaturedProduct(product) {
 function formatStockStatus(stockStatus) {
   if (stockStatus === 'unknown' || stockStatus == null || stockStatus === '') {
     return '';
+  }
+
+  const statusKey = `products.stockStatus.${stockStatus}`;
+  const localizedStatus = translate(statusKey);
+  if (localizedStatus !== statusKey) {
+    return localizedStatus;
   }
 
   const readable = String(stockStatus).replaceAll('_', ' ');
