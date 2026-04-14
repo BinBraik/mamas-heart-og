@@ -135,6 +135,10 @@ const ALLOWED_CATEGORIES = new Set([CATEGORY_ALL, 'Educational Kits', 'Sensory D
 const productState = {
   allProducts: [],
   activeCategory: CATEGORY_ALL,
+  activeSubcategory: '',
+  activeSensory: '',
+  activeSkill: '',
+  searchTerm: '',
 };
 
 function getCategoryFromUrl() {
@@ -152,6 +156,22 @@ function updateCategoryInUrl(category) {
     url.searchParams.set('category', category);
   }
   window.history.replaceState({}, '', url);
+}
+
+function normalizeList(value) {
+  if (Array.isArray(value)) {
+    return value.filter(Boolean);
+  }
+
+  if (typeof value === 'string' && value.trim()) {
+    return [value.trim()];
+  }
+
+  return [];
+}
+
+function textMatch(value, query) {
+  return String(value ?? '').toLowerCase().includes(query);
 }
 
 function getFilteredProducts() {
@@ -198,6 +218,43 @@ function initCategoryFilters() {
     const target = event.target.closest('.filter-chip');
     if (!target) return;
     applyCategory(target.dataset.category || CATEGORY_ALL);
+  });
+}
+
+function initAdvancedFilters() {
+  const subcategorySelect = document.getElementById('subcategoryFilter');
+  const sensorySelect = document.getElementById('sensoryFilter');
+  const searchInput = document.getElementById('searchFilter');
+  const skillsChipList = document.getElementById('skillsChipList');
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+  subcategorySelect?.addEventListener('change', (event) => {
+    productState.activeSubcategory = event.target.value;
+    applyFilters();
+  });
+
+  sensorySelect?.addEventListener('change', (event) => {
+    productState.activeSensory = event.target.value;
+    applyFilters();
+  });
+
+  searchInput?.addEventListener('input', (event) => {
+    productState.searchTerm = event.target.value;
+    applyFilters();
+  });
+
+  skillsChipList?.addEventListener('click', (event) => {
+    const chip = event.target.closest('.skills-chip');
+    if (!chip) return;
+
+    const skill = chip.dataset.skill || '';
+    productState.activeSkill = productState.activeSkill === skill ? '' : skill;
+    renderSkillsChips(getUniqueValues('skills'));
+    applyFilters();
+  });
+
+  clearFiltersBtn?.addEventListener('click', () => {
+    clearAllFilters();
   });
 }
 
@@ -308,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDarkModeToggle();
   productState.activeCategory = getCategoryFromUrl();
   initCategoryFilters();
+  initAdvancedFilters();
   updateFilterControls();
   loadProducts();
 });
