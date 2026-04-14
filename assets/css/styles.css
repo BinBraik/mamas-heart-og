@@ -623,6 +623,7 @@
   }
   .products-grid {
     display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem;
+    align-items: stretch;
   }
   .product-card {
     background:var(--bg-surface); border-radius:24px;
@@ -630,6 +631,9 @@
     box-shadow:0 2px 16px var(--overlay-dark-light);
     transition:transform 0.3s, box-shadow 0.3s;
     cursor:pointer;
+    height:100%;
+    display:flex;
+    flex-direction:column;
   }
   .product-card:hover { transform:translateY(-8px); box-shadow:0 16px 40px var(--overlay-dark-strong); }
   .product-img {
@@ -651,17 +655,57 @@
     padding:0.2rem 0.7rem; border-radius:50px; color:var(--brand-primary);
     box-shadow:0 1px 6px var(--overlay-surface-shadow);
   }
-  .product-body { padding:1.4rem; }
+  .product-featured-badge {
+    position:absolute;
+    top:1rem;
+    right:1rem;
+    background:var(--brand-primary);
+    color:var(--text-on-dark);
+    font-size:0.68rem;
+    font-weight:600;
+    letter-spacing:0.01em;
+    padding:0.25rem 0.65rem;
+    border-radius:50px;
+    box-shadow:0 1px 6px var(--overlay-surface-shadow);
+  }
+  .product-body {
+    padding:1.4rem;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+    gap:0.45rem;
+  }
   .product-name {
     font-family:'Cormorant Garamond',serif;
     font-size:1.1rem; margin-bottom:0.3rem; color:var(--text-primary);
+    min-height:2.3rem;
   }
-  .product-desc { font-size:0.8rem; color:var(--text-secondary); line-height:1.5; margin-bottom:1rem; }
-  .product-footer { display:flex; align-items:center; justify-content:space-between; }
+  .product-desc {
+    font-size:0.8rem; color:var(--text-secondary); line-height:1.5; margin-bottom:1rem;
+    min-height:3.8rem;
+  }
+  .product-footer {
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    margin-top:auto;
+    gap:0.75rem;
+  }
   .product-price { font-size:1.1rem; font-weight:500; color:var(--brand-accent); }
   .product-age-tag {
     font-size:0.68rem; background:var(--bg-section-muted);
     padding:0.2rem 0.6rem; border-radius:50px; color:var(--brand-accent-dark);
+    display:inline-flex;
+    margin-top:0.35rem;
+  }
+  .product-stock-tag {
+    font-size:0.68rem;
+    color:var(--text-secondary);
+    margin-top:0.35rem;
+    min-height:1rem;
+  }
+  .product-stock-tag--neutral {
+    visibility:hidden;
   }
   .add-btn {
     width:34px; height:34px; border-radius:50%;
