@@ -96,6 +96,18 @@ function initDarkModeToggle() {
 }
 
 function formatPrice(price, currency) {
+  if (currency === 'SAR') {
+    const sarValue = Number(price);
+    if (!Number.isFinite(sarValue)) {
+      return 'SAR —';
+    }
+
+    return `SAR ${new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(sarValue)}`;
+  }
+
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currency || 'USD',
@@ -109,7 +121,7 @@ function formatAgeRange(ageMin, ageMax) {
     return 'All ages';
   }
 
-  if (ageMin != null && ageMax != null && ageMax !== ageMin) {
+  if (ageMin != null && ageMax != null) {
     return `Age ${ageMin}–${ageMax}`;
   }
 
@@ -127,6 +139,29 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+const FALLBACK_PRODUCT_IMAGE = './assets/img/products/Cubetto1.jpg';
+
+function getProductImagePath(imageMain) {
+  if (!imageMain || !String(imageMain).trim()) {
+    return FALLBACK_PRODUCT_IMAGE;
+  }
+
+  return `./${String(imageMain).trim()}`;
+}
+
+function isFeaturedProduct(product) {
+  return Boolean(product?.featured);
+}
+
+function formatStockStatus(stockStatus) {
+  if (stockStatus === 'unknown' || stockStatus == null || stockStatus === '') {
+    return '';
+  }
+
+  const readable = String(stockStatus).replaceAll('_', ' ');
+  return readable.charAt(0).toUpperCase() + readable.slice(1);
 }
 
 const CATEGORY_ALL = 'all';
@@ -280,16 +315,27 @@ function renderProducts(products) {
   const cards = products.map((product) => {
     const priceLabel = formatPrice(product.price, product.currency);
     const ageLabel = formatAgeRange(product.age_min, product.age_max);
-    const imagePath = product.image_main ? `./${product.image_main}` : './assets/img/products/Cubetto1.jpg';
-    const productTag = product.featured
-      ? '⭐ Featured'
-      : `${product.category} · ${product.subcategory}`;
+    const imagePath = getProductImagePath(product.image_main);
+    const productTag = `${product.category} · ${product.subcategory}`;
+    const featuredBadge = isFeaturedProduct(product)
+      ? '<div class="product-featured-badge" aria-label="Featured product">Featured</div>'
+      : '';
+    const stockLabel = formatStockStatus(product.stock_status);
+    const stockMarkup = stockLabel
+      ? `<div class="product-stock-tag">${escapeHtml(stockLabel)}</div>`
+      : '<div class="product-stock-tag product-stock-tag--neutral" aria-hidden="true">&nbsp;</div>';
 
     return `
       <article class="product-card" data-product-id="${escapeHtml(product.id)}">
         <div class="product-img">
-          <img src="${escapeHtml(imagePath)}" alt="${escapeHtml(product.name)}">
+          <img
+            src="${escapeHtml(imagePath)}"
+            alt="${escapeHtml(product.name)}"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='${FALLBACK_PRODUCT_IMAGE}';"
+          >
           <div class="product-tag">${escapeHtml(productTag)}</div>
+          ${featuredBadge}
         </div>
         <div class="product-body">
           <div class="product-name">${escapeHtml(product.name)}</div>
@@ -298,6 +344,7 @@ function renderProducts(products) {
             <div>
               <div class="product-price">${escapeHtml(priceLabel)}</div>
               <div class="product-age-tag">${escapeHtml(ageLabel)}</div>
+              ${stockMarkup}
             </div>
             <button class="add-btn" aria-label="Add ${escapeHtml(product.name)} to cart">+</button>
           </div>
