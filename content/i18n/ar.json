@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "shopByCategory": "تسوق حسب الفئة",
+    "gifting": "الهدايا",
+    "books": "الكتب",
+    "ourPromise": "وعدنا",
+    "mamasSay": "آراء الأمهات",
+    "about": "من نحن",
+    "shopNow": "تسوق الآن ♡",
+    "openMenu": "فتح القائمة",
+    "languageSwitcher": "مبدّل اللغة"
+  },
+  "themeToggle": {
+    "switchToLight": "التبديل إلى الوضع الفاتح",
+    "switchToDark": "التبديل إلى الوضع الداكن"
+  },
+  "hero": {
+    "loadingTitle": "جارٍ تحميل المنتجات المميزة…",
+    "loadingDescription": "يرجى الانتظار"
+  },
+  "products": {
+    "sectionTag": "مجموعتنا",
+    "freeCopy": "احصل على نسخة مجانية مع كل عملية شراء",
+    "title": "الألعاب الأكثر مبيعًا",
+    "viewAll": "عرض كل الألعاب ←",
+    "categoriesLabel": "فئات المنتجات",
+    "filters": {
+      "all": "كل الألعاب",
+      "educationalKits": "المجموعات التعليمية",
+      "sensoryDevelopment": "التنمية الحسية"
+    },
+    "count": {
+      "one": "{count} منتج",
+      "other": "{count} منتجات"
+    },
+    "empty": {
+      "title": "لا توجد منتجات في هذا التصنيف حاليًا",
+      "description": "يرجى تغيير التصنيف لاستكشاف بقية مجموعتنا."
+    },
+    "featured": {
+      "label": "منتج مميز",
+      "badge": "مميز",
+      "loadingTitle": "سيتم عرض المنتجات المميزة قريبًا",
+      "loadingDescription": "يرجى استكشاف مجموعتنا أدناه"
+    },
+    "addToCartAria": "أضف {name} إلى السلة",
+    "loadError": {
+      "title": "المنتجات غير متاحة مؤقتًا",
+      "description": "تعذر تحميل المنتجات الآن. يرجى تحديث الصفحة والمحاولة مرة أخرى."
+    },
+    "age": {
+      "all": "مناسب لجميع الأعمار",
+      "range": "العمر {min}–{max}",
+      "min": "العمر {min}+",
+      "max": "حتى عمر {max}"
+    }
+  }
+}

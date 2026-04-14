@@ -27,36 +27,36 @@
     </div>
   </div>
   <ul class="nav-links">
-    <li><a href="#products">Shop by Category</a></li>
-    <li><a href="#products">Gifting</a></li>
-    <li><a href="#products">Books</a></li>
-    <li><a href="#why">Our Promise</a></li>
-    <li><a href="#testimonials">Mamas Say</a></li>
-    <li><a href="#cta">About</a></li>
+    <li><a href="#products" data-i18n="nav.shopByCategory">Shop by Category</a></li>
+    <li><a href="#products" data-i18n="nav.gifting">Gifting</a></li>
+    <li><a href="#products" data-i18n="nav.books">Books</a></li>
+    <li><a href="#why" data-i18n="nav.ourPromise">Our Promise</a></li>
+    <li><a href="#testimonials" data-i18n="nav.mamasSay">Mamas Say</a></li>
+    <li><a href="#cta" data-i18n="nav.about">About</a></li>
   </ul>
   <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
     <span class="toggle-icon">☀</span>
   </button>
-  <div class="language-toggle" id="languageToggle" role="group" aria-label="Language switcher">
+  <div class="language-toggle" id="languageToggle" role="group" aria-label="Language switcher" data-i18n-aria-label="nav.languageSwitcher">
     <button class="language-option is-active" type="button" data-lang="en" aria-pressed="true">EN</button>
     <span aria-hidden="true">|</span>
     <button class="language-option" type="button" data-lang="ar" aria-pressed="false">AR</button>
   </div>
-  <button class="nav-cta">Shop Now ♡</button>
-  <button class="hamburger" id="hamburger" aria-label="Open menu">
+  <button class="nav-cta" data-i18n="nav.shopNow">Shop Now ♡</button>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" data-i18n-aria-label="nav.openMenu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#products" class="mobile-link">Shop by Category</a>
-  <a href="#products" class="mobile-link">Gifting</a>
-  <a href="#products" class="mobile-link">Books</a>
-  <a href="#why"      class="mobile-link">Our Promise</a>
-  <a href="#testimonials" class="mobile-link">Mamas Say</a>
-  <a href="#cta"      class="mobile-link">About</a>
-  <button class="btn-primary">Shop Now ♡</button>
+  <a href="#products" class="mobile-link" data-i18n="nav.shopByCategory">Shop by Category</a>
+  <a href="#products" class="mobile-link" data-i18n="nav.gifting">Gifting</a>
+  <a href="#products" class="mobile-link" data-i18n="nav.books">Books</a>
+  <a href="#why"      class="mobile-link" data-i18n="nav.ourPromise">Our Promise</a>
+  <a href="#testimonials" class="mobile-link" data-i18n="nav.mamasSay">Mamas Say</a>
+  <a href="#cta"      class="mobile-link" data-i18n="nav.about">About</a>
+  <button class="btn-primary" data-i18n="nav.shopNow">Shop Now ♡</button>
 </div>
 
 <!-- HERO -->
@@ -87,8 +87,8 @@
 
   <div class="hero-visual" id="heroProductCards" aria-live="polite" aria-busy="true">
     <div class="toy-card">
-      <div class="toy-card-name">Loading featured toys…</div>
-      <div class="toy-card-age">Please wait</div>
+      <div class="toy-card-name" data-i18n="hero.loadingTitle">Loading featured toys…</div>
+      <div class="toy-card-age" data-i18n="hero.loadingDescription">Please wait</div>
       <div class="toy-card-price">♡</div>
     </div>
   </div>
@@ -172,17 +172,17 @@
 <section class="products" id="products">
   <div class="products-header">
     <div>
-      <div class="section-tag">Our Collection</div>
-      <h1>Get your FREE copy with Every Purchase</h1>
-      <h2 class="section-title">Bestselling Toys</h2>
+      <div class="section-tag" data-i18n="products.sectionTag">Our Collection</div>
+      <h1 data-i18n="products.freeCopy">Get your FREE copy with Every Purchase</h1>
+      <h2 class="section-title" data-i18n="products.title">Bestselling Toys</h2>
     </div>
-    <button class="btn-outline">View All Toys →</button>
+    <button class="btn-outline" data-i18n="products.viewAll">View All Toys →</button>
   </div>
   <div class="product-filter-shell">
-    <div class="product-filters" id="productFilters" role="tablist" aria-label="Product categories">
-      <button class="filter-chip is-active" type="button" role="tab" data-category="all" aria-selected="true" aria-pressed="true">All Toys</button>
-      <button class="filter-chip" type="button" role="tab" data-category="Educational Kits" aria-selected="false" aria-pressed="false">Educational Kits</button>
-      <button class="filter-chip" type="button" role="tab" data-category="Sensory Development Kits" aria-selected="false" aria-pressed="false">Sensory Development</button>
+    <div class="product-filters" id="productFilters" role="tablist" aria-label="Product categories" data-i18n-aria-label="products.categoriesLabel">
+      <button class="filter-chip is-active" type="button" role="tab" data-category="all" aria-selected="true" aria-pressed="true" data-i18n="products.filters.all">All Toys</button>
+      <button class="filter-chip" type="button" role="tab" data-category="Educational Kits" aria-selected="false" aria-pressed="false" data-i18n="products.filters.educationalKits">Educational Kits</button>
+      <button class="filter-chip" type="button" role="tab" data-category="Sensory Development Kits" aria-selected="false" aria-pressed="false" data-i18n="products.filters.sensoryDevelopment">Sensory Development</button>
     </div>
     <span class="filter-count" id="filterCount" aria-live="polite"></span>
   </div>
