@@ -175,110 +175,17 @@ function textMatch(value, query) {
 }
 
 function getFilteredProducts() {
-  const query = productState.searchTerm.trim().toLowerCase();
-
   return productState.allProducts.filter((product) => {
     if (productState.activeCategory !== CATEGORY_ALL && product.category !== productState.activeCategory) {
       return false;
     }
-
-    if (productState.activeSubcategory && product.subcategory !== productState.activeSubcategory) {
-      return false;
-    }
-
-    const sensoryValues = normalizeList(product.sensory_focus);
-    if (productState.activeSensory && !sensoryValues.includes(productState.activeSensory)) {
-      return false;
-    }
-
-    const skillValues = normalizeList(product.skills);
-    if (productState.activeSkill && !skillValues.includes(productState.activeSkill)) {
-      return false;
-    }
-
-    if (!query) {
-      return true;
-    }
-
-    const tags = normalizeList(product.tags);
-    return textMatch(product.name, query) || tags.some((tag) => textMatch(tag, query));
+    return true;
   });
-}
-
-function getUniqueValues(key) {
-  const values = new Set();
-  productState.allProducts.forEach((product) => {
-    normalizeList(product[key]).forEach((item) => values.add(item));
-  });
-  return [...values].sort((a, b) => a.localeCompare(b));
-}
-
-function populateSelectOptions(selectId, values, label) {
-  const select = document.getElementById(selectId);
-  if (!select) return;
-
-  const options = [`<option value="">All ${escapeHtml(label)}</option>`]
-    .concat(values.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`));
-  select.innerHTML = options.join('');
-}
-
-function renderSkillsChips(values) {
-  const list = document.getElementById('skillsChipList');
-  if (!list) return;
-
-  if (!values.length) {
-    list.innerHTML = '<span class="product-desc">No skill metadata available.</span>';
-    return;
-  }
-
-  list.innerHTML = values.map((skill) => {
-    const isActive = productState.activeSkill === skill;
-    return `
-      <button class="skills-chip ${isActive ? 'is-active' : ''}" type="button" data-skill="${escapeHtml(skill)}" aria-pressed="${isActive ? 'true' : 'false'}">
-        ${escapeHtml(skill)}
-      </button>
-    `;
-  }).join('');
-}
-
-function renderAdvancedFilterControls() {
-  const subcategories = getUniqueValues('subcategory');
-  const sensoryFocuses = getUniqueValues('sensory_focus');
-  const skills = getUniqueValues('skills');
-
-  populateSelectOptions('subcategoryFilter', subcategories, 'subcategories');
-  populateSelectOptions('sensoryFilter', sensoryFocuses, 'sensory focus');
-  renderSkillsChips(skills);
-
-  const subcategorySelect = document.getElementById('subcategoryFilter');
-  const sensorySelect = document.getElementById('sensoryFilter');
-  const searchInput = document.getElementById('searchFilter');
-
-  if (subcategorySelect) {
-    subcategorySelect.value = productState.activeSubcategory;
-  }
-  if (sensorySelect) {
-    sensorySelect.value = productState.activeSensory;
-  }
-  if (searchInput) {
-    searchInput.value = productState.searchTerm;
-  }
 }
 
 function applyFilters() {
   renderProducts(getFilteredProducts());
   updateFilterControls();
-}
-
-function clearAllFilters() {
-  productState.activeCategory = CATEGORY_ALL;
-  productState.activeSubcategory = '';
-  productState.activeSensory = '';
-  productState.activeSkill = '';
-  productState.searchTerm = '';
-  updateCategoryInUrl(CATEGORY_ALL);
-  renderAdvancedFilterControls();
-  applyFilters();
 }
 
 function updateFilterControls() {
@@ -287,6 +194,7 @@ function updateFilterControls() {
     const isActive = chip.dataset.category === productState.activeCategory;
     chip.classList.toggle('is-active', isActive);
     chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    chip.setAttribute('aria-selected', isActive ? 'true' : 'false');
   });
 
   const filterCount = document.getElementById('filterCount');
@@ -360,8 +268,8 @@ function renderProducts(products) {
     productsGrid.innerHTML = `
       <article class="product-card">
         <div class="product-body">
-          <div class="product-name">No products match your filters</div>
-          <div class="product-desc">Try removing a filter, using a broader search term, or click “Clear all filters” to view the full catalog.</div>
+          <div class="product-name">No products in this category yet</div>
+          <div class="product-desc">Please switch tabs to explore the rest of our catalog.</div>
         </div>
       </article>
     `;
@@ -443,7 +351,6 @@ async function loadProducts() {
 
     const products = await response.json();
     productState.allProducts = Array.isArray(products) ? products : [];
-    renderAdvancedFilterControls();
     applyFilters();
   } catch (error) {
     console.error('Unable to load products from normalized/products.json', error);
