@@ -45,6 +45,14 @@ function initAddButtons(root = document) {
 }
 
 function initScrollReveal(elements = document.querySelectorAll('.product-card, .testimonial-card, .why-feature, .age-card')) {
+  if (typeof IntersectionObserver !== 'function') {
+    elements.forEach((element) => {
+      element.style.opacity = '1';
+      element.style.transform = 'translateY(0)';
+    });
+    return;
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -179,6 +187,63 @@ const productState = {
   allProducts: [],
   activeCategory: CATEGORY_ALL,
 };
+
+const HERO_CARD_COUNT = 4;
+
+function getRandomDistinctProducts(products, count) {
+  const pool = Array.isArray(products) ? [...products] : [];
+  for (let i = pool.length - 1; i > 0; i -= 1) {
+    const swapIndex = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[swapIndex]] = [pool[swapIndex], pool[i]];
+  }
+  return pool.slice(0, Math.max(0, count));
+}
+
+function renderHeroProducts(products) {
+  const heroContainer = document.getElementById('heroProductCards');
+  if (!heroContainer) return;
+
+  heroContainer.setAttribute('aria-busy', 'true');
+
+  if (!products.length) {
+    heroContainer.innerHTML = `
+      <article class="toy-card">
+        <div class="toy-card-name">Featured toys are loading soon</div>
+        <div class="toy-card-age">Please explore our catalog below</div>
+        <div class="toy-card-price">♡</div>
+      </article>
+    `;
+    heroContainer.setAttribute('aria-busy', 'false');
+    return;
+  }
+
+  heroContainer.innerHTML = products.map((product) => {
+    const imagePath = getProductImagePath(product.image_main);
+    const ageLabel = formatAgeRange(product.age_min, product.age_max);
+    const priceLabel = formatPrice(product.price, product.currency);
+
+    return `
+      <article class="toy-card" data-product-id="${escapeHtml(product.id)}">
+        <img
+          class="toy-thumb"
+          src="${escapeHtml(imagePath)}"
+          alt="${escapeHtml(product.name)}"
+          loading="lazy"
+          onerror="this.onerror=null;this.src='${FALLBACK_PRODUCT_IMAGE}';"
+        >
+        <div class="toy-card-name">${escapeHtml(product.name)}</div>
+        <div class="toy-card-age">${escapeHtml(ageLabel)}</div>
+        <div class="toy-card-price">${escapeHtml(priceLabel)}</div>
+      </article>
+    `;
+  }).join('');
+
+  heroContainer.setAttribute('aria-busy', 'false');
+}
+
+function renderHeroProductsFallback() {
+  renderHeroProducts([]);
+}
 
 function getCategoryFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -340,8 +405,14 @@ function renderProductLoadError() {
 }
 
 async function loadProducts() {
+  const abortController = new AbortController();
+  const requestTimeoutMs = 8000;
+  const timeout = setTimeout(() => {
+    abortController.abort('Product request timed out');
+  }, requestTimeoutMs);
+
   try {
-    const response = await fetch('./normalized/products.json');
+    const response = await fetch('./normalized/products.json', { signal: abortController.signal });
 
     if (!response.ok) {
       throw new Error(`Request failed: ${response.status}`);
@@ -349,20 +420,24 @@ async function loadProducts() {
 
     const products = await response.json();
     productState.allProducts = Array.isArray(products) ? products : [];
+    renderHeroProducts(getRandomDistinctProducts(productState.allProducts, HERO_CARD_COUNT));
     applyFilters();
   } catch (error) {
     console.error('Unable to load products from normalized/products.json', error);
+    renderHeroProductsFallback();
     renderProductLoadError();
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initSmoothScroll();
-  initScrollReveal();
   initDarkModeToggle();
   productState.activeCategory = getCategoryFromUrl();
   initCategoryFilters();
   updateFilterControls();
   loadProducts();
+  initScrollReveal();
 });

@@ -815,6 +815,7 @@
 
     /* Nav */
     nav { padding:1rem 1.5rem; }
+    .logo-img { width:130px; }
     .nav-links { display:none; }
     .nav-cta { display:none; }
     .hamburger { display:flex; }
@@ -822,7 +823,7 @@
     /* Hero */
     .hero {
       grid-template-columns:1fr;
-      padding:6.5rem 1.5rem 3.5rem;
+      padding:9rem 1.5rem 3.5rem;
       gap:2.5rem;
     }
     .hero::before { display:none; }
