@@ -1,13 +1,37 @@
 # IMPORT_GUIDE
 
-This package is intended to let a coding/implementation chat wire up the catalog quickly without re-cleaning the source data.
+This package is designed so future catalog updates can be shipped via **data file changes** (not app code edits) when the schema contract is respected.
 
 ## Recommended source of truth
 Use:
 
-- `normalized/products.json` for app/runtime use
+- `normalized/products.json` for app/runtime use (**canonical**) 
 - `normalized/products.csv` for spreadsheet/CMS import
 - `images/products/` for all normalized product images
+
+## Exact update flow (content-only)
+Follow these steps in order for every content update:
+
+1. **Edit canonical data**
+   - Update product rows in `normalized/products.json`.
+   - If needed, mirror those changes to `normalized/products.csv` for spreadsheet workflows.
+2. **Add images**
+   - Put product images in `images/products/`.
+   - Set `image_main` to a relative path like `images/products/<slug>-01.webp`.
+3. **Verify schema fields**
+   - Run `python3 scripts/validate_products.py`.
+   - Fix any missing required fields, invalid categories, empty descriptions, slug issues, or broken image paths.
+
+## Lightweight validation
+Use the validator script before committing any content change:
+
+- Command: `python3 scripts/validate_products.py`
+- Checks:
+  - required fields exist
+  - key text fields are not empty
+  - `category` is one of the allowed values
+  - `image_main` follows path convention and points to an existing file
+  - `slug` formatting sanity check
 
 ## Basic consume pattern
 
@@ -38,6 +62,17 @@ All paths are relative to the package root.
 Examples:
 - `normalized/products.json`
 - `images/products/educational-kits-cubetto-plus-playset-01.webp`
+
+## Content QA checklist (non-technical editors)
+Before handing off updates, verify:
+
+- [ ] Every product has a valid image file and `image_main` path resolves.
+- [ ] `slug` values are lowercase and hyphenated (no spaces/underscores).
+- [ ] `short_description` and `long_description` are not empty.
+- [ ] `category` is only one of:
+  - `Educational Kits`
+  - `Sensory Development Kits`
+- [ ] `python3 scripts/validate_products.py` passes with no errors.
 
 ## Reversibility
 If implementation needs to trace back to the source package:
