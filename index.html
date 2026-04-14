@@ -198,6 +198,29 @@
     <button class="filter-chip" type="button" data-category="Sensory Development Kits" aria-pressed="false">Sensory Development Kits</button>
     <span class="filter-count" id="filterCount" aria-live="polite"></span>
   </div>
+  <div class="advanced-filters" id="advancedFilters" aria-label="Advanced product discovery filters">
+    <label class="filter-field">
+      <span>Subcategory</span>
+      <select id="subcategoryFilter">
+        <option value="">All subcategories</option>
+      </select>
+    </label>
+    <label class="filter-field">
+      <span>Sensory focus</span>
+      <select id="sensoryFilter">
+        <option value="">All sensory focus</option>
+      </select>
+    </label>
+    <label class="filter-field filter-search">
+      <span>Search</span>
+      <input id="searchFilter" type="search" placeholder="Search by name or tag" autocomplete="off"/>
+    </label>
+    <div class="filter-field filter-skills" id="skillsFilter" role="group" aria-label="Skills">
+      <span>Skills</span>
+      <div class="skills-chip-list" id="skillsChipList"></div>
+    </div>
+    <button class="clear-filters-btn" id="clearFiltersBtn" type="button">Clear all filters</button>
+  </div>
   <!-- PRODUCTS GRID -->
   <div class="products-grid" id="productsGrid" aria-live="polite" aria-busy="true"></div>
 </section>
