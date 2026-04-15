@@ -7,6 +7,18 @@ This project now uses a small content/config contract so non-technical updates c
   - `content/i18n/en.json`
   - `content/i18n/ar.json`
 - Keep EN/AR keys in parity. If you add a new key in EN, add it in AR too.
+- Hero free-book promo text keys live under:
+  - `hero.freeBook.title`
+  - `hero.freeBook.subtitle` (optional; leave empty to hide subtitle)
+  - `hero.freeBook.imageAlt`
+  - `hero.freeBook.ariaLabel`
+
+## Update hero free-book promo
+- Toggle promo visibility in `content/app-config.json`:
+  - `ui.enableHeroBookPromo` (`true`/`false`)
+- Update promo image in `content/app-config.json`:
+  - `assets.bookCoverImagePath` (supports absolute URL or local project-relative path)
+- The hero promo title/subtitle are rendered from i18n keys, and image source is rendered from config, so no HTML/JS source edits are required for routine promo updates.
 
 ## Update categories
 - Edit `content/app-config.json`:
