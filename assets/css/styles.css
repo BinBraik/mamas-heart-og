@@ -437,12 +437,15 @@
   }
   .stat-label { font-size:0.75rem; color:var(--text-secondary); margin-top:0.1rem; letter-spacing:0.3px; }
 
-  /* Hero right — promotional book feature */
+  /* Hero right — promotional rotator */
   .hero-visual {
     position:relative; z-index:1;
     animation: fadeUp 0.6s 0.15s ease both;
   }
-  .hero-book-promo {
+  .hero-promo-rotator {
+    position: relative;
+  }
+  .hero-promo-slide {
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -460,29 +463,32 @@
     max-width: min(560px, 100%);
     margin-inline: auto;
   }
-  .hero-book-promo::before,
-  .hero-book-promo::after {
+  .hero-promo-slide--inactive {
+    display: none;
+  }
+  .hero-promo-slide::before,
+  .hero-promo-slide::after {
     content: "";
     position: absolute;
     pointer-events: none;
     z-index: -1;
     border-radius: 999px;
   }
-  .hero-book-promo::before {
+  .hero-promo-slide::before {
     width: min(66%, 270px);
     aspect-ratio: 1;
     inset-block-start: -18%;
     inset-inline-end: -12%;
     background: radial-gradient(circle at 50% 50%, var(--promo-glow-primary) 0%, transparent 72%);
   }
-  .hero-book-promo::after {
+  .hero-promo-slide::after {
     width: min(55%, 230px);
     aspect-ratio: 1;
     inset-block-end: -24%;
     inset-inline-start: -16%;
     background: radial-gradient(circle at 50% 50%, var(--promo-glow-accent) 0%, transparent 72%);
   }
-  .hero-book-promo-title {
+  .hero-promo-title {
     grid-area: title;
     font-family: var(--font-heading-latin);
     font-size: clamp(1.35rem, 2.2vw, 1.78rem);
@@ -492,15 +498,23 @@
     max-width: 22ch;
     text-wrap: balance;
   }
-  .hero-book-promo-subtitle {
+  .hero-promo-subtitle {
     font-size: clamp(0.92rem, 1.12vw, 1.02rem);
     color: var(--text-secondary);
     line-height: 1.62;
     margin: 0;
     max-width: 44ch;
   }
-  .hero-book-promo-image {
-    width: min(100%, 260px);
+  .hero-promo-media-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .hero-promo-image {
+    width: min(100%, 240px);
     max-width: 100%;
     max-height: 320px;
     border-radius: 18px;
@@ -512,6 +526,12 @@
     margin-block-start: 0.35rem;
     transform: rotate(-1.25deg) translateY(1px);
     transform-origin: center;
+  }
+  .hero-promo-image--packaging {
+    width: min(100%, 180px);
+  }
+  .hero-promo-cta {
+    margin-block-start: 0.35rem;
   }
   @keyframes fadeUp {
     from { opacity:0; transform:translateY(22px); }
@@ -1080,15 +1100,15 @@
   html[lang="ar"] .product-desc {
     min-height: 4.6rem;
   }
-  html[lang="ar"] .hero-book-promo-title,
-  html[lang="ar"] .hero-book-promo-subtitle {
+  html[lang="ar"] .hero-promo-title,
+  html[lang="ar"] .hero-promo-subtitle {
     text-align: right;
   }
-  [dir="rtl"] .hero-book-promo-title,
-  [dir="rtl"] .hero-book-promo-subtitle {
+  [dir="rtl"] .hero-promo-title,
+  [dir="rtl"] .hero-promo-subtitle {
     text-align: right;
   }
-  [dir="rtl"] .hero-book-promo-image {
+  [dir="rtl"] .hero-promo-image {
     transform: rotate(1.25deg) translateY(1px);
   }
   html[lang="ar"] .product-tag,
@@ -1189,20 +1209,20 @@
     .hero-visual {
       width: 100%;
     }
-    .hero-book-promo {
+    .hero-promo-slide {
       padding: 1.25rem;
       border-radius: 22px;
       gap: 0.9rem;
     }
-    .hero-book-promo-title {
+    .hero-promo-title {
       max-width: none;
       font-size: 1.34rem;
     }
-    .hero-book-promo-subtitle {
+    .hero-promo-subtitle {
       max-width: none;
       font-size: 0.9rem;
     }
-    .hero-book-promo-image {
+    .hero-promo-image {
       width: min(100%, 210px);
       max-height: 280px;
       transform: none;

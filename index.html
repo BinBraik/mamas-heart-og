@@ -87,18 +87,59 @@
     </div>
   </div>
 
-  <div id="heroBookPromo" class="hero-visual" role="complementary" data-i18n-aria-label="hero.freeBook.ariaLabel" aria-label="">
-    <article class="hero-book-promo">
-      <h2 class="hero-book-promo-title" data-i18n="hero.freeBook.title"></h2>
-      <p id="heroBookPromoSubtitle" class="hero-book-promo-subtitle" data-i18n="hero.freeBook.subtitle"></p>
-      <img
-        id="heroBookPromoImage"
-        class="hero-book-promo-image"
-        src=""
-        alt=""
-        data-i18n-alt="hero.freeBook.imageAlt"
-        loading="lazy"
-      >
+  <div
+    id="heroPromoRotator"
+    class="hero-visual hero-promo-rotator"
+    role="complementary"
+    data-i18n-aria-label="hero.promo.ariaLabel"
+    aria-label=""
+  >
+    <article
+      id="heroPromoSlideBook"
+      class="hero-promo-slide hero-promo-slide--book hero-promo-slide--active"
+      data-slide-state="active"
+      aria-hidden="false"
+    >
+      <h2 class="hero-promo-title" data-i18n="hero.bookPromo.title"></h2>
+      <p id="heroBookPromoSubtitle" class="hero-promo-subtitle" data-i18n="hero.bookPromo.subtitle"></p>
+      <div class="hero-promo-media-group">
+        <img
+          id="heroBookPromoImage"
+          class="hero-promo-image"
+          src=""
+          alt=""
+          data-i18n-alt="hero.bookPromo.imageAlt"
+          loading="lazy"
+        >
+      </div>
+      <a href="#products" class="btn-ghost hero-promo-cta" data-i18n="hero.bookPromo.cta">Explore the collection</a>
+    </article>
+
+    <article
+      id="heroPromoSlidePackaging"
+      class="hero-promo-slide hero-promo-slide--packaging hero-promo-slide--inactive"
+      data-slide-state="inactive"
+      aria-hidden="true"
+    >
+      <h2 class="hero-promo-title" data-i18n="hero.packagingPromo.title"></h2>
+      <p class="hero-promo-subtitle" data-i18n="hero.packagingPromo.subtitle"></p>
+      <div class="hero-promo-media-group">
+        <img
+          class="hero-promo-image hero-promo-image--packaging"
+          src="./images/Packaging1.png"
+          alt=""
+          data-i18n-alt="hero.packagingPromo.images.primaryAlt"
+          loading="lazy"
+        >
+        <img
+          class="hero-promo-image hero-promo-image--packaging"
+          src="./images/Packaging2.png"
+          alt=""
+          data-i18n-alt="hero.packagingPromo.images.secondaryAlt"
+          loading="lazy"
+        >
+      </div>
+      <a href="#cta" class="btn-ghost hero-promo-cta" data-i18n="hero.packagingPromo.cta">See gifting options</a>
     </article>
   </div>
 </section>
