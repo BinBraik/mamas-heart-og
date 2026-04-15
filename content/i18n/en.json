@@ -34,7 +34,13 @@
       "ageRange": "Perfect age range"
     },
     "loadingTitle": "Loading featured toys…",
-    "loadingDescription": "Please wait"
+    "loadingDescription": "Please wait",
+    "bookPromo": {
+      "ariaLabel": "Free book promotion",
+      "title": "Get your FREE copy with Every Purchase",
+      "subtitle": "A concise parenting guidebook with child-development tips is included in every order.",
+      "imageAlt": "Book cover for Mama's Heart free gift"
+    }
   },
   "trust": {
     "expertDesigned": "Expert-Designed Toys",
