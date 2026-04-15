@@ -272,7 +272,7 @@
 </section>
 
 <div class="chat-modal-overlay" id="chatModalOverlay" hidden>
-  <section
+  <div
     class="chat-modal"
     id="chatModal"
     role="dialog"
@@ -292,9 +292,15 @@
         ×
       </button>
     </header>
-    <div class="chat-modal-messages" id="chatModalMessages" aria-live="polite">
+    <div
+      class="chat-modal-messages"
+      id="chatModalMessages"
+      aria-live="polite"
+      aria-label="Chat conversation"
+      data-i18n-aria-label="chat.threadAriaLabel"
+    >
       <article class="chat-message chat-message--assistant">
-        <p data-i18n="chat.helperIntro">Hi mama ♡ Tell me your child’s age and interests, and I’ll help you choose a toy.</p>
+        <p data-i18n="chat.welcomeText">Hi mama ♡ Tell me your child’s age and interests, and I’ll help you choose a toy.</p>
       </article>
     </div>
     <form class="chat-modal-form" id="chatModalForm">
@@ -305,10 +311,18 @@
         data-i18n-placeholder="chat.placeholder"
         placeholder="Ask Mama anything…"
         autocomplete="off"
+        aria-label="Chat message input"
+        data-i18n-aria-label="chat.inputAriaLabel"
       >
-      <button type="submit" class="btn-primary chat-modal-send" data-i18n="chat.send">Send</button>
+      <button
+        type="submit"
+        class="btn-primary chat-modal-send"
+        data-i18n="chat.send"
+        aria-label="Send message"
+        data-i18n-aria-label="chat.sendAriaLabel"
+      >Send</button>
     </form>
-  </section>
+  </div>
 </div>
 
 <!-- NEWSLETTER -->
