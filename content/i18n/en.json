@@ -45,7 +45,7 @@
   },
   "why": {
     "tag": "Our Promise to You",
-    "title": "Toys made from the <em style=\"font-style:italic;color:var(--brand-primary)\">heart</em>",
+    "title": "Toys made from the <em class=\"accent-emphasis\">heart</em>",
     "subtitle": "Every Mama's Heart toy is crafted to support your child's development naturally — turning everyday play into meaningful milestones.",
     "features": {
       "experts": {
@@ -146,7 +146,7 @@
   },
   "cta": {
     "tag": "Begin the journey",
-    "title": "Give your child the gift of <em style=\"font-style:italic;color:var(--brand-primary)\">joyful learning</em>",
+    "title": "Give your child the gift of <em class=\"accent-emphasis\">joyful learning</em>",
     "subtitle": "Join over 12,000 families who have made playtime smarter, more meaningful, and full of love — with Mama's Heart.",
     "actions": {
       "shop": "Shop the Collection ♡",

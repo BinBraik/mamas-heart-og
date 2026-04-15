@@ -1,0 +1,44 @@
+{
+  "app": {
+    "defaultLanguage": "en",
+    "fallbackLanguage": "en",
+    "supportedLanguages": ["en", "ar"]
+  },
+  "theme": {
+    "defaultTheme": "light"
+  },
+  "data": {
+    "productsPath": "./normalized/products.json",
+    "requestTimeoutMs": 8000
+  },
+  "assets": {
+    "fallbackProductImage": "./assets/img/logo/mama-heart-logo.png",
+    "cacheBustedImages": {
+      "images/products/educational-kits-cubetto-plus-playset-01.webp": "2"
+    }
+  },
+  "ui": {
+    "heroCardCount": 4,
+    "addButton": {
+      "defaultSymbol": "+",
+      "activeSymbol": "♡",
+      "activeDurationMs": 1200
+    }
+  },
+  "catalog": {
+    "allCategory": {
+      "queryValue": "all",
+      "i18nKey": "products.filters.all"
+    },
+    "categories": [
+      {
+        "value": "Educational Kits",
+        "i18nKey": "products.filters.educationalKits"
+      },
+      {
+        "value": "Sensory Development Kits",
+        "i18nKey": "products.filters.sensoryDevelopment"
+      }
+    ]
+  }
+}

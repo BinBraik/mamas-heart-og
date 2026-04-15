@@ -1,3 +1,130 @@
+const DEFAULT_CONFIG = {
+  app: {
+    defaultLanguage: 'en',
+    fallbackLanguage: 'en',
+    supportedLanguages: ['en', 'ar'],
+  },
+  theme: {
+    defaultTheme: 'light',
+  },
+  data: {
+    productsPath: './normalized/products.json',
+    requestTimeoutMs: 8000,
+  },
+  assets: {
+    fallbackProductImage: './assets/img/logo/mama-heart-logo.png',
+    cacheBustedImages: {},
+  },
+  ui: {
+    heroCardCount: 4,
+    addButton: {
+      defaultSymbol: '+',
+      activeSymbol: '♡',
+      activeDurationMs: 1200,
+    },
+  },
+  catalog: {
+    allCategory: {
+      queryValue: 'all',
+      i18nKey: 'products.filters.all',
+    },
+    categories: [],
+  },
+};
+
+const appState = {
+  config: DEFAULT_CONFIG,
+};
+
+const languageState = {
+  current: DEFAULT_CONFIG.app.defaultLanguage,
+  dictionaries: {},
+};
+
+const productState = {
+  allProducts: [],
+  activeCategory: DEFAULT_CONFIG.catalog.allCategory.queryValue,
+  featuredHeroProducts: [],
+};
+
+const INTERPOLATION_TOKEN_REGEX = /\{(\w+)\}/g;
+
+function deepGet(source, path) {
+  if (!source) return undefined;
+  return path.split('.').reduce((value, segment) => {
+    if (value == null || typeof value !== 'object') {
+      return undefined;
+    }
+    return value[segment];
+  }, source);
+}
+
+function interpolate(template, replacements = {}) {
+  return String(template).replace(INTERPOLATION_TOKEN_REGEX, (_, token) => (
+    replacements[token] == null ? '' : String(replacements[token])
+  ));
+}
+
+function translate(key, replacements = {}) {
+  const fallbackLanguage = appState.config.app.fallbackLanguage;
+  const activeDictionary = languageState.dictionaries[languageState.current];
+  const fallbackDictionary = languageState.dictionaries[fallbackLanguage];
+  const activeValue = deepGet(activeDictionary, key);
+  const fallbackValue = deepGet(fallbackDictionary, key);
+  const resolved = typeof activeValue === 'string' ? activeValue : fallbackValue;
+  if (typeof resolved !== 'string') {
+    return key;
+  }
+  return interpolate(resolved, replacements);
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function getAllCategoryQueryValue() {
+  return appState.config.catalog.allCategory.queryValue;
+}
+
+function getSupportedCategories() {
+  const allCategory = getAllCategoryQueryValue();
+  const configuredCategories = appState.config.catalog.categories.map((entry) => entry.value);
+  return new Set([allCategory, ...configuredCategories]);
+}
+
+function getCategoryLabel(categoryValue) {
+  const allCategory = appState.config.catalog.allCategory;
+  if (categoryValue === allCategory.queryValue) {
+    return translate(allCategory.i18nKey);
+  }
+
+  const configured = appState.config.catalog.categories.find((entry) => entry.value === categoryValue);
+  return configured ? translate(configured.i18nKey) : categoryValue;
+}
+
+function getFallbackProductImage() {
+  return appState.config.assets.fallbackProductImage;
+}
+
+function getProductImagePath(imageMain) {
+  if (!imageMain || !String(imageMain).trim()) {
+    return getFallbackProductImage();
+  }
+
+  const normalizedPath = String(imageMain).trim();
+  const version = appState.config.assets.cacheBustedImages[normalizedPath];
+  if (version) {
+    return `./${normalizedPath}?v=${encodeURIComponent(version)}`;
+  }
+
+  return `./${normalizedPath}`;
+}
+
 function initMobileMenu() {
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -32,14 +159,16 @@ function initSmoothScroll() {
 }
 
 function initAddButtons(root = document) {
+  const addButtonConfig = appState.config.ui.addButton;
+
   root.querySelectorAll('.add-btn').forEach((button) => {
     button.addEventListener('click', function addButtonAnimation() {
-      this.textContent = '♡';
+      this.textContent = addButtonConfig.activeSymbol;
       this.style.background = 'var(--brand-rose)';
       setTimeout(() => {
-        this.textContent = '+';
+        this.textContent = addButtonConfig.defaultSymbol;
         this.style.background = 'var(--brand-primary)';
-      }, 1200);
+      }, addButtonConfig.activeDurationMs);
     });
   });
 }
@@ -85,13 +214,13 @@ function initDarkModeToggle() {
     }
 
     document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'light');
+    localStorage.setItem('theme', appState.config.theme.defaultTheme);
     if (icon) icon.textContent = '☀️';
     toggle.setAttribute('aria-label', translate('themeToggle.switchToDark'));
   };
 
-  const saved = localStorage.getItem('theme');
-  if (saved === 'dark') {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
     setToggleState(true);
   } else {
     setToggleState(false);
@@ -101,45 +230,6 @@ function initDarkModeToggle() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     setToggleState(!isDark);
   });
-}
-
-const DEFAULT_LANGUAGE = 'en';
-const SUPPORTED_LANGUAGES = new Set(['en', 'ar']);
-const FALLBACK_LANGUAGE = 'en';
-
-const languageState = {
-  current: DEFAULT_LANGUAGE,
-  dictionaries: {},
-};
-
-const INTERPOLATION_TOKEN_REGEX = /\{(\w+)\}/g;
-
-function deepGet(source, path) {
-  if (!source) return undefined;
-  return path.split('.').reduce((value, segment) => {
-    if (value == null || typeof value !== 'object') {
-      return undefined;
-    }
-    return value[segment];
-  }, source);
-}
-
-function interpolate(template, replacements = {}) {
-  return String(template).replace(INTERPOLATION_TOKEN_REGEX, (_, token) => (
-    replacements[token] == null ? '' : String(replacements[token])
-  ));
-}
-
-function translate(key, replacements = {}) {
-  const activeDictionary = languageState.dictionaries[languageState.current];
-  const fallbackDictionary = languageState.dictionaries[FALLBACK_LANGUAGE];
-  const activeValue = deepGet(activeDictionary, key);
-  const fallbackValue = deepGet(fallbackDictionary, key);
-  const resolved = typeof activeValue === 'string' ? activeValue : fallbackValue;
-  if (typeof resolved !== 'string') {
-    return key;
-  }
-  return interpolate(resolved, replacements);
 }
 
 function applyStaticTranslations(root = document) {
@@ -164,18 +254,80 @@ function applyStaticTranslations(root = document) {
   if (metaDescription) {
     metaDescription.setAttribute('content', translate('meta.description'));
   }
+
   const metaOgTitle = document.getElementById('metaOgTitle');
   if (metaOgTitle) {
     metaOgTitle.setAttribute('content', translate('meta.ogTitle'));
   }
+
   const metaOgDescription = document.getElementById('metaOgDescription');
   if (metaOgDescription) {
     metaOgDescription.setAttribute('content', translate('meta.ogDescription'));
   }
 }
 
+async function loadConfig() {
+  try {
+    const response = await fetch('./content/app-config.json');
+    if (!response.ok) {
+      throw new Error(`Unable to load app-config.json: ${response.status}`);
+    }
+
+    const loadedConfig = await response.json();
+    appState.config = {
+      ...DEFAULT_CONFIG,
+      ...loadedConfig,
+      app: {
+        ...DEFAULT_CONFIG.app,
+        ...loadedConfig.app,
+      },
+      theme: {
+        ...DEFAULT_CONFIG.theme,
+        ...loadedConfig.theme,
+      },
+      data: {
+        ...DEFAULT_CONFIG.data,
+        ...loadedConfig.data,
+      },
+      assets: {
+        ...DEFAULT_CONFIG.assets,
+        ...loadedConfig.assets,
+        cacheBustedImages: {
+          ...DEFAULT_CONFIG.assets.cacheBustedImages,
+          ...(loadedConfig.assets?.cacheBustedImages || {}),
+        },
+      },
+      ui: {
+        ...DEFAULT_CONFIG.ui,
+        ...loadedConfig.ui,
+        addButton: {
+          ...DEFAULT_CONFIG.ui.addButton,
+          ...(loadedConfig.ui?.addButton || {}),
+        },
+      },
+      catalog: {
+        ...DEFAULT_CONFIG.catalog,
+        ...loadedConfig.catalog,
+        allCategory: {
+          ...DEFAULT_CONFIG.catalog.allCategory,
+          ...(loadedConfig.catalog?.allCategory || {}),
+        },
+        categories: Array.isArray(loadedConfig.catalog?.categories)
+          ? loadedConfig.catalog.categories
+          : DEFAULT_CONFIG.catalog.categories,
+      },
+    };
+  } catch (error) {
+    console.error('Unable to load content/app-config.json, using defaults', error);
+    appState.config = DEFAULT_CONFIG;
+  }
+
+  languageState.current = appState.config.app.defaultLanguage;
+  productState.activeCategory = getAllCategoryQueryValue();
+}
+
 async function loadDictionaries() {
-  const dictionaryEntries = await Promise.all([...SUPPORTED_LANGUAGES].map(async (language) => {
+  const dictionaryEntries = await Promise.all(appState.config.app.supportedLanguages.map(async (language) => {
     const response = await fetch(`./content/i18n/${language}.json`);
     if (!response.ok) {
       throw new Error(`Unable to load dictionary for ${language}: ${response.status}`);
@@ -190,28 +342,31 @@ async function loadDictionaries() {
 function getLanguageFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const language = params.get('lang');
-  if (!SUPPORTED_LANGUAGES.has(language)) {
+  const supported = new Set(appState.config.app.supportedLanguages);
+  if (!supported.has(language)) {
     return null;
   }
   return language;
 }
 
 function getPreferredLanguage() {
+  const supported = new Set(appState.config.app.supportedLanguages);
   const languageFromQuery = getLanguageFromUrl();
   if (languageFromQuery) {
     return languageFromQuery;
   }
 
   const savedLanguage = localStorage.getItem('language');
-  if (SUPPORTED_LANGUAGES.has(savedLanguage)) {
+  if (supported.has(savedLanguage)) {
     return savedLanguage;
   }
 
-  return DEFAULT_LANGUAGE;
+  return appState.config.app.defaultLanguage;
 }
 
 function setLanguage(language) {
-  languageState.current = SUPPORTED_LANGUAGES.has(language) ? language : DEFAULT_LANGUAGE;
+  const supported = new Set(appState.config.app.supportedLanguages);
+  languageState.current = supported.has(language) ? language : appState.config.app.defaultLanguage;
   if (languageState.current === 'ar') {
     document.documentElement.setAttribute('lang', 'ar');
     document.documentElement.setAttribute('dir', 'rtl');
@@ -219,9 +374,11 @@ function setLanguage(language) {
     document.documentElement.setAttribute('lang', 'en');
     document.documentElement.setAttribute('dir', 'ltr');
   }
+
   localStorage.setItem('language', languageState.current);
   updateLanguageToggleState();
   applyStaticTranslations();
+  renderCategoryFilterChips();
 }
 
 function updateLanguageToggleState() {
@@ -244,10 +401,12 @@ function initLanguageToggle() {
     if (!target) {
       return;
     }
+
     const selectedLanguage = target.dataset.lang;
     if (selectedLanguage === languageState.current) {
       return;
     }
+
     setLanguage(selectedLanguage);
     applyFilters();
   });
@@ -291,33 +450,6 @@ function formatAgeRange(ageMin, ageMax) {
   return translate('products.age.max', { max: ageMax });
 }
 
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}
-
-const FALLBACK_PRODUCT_IMAGE = './assets/img/logo/mama-heart-logo.png';
-const CUBETTO_IMAGE_PATH = 'images/products/educational-kits-cubetto-plus-playset-01.webp';
-const CUBETTO_IMAGE_VERSION = '2';
-
-function getProductImagePath(imageMain) {
-  if (!imageMain || !String(imageMain).trim()) {
-    return FALLBACK_PRODUCT_IMAGE;
-  }
-
-  const normalizedPath = String(imageMain).trim();
-
-  if (normalizedPath === CUBETTO_IMAGE_PATH) {
-    return `./${normalizedPath}?v=${CUBETTO_IMAGE_VERSION}`;
-  }
-
-  return `./${normalizedPath}`;
-}
-
 function isFeaturedProduct(product) {
   return Boolean(product?.featured);
 }
@@ -335,11 +467,7 @@ function getLocalizedProductField(product, fieldName) {
   }
 
   const fallbackValue = product[fieldName];
-  if (typeof fallbackValue === 'string') {
-    return fallbackValue;
-  }
-
-  return '';
+  return typeof fallbackValue === 'string' ? fallbackValue : '';
 }
 
 function formatStockStatus(stockStatus) {
@@ -357,23 +485,13 @@ function formatStockStatus(stockStatus) {
   return readable.charAt(0).toUpperCase() + readable.slice(1);
 }
 
-const CATEGORY_ALL = 'all';
-const ALLOWED_CATEGORIES = new Set([CATEGORY_ALL, 'Educational Kits', 'Sensory Development Kits']);
-
-const productState = {
-  allProducts: [],
-  activeCategory: CATEGORY_ALL,
-  featuredHeroProducts: [],
-};
-
-const HERO_CARD_COUNT = 4;
-
 function getRandomDistinctProducts(products, count) {
   const pool = Array.isArray(products) ? [...products] : [];
   for (let i = pool.length - 1; i > 0; i -= 1) {
     const swapIndex = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[swapIndex]] = [pool[swapIndex], pool[i]];
   }
+
   return pool.slice(0, Math.max(0, count));
 }
 
@@ -408,7 +526,7 @@ function renderHeroProducts(products) {
           src="${escapeHtml(imagePath)}"
           alt="${escapeHtml(localizedName)}"
           loading="lazy"
-          onerror="this.onerror=null;this.src='${FALLBACK_PRODUCT_IMAGE}';"
+          onerror="this.onerror=null;this.src='${getFallbackProductImage()}';"
         >
         <div class="toy-card-name">${escapeHtml(localizedName)}</div>
         <div class="toy-card-age">${escapeHtml(ageLabel)}</div>
@@ -424,36 +542,62 @@ function renderHeroProductsFallback() {
   renderHeroProducts([]);
 }
 
+function renderCategoryFilterChips() {
+  const filtersContainer = document.getElementById('productFilters');
+  if (!filtersContainer) return;
+
+  const allCategory = appState.config.catalog.allCategory;
+  const categories = [
+    {
+      queryValue: allCategory.queryValue,
+      label: getCategoryLabel(allCategory.queryValue),
+    },
+    ...appState.config.catalog.categories.map((entry) => ({
+      queryValue: entry.value,
+      label: getCategoryLabel(entry.value),
+    })),
+  ];
+
+  filtersContainer.innerHTML = categories.map((category) => {
+    const isActive = category.queryValue === productState.activeCategory;
+    return `
+      <button
+        class="filter-chip${isActive ? ' is-active' : ''}"
+        type="button"
+        role="tab"
+        data-category="${escapeHtml(category.queryValue)}"
+        aria-selected="${isActive ? 'true' : 'false'}"
+        aria-pressed="${isActive ? 'true' : 'false'}"
+      >${escapeHtml(category.label)}</button>
+    `;
+  }).join('');
+}
+
 function getCategoryFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const category = params.get('category');
-  if (!category) return CATEGORY_ALL;
-  return ALLOWED_CATEGORIES.has(category) ? category : CATEGORY_ALL;
+  if (!category) return getAllCategoryQueryValue();
+  return getSupportedCategories().has(category) ? category : getAllCategoryQueryValue();
 }
 
 function updateCategoryInUrl(category) {
   const url = new URL(window.location.href);
-  if (category === CATEGORY_ALL) {
+  if (category === getAllCategoryQueryValue()) {
     url.searchParams.delete('category');
   } else {
     url.searchParams.set('category', category);
   }
+
   window.history.replaceState({}, '', url);
 }
 
 function getFilteredProducts() {
   return productState.allProducts.filter((product) => {
-    if (productState.activeCategory !== CATEGORY_ALL && product.category !== productState.activeCategory) {
+    if (productState.activeCategory !== getAllCategoryQueryValue() && product.category !== productState.activeCategory) {
       return false;
     }
     return true;
   });
-}
-
-function applyFilters() {
-  renderHeroProducts(productState.featuredHeroProducts);
-  renderProducts(getFilteredProducts());
-  updateFilterControls();
 }
 
 function updateFilterControls() {
@@ -473,8 +617,16 @@ function updateFilterControls() {
   }
 }
 
+function applyFilters() {
+  renderHeroProducts(productState.featuredHeroProducts);
+  renderProducts(getFilteredProducts());
+  updateFilterControls();
+}
+
 function applyCategory(category) {
-  productState.activeCategory = ALLOWED_CATEGORIES.has(category) ? category : CATEGORY_ALL;
+  productState.activeCategory = getSupportedCategories().has(category)
+    ? category
+    : getAllCategoryQueryValue();
   updateCategoryInUrl(productState.activeCategory);
   applyFilters();
 }
@@ -486,7 +638,8 @@ function initCategoryFilters() {
   filtersContainer.addEventListener('click', (event) => {
     const target = event.target.closest('.filter-chip');
     if (!target) return;
-    applyCategory(target.dataset.category || CATEGORY_ALL);
+
+    applyCategory(target.dataset.category || getAllCategoryQueryValue());
   });
 }
 
@@ -516,7 +669,8 @@ function renderProducts(products) {
     const localizedName = getLocalizedProductField(product, 'name');
     const localizedSubcategory = getLocalizedProductField(product, 'subcategory');
     const localizedShortDescription = getLocalizedProductField(product, 'short_description');
-    const productTag = `${product.category} · ${localizedSubcategory || product.subcategory}`;
+    const localizedCategory = getCategoryLabel(product.category);
+    const productTag = `${localizedCategory} · ${localizedSubcategory || product.subcategory}`;
     const featuredBadge = isFeaturedProduct(product)
       ? `<div class="product-featured-badge" aria-label="${translate('products.featured.label')}">${translate('products.featured.badge')}</div>`
       : '';
@@ -532,7 +686,7 @@ function renderProducts(products) {
             src="${escapeHtml(imagePath)}"
             alt="${escapeHtml(localizedName)}"
             loading="lazy"
-            onerror="this.onerror=null;this.src='${FALLBACK_PRODUCT_IMAGE}';"
+            onerror="this.onerror=null;this.src='${getFallbackProductImage()}';"
           >
           <div class="product-tag">${escapeHtml(productTag)}</div>
           ${featuredBadge}
@@ -546,7 +700,7 @@ function renderProducts(products) {
               <div class="product-age-tag">${escapeHtml(ageLabel)}</div>
               ${stockMarkup}
             </div>
-            <button class="add-btn" aria-label="${escapeHtml(translate('products.addToCartAria', { name: localizedName }))}">+</button>
+            <button class="add-btn" aria-label="${escapeHtml(translate('products.addToCartAria', { name: localizedName }))}">${escapeHtml(appState.config.ui.addButton.defaultSymbol)}</button>
           </div>
         </div>
       </article>
@@ -590,13 +744,13 @@ function renderProductLoadError() {
 
 async function loadProducts() {
   const abortController = new AbortController();
-  const requestTimeoutMs = 8000;
+  const requestTimeoutMs = appState.config.data.requestTimeoutMs;
   const timeout = setTimeout(() => {
     abortController.abort('Product request timed out');
   }, requestTimeoutMs);
 
   try {
-    const response = await fetch('./normalized/products.json', { signal: abortController.signal });
+    const response = await fetch(appState.config.data.productsPath, { signal: abortController.signal });
 
     if (!response.ok) {
       throw new Error(`Request failed: ${response.status}`);
@@ -604,11 +758,14 @@ async function loadProducts() {
 
     const products = await response.json();
     productState.allProducts = Array.isArray(products) ? products : [];
-    productState.featuredHeroProducts = getRandomDistinctProducts(productState.allProducts, HERO_CARD_COUNT);
+    productState.featuredHeroProducts = getRandomDistinctProducts(
+      productState.allProducts,
+      appState.config.ui.heroCardCount,
+    );
     renderHeroProducts(productState.featuredHeroProducts);
     applyFilters();
   } catch (error) {
-    console.error('Unable to load products from normalized/products.json', error);
+    console.error(`Unable to load products from ${appState.config.data.productsPath}`, error);
     productState.featuredHeroProducts = [];
     renderHeroProductsFallback();
     renderProductLoadError();
@@ -618,14 +775,13 @@ async function loadProducts() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  await loadConfig();
+
   try {
     await loadDictionaries();
   } catch (error) {
     console.error('Unable to load translation dictionaries', error);
-    languageState.dictionaries = {
-      en: {},
-      ar: {},
-    };
+    languageState.dictionaries = Object.fromEntries(appState.config.app.supportedLanguages.map((language) => [language, {}]));
   }
 
   setLanguage(getPreferredLanguage());
@@ -634,6 +790,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initDarkModeToggle();
   initLanguageToggle();
   productState.activeCategory = getCategoryFromUrl();
+  renderCategoryFilterChips();
   initCategoryFilters();
   updateFilterControls();
   loadProducts();

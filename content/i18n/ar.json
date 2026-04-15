@@ -45,7 +45,7 @@
   },
   "why": {
     "tag": "وعدنا لك",
-    "title": "ألعاب مصنوعة من <em style=\"font-style:italic;color:var(--brand-primary)\">القلب</em>",
+    "title": "ألعاب مصنوعة من <em class=\"accent-emphasis\">القلب</em>",
     "subtitle": "كل لعبة من قلب ماما صُممت لدعم نمو طفلك بشكل طبيعي — لتحويل اللعب اليومي إلى إنجازات مهمة.",
     "features": {
       "experts": {
@@ -146,7 +146,7 @@
   },
   "cta": {
     "tag": "ابدأ الرحلة",
-    "title": "امنح طفلك هدية <em style=\"font-style:italic;color:var(--brand-primary)\">التعلّم الممتع</em>",
+    "title": "امنح طفلك هدية <em class=\"accent-emphasis\">التعلّم الممتع</em>",
     "subtitle": "انضم إلى أكثر من 12,000 عائلة جعلت وقت اللعب أذكى وأكثر معنى ومليئًا بالحب — مع قلب ماما.",
     "actions": {
       "shop": "تسوّق المجموعة ♡",
