@@ -19,6 +19,7 @@
   },
   "ui": {
     "heroCardCount": 4,
+    "enableHeroRandomCards": false,
     "addButton": {
       "defaultSymbol": "+",
       "activeSymbol": "♡",
