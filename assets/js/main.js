@@ -310,25 +310,41 @@ function applyStaticTranslations(root = document) {
     metaOgDescription.setAttribute('content', translate('meta.ogDescription'));
   }
 
-  renderHeroBookPromo();
+  renderHeroPromoRotator();
 }
 
-function renderHeroBookPromo() {
-  const promoContainer = document.getElementById('heroBookPromo');
+function renderHeroPromoRotator() {
+  const promoContainer = document.getElementById('heroPromoRotator');
   if (!promoContainer) {
     return;
   }
 
   const isPromoEnabled = appState.config.ui.enableHeroBookPromo !== false;
-  promoContainer.hidden = !isPromoEnabled;
-  if (!isPromoEnabled) {
-    return;
+  const bookSlide = document.getElementById('heroPromoSlideBook');
+  const packagingSlide = document.getElementById('heroPromoSlidePackaging');
+
+  if (bookSlide) {
+    const bookSlideActiveClass = isPromoEnabled ? 'hero-promo-slide--active' : 'hero-promo-slide--inactive';
+    const bookSlideInactiveClass = isPromoEnabled ? 'hero-promo-slide--inactive' : 'hero-promo-slide--active';
+    bookSlide.classList.add(bookSlideActiveClass);
+    bookSlide.classList.remove(bookSlideInactiveClass);
+    bookSlide.setAttribute('data-slide-state', isPromoEnabled ? 'active' : 'inactive');
+    bookSlide.setAttribute('aria-hidden', isPromoEnabled ? 'false' : 'true');
+  }
+
+  if (packagingSlide) {
+    const packagingActiveClass = isPromoEnabled ? 'hero-promo-slide--inactive' : 'hero-promo-slide--active';
+    const packagingInactiveClass = isPromoEnabled ? 'hero-promo-slide--active' : 'hero-promo-slide--inactive';
+    packagingSlide.classList.add(packagingActiveClass);
+    packagingSlide.classList.remove(packagingInactiveClass);
+    packagingSlide.setAttribute('data-slide-state', isPromoEnabled ? 'inactive' : 'active');
+    packagingSlide.setAttribute('aria-hidden', isPromoEnabled ? 'true' : 'false');
   }
 
   const promoSubtitle = document.getElementById('heroBookPromoSubtitle');
   if (promoSubtitle) {
-    const subtitle = translate('hero.freeBook.subtitle');
-    const hasSubtitle = subtitle !== 'hero.freeBook.subtitle' && subtitle.trim().length > 0;
+    const subtitle = translate('hero.bookPromo.subtitle');
+    const hasSubtitle = subtitle !== 'hero.bookPromo.subtitle' && subtitle.trim().length > 0;
     promoSubtitle.hidden = !hasSubtitle;
     promoSubtitle.textContent = hasSubtitle ? subtitle : '';
   }
