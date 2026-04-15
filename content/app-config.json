@@ -26,7 +26,45 @@
       "defaultSymbol": "+",
       "activeSymbol": "♡",
       "activeDurationMs": 1200
-    }
+    },
+    "heroPromos": [
+      {
+        "id": "bookPromo",
+        "titleKey": "hero.promos.book.title",
+        "subtitleKey": "hero.promos.book.subtitle",
+        "ctaKey": "hero.promos.book.cta",
+        "ctaHref": "#products",
+        "accentClass": "hero-promo-slide--book",
+        "images": [
+          {
+            "path": "./images/BookCover.png",
+            "altKey": "hero.promos.book.images.coverAlt"
+          }
+        ]
+      },
+      {
+        "id": "packagingPromo",
+        "titleKey": "hero.promos.packaging.title",
+        "subtitleKey": "hero.promos.packaging.subtitle",
+        "ctaKey": "hero.promos.packaging.cta",
+        "ctaHref": "#cta",
+        "accentClass": "hero-promo-slide--packaging",
+        "images": [
+          {
+            "path": "./images/Packaging1.png",
+            "altKey": "hero.promos.packaging.images.primaryAlt"
+          },
+          {
+            "path": "./images/Packaging2.png",
+            "altKey": "hero.promos.packaging.images.secondaryAlt"
+          },
+          {
+            "path": "./images/Packaging3.png",
+            "altKey": "hero.promos.packaging.images.tertiaryAlt"
+          }
+        ]
+      }
+    ]
   },
   "catalog": {
     "allCategory": {

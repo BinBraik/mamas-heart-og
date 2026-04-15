@@ -22,6 +22,44 @@ const DEFAULT_CONFIG = {
       activeSymbol: '♡',
       activeDurationMs: 1200,
     },
+    heroPromos: [
+      {
+        id: 'bookPromo',
+        titleKey: 'hero.promos.book.title',
+        subtitleKey: 'hero.promos.book.subtitle',
+        ctaKey: 'hero.promos.book.cta',
+        ctaHref: '#products',
+        accentClass: 'hero-promo-slide--book',
+        images: [
+          {
+            path: './images/BookCover.png',
+            altKey: 'hero.promos.book.images.coverAlt',
+          },
+        ],
+      },
+      {
+        id: 'packagingPromo',
+        titleKey: 'hero.promos.packaging.title',
+        subtitleKey: 'hero.promos.packaging.subtitle',
+        ctaKey: 'hero.promos.packaging.cta',
+        ctaHref: '#cta',
+        accentClass: 'hero-promo-slide--packaging',
+        images: [
+          {
+            path: './images/Packaging1.png',
+            altKey: 'hero.promos.packaging.images.primaryAlt',
+          },
+          {
+            path: './images/Packaging2.png',
+            altKey: 'hero.promos.packaging.images.secondaryAlt',
+          },
+          {
+            path: './images/Packaging3.png',
+            altKey: 'hero.promos.packaging.images.tertiaryAlt',
+          },
+        ],
+      },
+    ],
   },
   catalog: {
     allCategory: {
@@ -131,6 +169,24 @@ function getBookCoverImagePath() {
   }
 
   const trimmedPath = configuredPath.trim();
+  const hasProtocol = /^[a-z]+:\/\//i.test(trimmedPath);
+  if (hasProtocol || trimmedPath.startsWith('./') || trimmedPath.startsWith('/')) {
+    return trimmedPath;
+  }
+
+  return `./${trimmedPath}`;
+}
+
+function getConfigImagePath(pathValue) {
+  if (typeof pathValue !== 'string') {
+    return '';
+  }
+
+  const trimmedPath = pathValue.trim();
+  if (!trimmedPath) {
+    return '';
+  }
+
   const hasProtocol = /^[a-z]+:\/\//i.test(trimmedPath);
   if (hasProtocol || trimmedPath.startsWith('./') || trimmedPath.startsWith('/')) {
     return trimmedPath;
@@ -322,6 +378,11 @@ function renderHeroPromoRotator() {
   const isPromoEnabled = appState.config.ui.enableHeroBookPromo !== false;
   const bookSlide = document.getElementById('heroPromoSlideBook');
   const packagingSlide = document.getElementById('heroPromoSlidePackaging');
+  const heroPromos = Array.isArray(appState.config.ui.heroPromos)
+    ? appState.config.ui.heroPromos
+    : DEFAULT_CONFIG.ui.heroPromos;
+  const bookPromoConfig = heroPromos.find((promo) => promo.id === 'bookPromo');
+  const packagingPromoConfig = heroPromos.find((promo) => promo.id === 'packagingPromo');
 
   if (bookSlide) {
     const bookSlideActiveClass = isPromoEnabled ? 'hero-promo-slide--active' : 'hero-promo-slide--inactive';
@@ -330,6 +391,34 @@ function renderHeroPromoRotator() {
     bookSlide.classList.remove(bookSlideInactiveClass);
     bookSlide.setAttribute('data-slide-state', isPromoEnabled ? 'active' : 'inactive');
     bookSlide.setAttribute('aria-hidden', isPromoEnabled ? 'false' : 'true');
+
+    const bookTitle = bookSlide.querySelector('.hero-promo-title');
+    if (bookTitle && bookPromoConfig?.titleKey) {
+      bookTitle.textContent = translate(bookPromoConfig.titleKey);
+    }
+
+    const bookSubtitle = bookSlide.querySelector('.hero-promo-subtitle');
+    if (bookSubtitle && bookPromoConfig?.subtitleKey) {
+      const subtitle = translate(bookPromoConfig.subtitleKey);
+      const hasSubtitle = subtitle !== bookPromoConfig.subtitleKey && subtitle.trim().length > 0;
+      bookSubtitle.hidden = !hasSubtitle;
+      bookSubtitle.textContent = hasSubtitle ? subtitle : '';
+    }
+
+    const bookCta = bookSlide.querySelector('.hero-promo-cta');
+    if (bookCta) {
+      if (bookPromoConfig?.ctaKey) {
+        bookCta.textContent = translate(bookPromoConfig.ctaKey);
+      }
+      if (bookPromoConfig?.ctaHref) {
+        bookCta.setAttribute('href', bookPromoConfig.ctaHref);
+      }
+    }
+
+    const configuredAccentClass = bookPromoConfig?.accentClass;
+    if (configuredAccentClass && !bookSlide.classList.contains(configuredAccentClass)) {
+      bookSlide.classList.add(configuredAccentClass);
+    }
   }
 
   if (packagingSlide) {
@@ -339,19 +428,59 @@ function renderHeroPromoRotator() {
     packagingSlide.classList.remove(packagingInactiveClass);
     packagingSlide.setAttribute('data-slide-state', isPromoEnabled ? 'inactive' : 'active');
     packagingSlide.setAttribute('aria-hidden', isPromoEnabled ? 'true' : 'false');
-  }
 
-  const promoSubtitle = document.getElementById('heroBookPromoSubtitle');
-  if (promoSubtitle) {
-    const subtitle = translate('hero.bookPromo.subtitle');
-    const hasSubtitle = subtitle !== 'hero.bookPromo.subtitle' && subtitle.trim().length > 0;
-    promoSubtitle.hidden = !hasSubtitle;
-    promoSubtitle.textContent = hasSubtitle ? subtitle : '';
+    const packagingTitle = packagingSlide.querySelector('.hero-promo-title');
+    if (packagingTitle && packagingPromoConfig?.titleKey) {
+      packagingTitle.textContent = translate(packagingPromoConfig.titleKey);
+    }
+
+    const packagingSubtitle = packagingSlide.querySelector('.hero-promo-subtitle');
+    if (packagingSubtitle && packagingPromoConfig?.subtitleKey) {
+      const subtitle = translate(packagingPromoConfig.subtitleKey);
+      const hasSubtitle = subtitle !== packagingPromoConfig.subtitleKey && subtitle.trim().length > 0;
+      packagingSubtitle.hidden = !hasSubtitle;
+      packagingSubtitle.textContent = hasSubtitle ? subtitle : '';
+    }
+
+    const packagingCta = packagingSlide.querySelector('.hero-promo-cta');
+    if (packagingCta) {
+      if (packagingPromoConfig?.ctaKey) {
+        packagingCta.textContent = translate(packagingPromoConfig.ctaKey);
+      }
+      if (packagingPromoConfig?.ctaHref) {
+        packagingCta.setAttribute('href', packagingPromoConfig.ctaHref);
+      }
+    }
+
+    const packagingAccentClass = packagingPromoConfig?.accentClass;
+    if (packagingAccentClass && !packagingSlide.classList.contains(packagingAccentClass)) {
+      packagingSlide.classList.add(packagingAccentClass);
+    }
+
+    const mediaGroup = packagingSlide.querySelector('.hero-promo-media-group');
+    if (mediaGroup) {
+      mediaGroup.replaceChildren();
+      const configuredImages = Array.isArray(packagingPromoConfig?.images) ? packagingPromoConfig.images : [];
+      configuredImages.forEach((imageConfig) => {
+        const image = document.createElement('img');
+        image.className = 'hero-promo-image hero-promo-image--packaging';
+        image.loading = 'lazy';
+        image.src = getConfigImagePath(imageConfig.path);
+        image.alt = imageConfig.altKey ? translate(imageConfig.altKey) : '';
+        mediaGroup.append(image);
+      });
+    }
   }
 
   const promoImage = document.getElementById('heroBookPromoImage');
   if (promoImage) {
-    promoImage.setAttribute('src', getBookCoverImagePath());
+    const primaryBookImage = Array.isArray(bookPromoConfig?.images) ? bookPromoConfig.images[0] : null;
+    const configuredBookImagePath = getConfigImagePath(primaryBookImage?.path);
+    const fallbackBookImagePath = getBookCoverImagePath();
+    promoImage.setAttribute('src', configuredBookImagePath || fallbackBookImagePath);
+    if (primaryBookImage?.altKey) {
+      promoImage.setAttribute('alt', translate(primaryBookImage.altKey));
+    }
   }
 }
 
@@ -393,6 +522,9 @@ async function loadConfig() {
           ...DEFAULT_CONFIG.ui.addButton,
           ...(loadedConfig.ui?.addButton || {}),
         },
+        heroPromos: Array.isArray(loadedConfig.ui?.heroPromos)
+          ? loadedConfig.ui.heroPromos
+          : DEFAULT_CONFIG.ui.heroPromos,
       },
       catalog: {
         ...DEFAULT_CONFIG.catalog,

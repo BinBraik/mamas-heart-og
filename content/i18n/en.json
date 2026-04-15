@@ -50,6 +50,26 @@
         "primaryAlt": "Mama's Heart gift packaging front view",
         "secondaryAlt": "Mama's Heart gift packaging side view"
       }
+    },
+    "promos": {
+      "book": {
+        "title": "Get your FREE copy with Every Purchase",
+        "subtitle": "A concise parenting guidebook with child-development tips is included in every order.",
+        "cta": "Explore the collection",
+        "images": {
+          "coverAlt": "Book cover for Mama's Heart free gift"
+        }
+      },
+      "packaging": {
+        "title": "Beautiful Packaging, Ready to Gift",
+        "subtitle": "Every order arrives in keepsake-ready packaging made to delight little learners and their families.",
+        "cta": "See gifting options",
+        "images": {
+          "primaryAlt": "Mama's Heart gift packaging front view",
+          "secondaryAlt": "Mama's Heart gift packaging side view",
+          "tertiaryAlt": "Mama's Heart gift packaging wrapped presentation"
+        }
+      }
     }
   },
   "trust": {
