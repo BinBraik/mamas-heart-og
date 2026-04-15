@@ -184,7 +184,7 @@
     "subtitle": "Join over 12,000 families who have made playtime smarter, more meaningful, and full of love — with Mama's Heart.",
     "actions": {
       "shop": "Shop the Collection ♡",
-      "find": "Find the Perfect Toy →"
+      "askMama": "Ask Mama"
     }
   },
   "newsletter": {
@@ -221,5 +221,13 @@
       "rights": "© 2025 Mama's Heart. All rights reserved.",
       "madeWithLove": "Made with ♡ for every mama"
     }
+  },
+  "chat": {
+    "title": "Ask Mama",
+    "placeholder": "Ask Mama anything…",
+    "helperIntro": "Hi mama ♡ Tell me your child's age and interests, and I'll help you choose a toy.",
+    "send": "Send",
+    "closeAriaLabel": "Close chat",
+    "inputLabel": "Type your message"
   }
 }
