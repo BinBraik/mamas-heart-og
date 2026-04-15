@@ -13,6 +13,7 @@ const DEFAULT_CONFIG = {
   },
   assets: {
     fallbackProductImage: './assets/img/logo/mama-heart-logo.png',
+    bookCoverImagePath: './images/BookCover.png',
     cacheBustedImages: {},
   },
   ui: {
@@ -121,6 +122,21 @@ function getProductImagePath(imageMain) {
   }
 
   return `./${normalizedPath}`;
+}
+
+function getBookCoverImagePath() {
+  const configuredPath = appState.config.assets.bookCoverImagePath;
+  if (typeof configuredPath !== 'string' || !configuredPath.trim()) {
+    return '';
+  }
+
+  const trimmedPath = configuredPath.trim();
+  const hasProtocol = /^[a-z]+:\/\//i.test(trimmedPath);
+  if (hasProtocol || trimmedPath.startsWith('./') || trimmedPath.startsWith('/')) {
+    return trimmedPath;
+  }
+
+  return `./${trimmedPath}`;
 }
 
 function initMobileMenu() {
@@ -292,6 +308,34 @@ function applyStaticTranslations(root = document) {
   const metaOgDescription = document.getElementById('metaOgDescription');
   if (metaOgDescription) {
     metaOgDescription.setAttribute('content', translate('meta.ogDescription'));
+  }
+
+  renderHeroBookPromo();
+}
+
+function renderHeroBookPromo() {
+  const promoContainer = document.getElementById('heroBookPromo');
+  if (!promoContainer) {
+    return;
+  }
+
+  const isPromoEnabled = appState.config.ui.enableHeroBookPromo !== false;
+  promoContainer.hidden = !isPromoEnabled;
+  if (!isPromoEnabled) {
+    return;
+  }
+
+  const promoSubtitle = document.getElementById('heroBookPromoSubtitle');
+  if (promoSubtitle) {
+    const subtitle = translate('hero.freeBook.subtitle');
+    const hasSubtitle = subtitle !== 'hero.freeBook.subtitle' && subtitle.trim().length > 0;
+    promoSubtitle.hidden = !hasSubtitle;
+    promoSubtitle.textContent = hasSubtitle ? subtitle : '';
+  }
+
+  const promoImage = document.getElementById('heroBookPromoImage');
+  if (promoImage) {
+    promoImage.setAttribute('src', getBookCoverImagePath());
   }
 }
 

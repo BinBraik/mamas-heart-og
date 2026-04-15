@@ -16,6 +16,7 @@
   },
   "assets": {
     "fallbackProductImage": "./assets/img/logo/mama-heart-logo.png",
+    "bookCoverImagePath": "./images/BookCover.png",
     "cacheBustedImages": {
       "images/products/educational-kits-cubetto-plus-playset-01.webp": "2"
     }
