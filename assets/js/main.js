@@ -17,6 +17,10 @@ const DEFAULT_CONFIG = {
     cacheBustedImages: {},
   },
   ui: {
+    heroPromoRotator: {
+      rotationIntervalMs: 6000,
+      enableControls: true,
+    },
     addButton: {
       defaultSymbol: '+',
       activeSymbol: '♡',
@@ -82,6 +86,17 @@ const languageState = {
 const productState = {
   allProducts: [],
   activeCategory: DEFAULT_CONFIG.catalog.allCategory.queryValue,
+};
+
+const heroPromoState = {
+  currentIndex: 0,
+  timerId: null,
+  hasInitialized: false,
+  intervalMs: DEFAULT_CONFIG.ui.heroPromoRotator.rotationIntervalMs,
+  isPaused: false,
+  isReducedMotion: false,
+  reducedMotionQuery: null,
+  controlsInitialized: false,
 };
 
 const INTERPOLATION_TOKEN_REGEX = /\{(\w+)\}/g;
@@ -375,7 +390,6 @@ function renderHeroPromoRotator() {
     return;
   }
 
-  const isPromoEnabled = appState.config.ui.enableHeroBookPromo !== false;
   const bookSlide = document.getElementById('heroPromoSlideBook');
   const packagingSlide = document.getElementById('heroPromoSlidePackaging');
   const heroPromos = Array.isArray(appState.config.ui.heroPromos)
@@ -383,15 +397,27 @@ function renderHeroPromoRotator() {
     : DEFAULT_CONFIG.ui.heroPromos;
   const bookPromoConfig = heroPromos.find((promo) => promo.id === 'bookPromo');
   const packagingPromoConfig = heroPromos.find((promo) => promo.id === 'packagingPromo');
+  const promoSlides = [
+    { id: 'bookPromo', element: bookSlide, config: bookPromoConfig },
+    { id: 'packagingPromo', element: packagingSlide, config: packagingPromoConfig },
+  ].filter((slide) => slide.element && slide.config);
+
+  if (!promoSlides.length) {
+    return;
+  }
+
+  const configuredInterval = Number(appState.config.ui?.heroPromoRotator?.rotationIntervalMs);
+  heroPromoState.intervalMs = Number.isFinite(configuredInterval) && configuredInterval >= 1000
+    ? configuredInterval
+    : DEFAULT_CONFIG.ui.heroPromoRotator.rotationIntervalMs;
+
+  if (!heroPromoState.hasInitialized) {
+    heroPromoState.currentIndex = appState.config.ui.enableHeroBookPromo === false ? 1 : 0;
+    heroPromoState.hasInitialized = true;
+  }
+  heroPromoState.currentIndex = Math.min(heroPromoState.currentIndex, promoSlides.length - 1);
 
   if (bookSlide) {
-    const bookSlideActiveClass = isPromoEnabled ? 'hero-promo-slide--active' : 'hero-promo-slide--inactive';
-    const bookSlideInactiveClass = isPromoEnabled ? 'hero-promo-slide--inactive' : 'hero-promo-slide--active';
-    bookSlide.classList.add(bookSlideActiveClass);
-    bookSlide.classList.remove(bookSlideInactiveClass);
-    bookSlide.setAttribute('data-slide-state', isPromoEnabled ? 'active' : 'inactive');
-    bookSlide.setAttribute('aria-hidden', isPromoEnabled ? 'false' : 'true');
-
     const bookTitle = bookSlide.querySelector('.hero-promo-title');
     if (bookTitle && bookPromoConfig?.titleKey) {
       bookTitle.textContent = translate(bookPromoConfig.titleKey);
@@ -422,13 +448,6 @@ function renderHeroPromoRotator() {
   }
 
   if (packagingSlide) {
-    const packagingActiveClass = isPromoEnabled ? 'hero-promo-slide--inactive' : 'hero-promo-slide--active';
-    const packagingInactiveClass = isPromoEnabled ? 'hero-promo-slide--active' : 'hero-promo-slide--inactive';
-    packagingSlide.classList.add(packagingActiveClass);
-    packagingSlide.classList.remove(packagingInactiveClass);
-    packagingSlide.setAttribute('data-slide-state', isPromoEnabled ? 'inactive' : 'active');
-    packagingSlide.setAttribute('aria-hidden', isPromoEnabled ? 'true' : 'false');
-
     const packagingTitle = packagingSlide.querySelector('.hero-promo-title');
     if (packagingTitle && packagingPromoConfig?.titleKey) {
       packagingTitle.textContent = translate(packagingPromoConfig.titleKey);
@@ -482,6 +501,188 @@ function renderHeroPromoRotator() {
       promoImage.setAttribute('alt', translate(primaryBookImage.altKey));
     }
   }
+
+  initHeroPromoRotator(promoContainer, promoSlides);
+}
+
+function applyHeroPromoSlideState(promoContainer, promoSlides) {
+  promoSlides.forEach((slide, index) => {
+    const isActive = index === heroPromoState.currentIndex;
+    slide.element.classList.toggle('hero-promo-slide--active', isActive);
+    slide.element.classList.toggle('hero-promo-slide--inactive', !isActive);
+    slide.element.setAttribute('data-slide-state', isActive ? 'active' : 'inactive');
+    slide.element.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+  });
+
+  promoContainer.querySelectorAll('.hero-promo-dot').forEach((dotButton) => {
+    const dotIndex = Number(dotButton.dataset.index);
+    const isActive = dotIndex === heroPromoState.currentIndex;
+    dotButton.classList.toggle('is-active', isActive);
+    dotButton.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+}
+
+function goToHeroPromoSlide(nextIndex, promoContainer, promoSlides, { restartTimer = true } = {}) {
+  const totalSlides = promoSlides.length;
+  if (!totalSlides) {
+    return;
+  }
+
+  heroPromoState.currentIndex = ((nextIndex % totalSlides) + totalSlides) % totalSlides;
+  applyHeroPromoSlideState(promoContainer, promoSlides);
+
+  if (restartTimer) {
+    startHeroPromoRotation(promoContainer, promoSlides);
+  }
+}
+
+function showNextHeroPromoSlide(promoContainer, promoSlides) {
+  goToHeroPromoSlide(heroPromoState.currentIndex + 1, promoContainer, promoSlides, { restartTimer: false });
+}
+
+function stopHeroPromoRotation() {
+  if (heroPromoState.timerId) {
+    window.clearInterval(heroPromoState.timerId);
+    heroPromoState.timerId = null;
+  }
+}
+
+function startHeroPromoRotation(promoContainer, promoSlides) {
+  stopHeroPromoRotation();
+
+  const shouldAutoRotate = promoSlides.length > 1 && !heroPromoState.isReducedMotion && !heroPromoState.isPaused;
+  if (!shouldAutoRotate) {
+    return;
+  }
+
+  heroPromoState.timerId = window.setInterval(() => {
+    showNextHeroPromoSlide(promoContainer, promoSlides);
+  }, heroPromoState.intervalMs);
+}
+
+function setHeroPromoPaused(isPaused, promoContainer, promoSlides) {
+  heroPromoState.isPaused = isPaused;
+  if (isPaused) {
+    stopHeroPromoRotation();
+    return;
+  }
+
+  startHeroPromoRotation(promoContainer, promoSlides);
+}
+
+function initHeroPromoControls(promoContainer, promoSlides) {
+  const controlsConfigEnabled = appState.config.ui?.heroPromoRotator?.enableControls !== false;
+  let controls = promoContainer.querySelector('.hero-promo-controls');
+
+  if (!controlsConfigEnabled) {
+    controls?.remove();
+    return;
+  }
+
+  if (!controls) {
+    controls = document.createElement('div');
+    controls.className = 'hero-promo-controls';
+    controls.innerHTML = `
+      <button type="button" class="hero-promo-control hero-promo-control--prev" data-action="prev" aria-label="Previous promo">‹</button>
+      <div class="hero-promo-dots" role="group" aria-label="Promo slide controls"></div>
+      <button type="button" class="hero-promo-control hero-promo-control--next" data-action="next" aria-label="Next promo">›</button>
+    `;
+    promoContainer.append(controls);
+  }
+
+  const dotsContainer = controls.querySelector('.hero-promo-dots');
+  if (dotsContainer) {
+    dotsContainer.innerHTML = promoSlides.map((slide, index) => {
+      const label = slide.config?.titleKey ? translate(slide.config.titleKey) : `Slide ${index + 1}`;
+      return `
+        <button
+          type="button"
+          class="hero-promo-dot"
+          data-index="${index}"
+          aria-label="${escapeHtml(label)}"
+          aria-pressed="false"
+        ></button>
+      `;
+    }).join('');
+  }
+
+  if (!heroPromoState.controlsInitialized) {
+    controls.addEventListener('click', (event) => {
+      const control = event.target.closest('button');
+      if (!control) {
+        return;
+      }
+
+      if (control.dataset.action === 'prev') {
+        goToHeroPromoSlide(heroPromoState.currentIndex - 1, promoContainer, promoSlides);
+        return;
+      }
+
+      if (control.dataset.action === 'next') {
+        goToHeroPromoSlide(heroPromoState.currentIndex + 1, promoContainer, promoSlides);
+        return;
+      }
+
+      if (control.classList.contains('hero-promo-dot')) {
+        const nextIndex = Number(control.dataset.index);
+        if (Number.isFinite(nextIndex)) {
+          goToHeroPromoSlide(nextIndex, promoContainer, promoSlides);
+        }
+      }
+    });
+    heroPromoState.controlsInitialized = true;
+  }
+}
+
+function initHeroPromoMotionPreference(promoContainer, promoSlides) {
+  if (!heroPromoState.reducedMotionQuery) {
+    heroPromoState.reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  }
+
+  const updateMotionPreference = () => {
+    heroPromoState.isReducedMotion = heroPromoState.reducedMotionQuery.matches;
+    promoContainer.setAttribute('data-reduced-motion', heroPromoState.isReducedMotion ? 'true' : 'false');
+    startHeroPromoRotation(promoContainer, promoSlides);
+  };
+
+  if (!promoContainer.dataset.motionPreferenceBound) {
+    heroPromoState.reducedMotionQuery.addEventListener('change', updateMotionPreference);
+    promoContainer.dataset.motionPreferenceBound = 'true';
+  }
+
+  updateMotionPreference();
+}
+
+function initHeroPromoRotator(promoContainer, promoSlides) {
+  initHeroPromoControls(promoContainer, promoSlides);
+  initHeroPromoMotionPreference(promoContainer, promoSlides);
+
+  if (!promoContainer.dataset.rotationHooksBound) {
+    promoContainer.addEventListener('mouseenter', () => {
+      setHeroPromoPaused(true, promoContainer, promoSlides);
+    });
+    promoContainer.addEventListener('mouseleave', () => {
+      setHeroPromoPaused(false, promoContainer, promoSlides);
+    });
+    promoContainer.addEventListener('focusin', () => {
+      setHeroPromoPaused(true, promoContainer, promoSlides);
+    });
+    promoContainer.addEventListener('focusout', (event) => {
+      if (promoContainer.contains(event.relatedTarget)) {
+        return;
+      }
+      setHeroPromoPaused(false, promoContainer, promoSlides);
+    });
+    document.addEventListener('visibilitychange', () => {
+      const isDocumentHidden = document.hidden;
+      setHeroPromoPaused(isDocumentHidden, promoContainer, promoSlides);
+    });
+
+    promoContainer.dataset.rotationHooksBound = 'true';
+  }
+
+  applyHeroPromoSlideState(promoContainer, promoSlides);
+  startHeroPromoRotation(promoContainer, promoSlides);
 }
 
 async function loadConfig() {
@@ -518,6 +719,10 @@ async function loadConfig() {
       ui: {
         ...DEFAULT_CONFIG.ui,
         ...loadedConfig.ui,
+        heroPromoRotator: {
+          ...DEFAULT_CONFIG.ui.heroPromoRotator,
+          ...(loadedConfig.ui?.heroPromoRotator || {}),
+        },
         addButton: {
           ...DEFAULT_CONFIG.ui.addButton,
           ...(loadedConfig.ui?.addButton || {}),

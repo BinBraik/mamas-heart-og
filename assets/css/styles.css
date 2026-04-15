@@ -444,8 +444,10 @@
   }
   .hero-promo-rotator {
     position: relative;
+    display: grid;
   }
   .hero-promo-slide {
+    grid-area: 1 / 1;
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -462,9 +464,81 @@
     gap: 0.85rem;
     max-width: min(560px, 100%);
     margin-inline: auto;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition:
+      opacity 420ms ease,
+      transform 420ms ease,
+      visibility 0ms linear 0ms;
   }
   .hero-promo-slide--inactive {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition:
+      opacity 380ms ease,
+      transform 380ms ease,
+      visibility 0ms linear 380ms;
+  }
+  .hero-promo-controls {
+    grid-area: 1 / 1;
+    align-self: end;
+    justify-self: center;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--overlay-white-border);
+    border: 1px solid var(--border-soft);
+    border-radius: 999px;
+    padding: 0.3rem 0.45rem;
+    margin-bottom: 0.6rem;
+    backdrop-filter: blur(10px);
+  }
+  .hero-promo-control,
+  .hero-promo-dot {
+    border: 0;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .hero-promo-control {
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 50%;
+    font-size: 1.12rem;
+    line-height: 1;
+  }
+  .hero-promo-control:hover,
+  .hero-promo-control:focus-visible {
+    background: var(--overlay-brand-soft);
+    color: var(--text-primary);
+    outline: none;
+  }
+  .hero-promo-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .hero-promo-dot {
+    width: 0.56rem;
+    height: 0.56rem;
+    border-radius: 999px;
+    background: var(--overlay-dark-soft);
+    opacity: 0.45;
+  }
+  .hero-promo-dot.is-active {
+    opacity: 1;
+    background: var(--brand-primary);
+  }
+  .hero-promo-rotator[data-reduced-motion="true"] .hero-promo-slide {
+    transition: none;
+    transform: none;
+  }
+  .hero-promo-rotator[data-reduced-motion="true"] .hero-promo-slide--inactive {
+    transition: none;
   }
   .hero-promo-slide::before,
   .hero-promo-slide::after {
