@@ -138,6 +138,7 @@ function initMobileMenu() {
   const setMenuOpen = (isOpen) => {
     hamburger.classList.toggle('open', isOpen);
     mobileMenu.classList.toggle('open', isOpen);
+    document.body.classList.toggle('menu-open', isOpen);
     hamburger.setAttribute('aria-expanded', String(isOpen));
 
     if (isOpen) {
