@@ -9,7 +9,7 @@ const DEFAULT_CONFIG = {
   },
   data: {
     productsPath: './normalized/products.json',
-    requestTimeoutMs: 8000,
+    requestTimeoutMs: 25000,
   },
   assets: {
     fallbackProductImage: './assets/img/logo/mama-heart-logo.png',
@@ -432,9 +432,40 @@ function initAskMamaModal() {
     return { controller, timeoutId };
   };
 
+  const wait = (delayMs) => new Promise((resolve) => {
+    setTimeout(resolve, delayMs);
+  });
+
+  const getReadableAskMamaError = (error) => {
+    const fallbackMessage = translate('chat.errorLabel');
+
+    if (!(error instanceof Error)) {
+      return fallbackMessage;
+    }
+
+    if (error.name === 'TimeoutError' || error.name === 'AbortError') {
+      return languageState.current === 'ar'
+        ? 'الرد يتأخر أكثر من المعتاد. يرجى المحاولة مرة أخرى.'
+        : 'Mama is taking longer than usual. Please try again.';
+    }
+
+    if (error.message.includes('server_misconfigured')) {
+      return languageState.current === 'ar'
+        ? 'ميزة اسألي ماما غير مفعّلة بعد على الخادم.'
+        : 'Ask Mama is not configured on the server yet.';
+    }
+
+    if (error.message.includes('assistant_unavailable')) {
+      return languageState.current === 'ar'
+        ? 'الخدمة غير متاحة مؤقتًا. حاولي مرة أخرى بعد قليل.'
+        : 'Assistant service is temporarily unavailable. Please try again shortly.';
+    }
+
+    return fallbackMessage;
+  };
+
   const fetchAskMamaResponse = async (message, requestId) => {
     const requestTimeoutMs = appState.config.data.requestTimeoutMs || 10000;
-    const { controller, timeoutId } = createRequestTimeoutSignal(requestTimeoutMs);
     const requestPayload = {
       message,
       language: chatState.language,
@@ -448,30 +479,55 @@ function initAskMamaModal() {
       requestPayload.chatHistory = history;
     }
 
-    let response;
-    try {
-      response = await fetch('/api/ask-mama', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestPayload),
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timeoutId);
+    const MAX_ATTEMPTS = 2;
+    let response = null;
+    let lastError = null;
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+      const { controller, timeoutId } = createRequestTimeoutSignal(requestTimeoutMs);
+      try {
+        response = await fetch('/api/ask-mama', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestPayload),
+          signal: controller.signal,
+        });
+        break;
+      } catch (error) {
+        lastError = error;
+        const isRetryable = error instanceof Error
+          && (error.name === 'AbortError' || error.name === 'TimeoutError' || error instanceof TypeError);
+        const isLastAttempt = attempt === MAX_ATTEMPTS;
+        if (!isRetryable || isLastAttempt) {
+          throw error;
+        }
+        await wait(250 * attempt);
+      } finally {
+        clearTimeout(timeoutId);
+      }
     }
 
     if (requestId !== chatState.activeRequestId) {
       throw new Error('Stale Ask Mama response ignored.');
     }
 
+    if (!response) {
+      throw lastError || new Error('Ask Mama request failed without response.');
+    }
+
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
+      const errorCode = payload?.error?.code;
       const errorMessage = payload?.error?.message;
-      throw new Error(typeof errorMessage === 'string' && errorMessage.trim()
-        ? errorMessage
-        : 'Ask Mama request failed');
+      const details = payload?.error?.details;
+      const errorParts = [
+        typeof errorCode === 'string' ? errorCode : '',
+        typeof errorMessage === 'string' ? errorMessage : '',
+        typeof details === 'string' ? details : '',
+      ].filter(Boolean);
+      throw new Error(errorParts.join(' | ') || 'Ask Mama request failed');
     }
 
     const assistantText = typeof payload?.assistantText === 'string' ? payload.assistantText.trim() : '';
@@ -668,7 +724,7 @@ function initAskMamaModal() {
         return;
       }
       loadingIndicator.remove();
-      appendMessage(translate('chat.errorLabel'), 'assistant', { isStatus: true });
+      appendMessage(getReadableAskMamaError(error), 'assistant', { isStatus: true });
       if (error instanceof Error) {
         console.error(error);
       }
