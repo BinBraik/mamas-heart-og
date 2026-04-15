@@ -618,10 +618,9 @@
     width: min(100%, 250px);
     max-width: 100%;
     max-height: 330px;
-    border-radius: 18px;
-    box-shadow:
-      0 18px 34px var(--promo-shadow),
-      0 0 0 1px var(--overlay-white-border);
+    border-radius: 0;
+    box-shadow: none;
+    filter: drop-shadow(0 10px 20px var(--promo-shadow-soft));
     object-fit: contain;
     align-self: center;
     margin-block-start: 0.35rem;
@@ -657,8 +656,8 @@
     width: min(100%, 230px);
     max-width: 220px;
     aspect-ratio: 4 / 5;
-    object-fit: cover;
-    border-radius: 14px;
+    object-fit: contain;
+    border-radius: 0;
     transform: none;
   }
   .hero-promo-slide--packaging .hero-promo-image:nth-child(2) {
