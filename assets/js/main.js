@@ -276,6 +276,10 @@ function applyStaticTranslations(root = document) {
     element.setAttribute('aria-label', translate(element.dataset.i18nAriaLabel));
   });
 
+  root.querySelectorAll('[data-i18n-alt]').forEach((element) => {
+    element.setAttribute('alt', translate(element.dataset.i18nAlt));
+  });
+
   document.title = translate('meta.title');
   const metaDescription = document.getElementById('metaDescription');
   if (metaDescription) {
