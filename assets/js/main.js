@@ -363,6 +363,7 @@ const ALLOWED_CATEGORIES = new Set([CATEGORY_ALL, 'Educational Kits', 'Sensory D
 const productState = {
   allProducts: [],
   activeCategory: CATEGORY_ALL,
+  featuredHeroProducts: [],
 };
 
 const HERO_CARD_COUNT = 4;
@@ -450,6 +451,7 @@ function getFilteredProducts() {
 }
 
 function applyFilters() {
+  renderHeroProducts(productState.featuredHeroProducts);
   renderProducts(getFilteredProducts());
   updateFilterControls();
 }
@@ -602,10 +604,12 @@ async function loadProducts() {
 
     const products = await response.json();
     productState.allProducts = Array.isArray(products) ? products : [];
-    renderHeroProducts(getRandomDistinctProducts(productState.allProducts, HERO_CARD_COUNT));
+    productState.featuredHeroProducts = getRandomDistinctProducts(productState.allProducts, HERO_CARD_COUNT);
+    renderHeroProducts(productState.featuredHeroProducts);
     applyFilters();
   } catch (error) {
     console.error('Unable to load products from normalized/products.json', error);
+    productState.featuredHeroProducts = [];
     renderHeroProductsFallback();
     renderProductLoadError();
   } finally {
