@@ -445,9 +445,17 @@
   .hero-promo-rotator {
     position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    row-gap: 0.55rem;
+    align-items: stretch;
+    width: min(100%, 580px);
+    margin-inline: auto;
+    border-radius: 32px;
   }
   .hero-promo-slide {
-    grid-area: 1 / 1;
+    grid-column: 1;
+    grid-row: 2;
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -457,34 +465,39 @@
     box-shadow:
       0 28px 56px var(--promo-shadow-soft),
       0 12px 30px var(--promo-shadow);
-    padding: clamp(1.35rem, 2.2vw, 2.05rem);
+    padding: clamp(1.45rem, 2.2vw, 2.1rem);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.85rem;
-    max-width: min(560px, 100%);
+    gap: 0.78rem;
+    max-width: min(580px, 100%);
     margin-inline: auto;
+    min-height: clamp(340px, 28vw, 390px);
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
     transition:
-      opacity 420ms ease,
-      transform 420ms ease,
+      opacity 460ms cubic-bezier(0.2, 0.7, 0.25, 1),
+      transform 460ms cubic-bezier(0.2, 0.7, 0.25, 1),
       visibility 0ms linear 0ms;
+  }
+  .hero-promo-slide--active {
+    z-index: 2;
   }
   .hero-promo-slide--inactive {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transform: translateY(10px);
+    transform: translate3d(0, 16px, 0) scale(0.985);
     transition:
-      opacity 380ms ease,
-      transform 380ms ease,
+      opacity 360ms ease,
+      transform 360ms ease,
       visibility 0ms linear 380ms;
   }
   .hero-promo-controls {
-    grid-area: 1 / 1;
-    align-self: end;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
     justify-self: center;
     z-index: 4;
     display: inline-flex;
@@ -494,8 +507,9 @@
     border: 1px solid var(--border-soft);
     border-radius: 999px;
     padding: 0.3rem 0.45rem;
-    margin-bottom: 0.6rem;
+    margin-top: 0;
     backdrop-filter: blur(10px);
+    box-shadow: 0 10px 22px var(--promo-shadow-soft);
   }
   .hero-promo-control,
   .hero-promo-dot {
@@ -510,12 +524,14 @@
     border-radius: 50%;
     font-size: 1.12rem;
     line-height: 1;
+    transition: background-color 220ms ease, color 220ms ease, transform 220ms ease;
   }
   .hero-promo-control:hover,
   .hero-promo-control:focus-visible {
     background: var(--overlay-brand-soft);
     color: var(--text-primary);
     outline: none;
+    transform: translateY(-1px);
   }
   .hero-promo-dots {
     display: inline-flex;
@@ -528,10 +544,12 @@
     border-radius: 999px;
     background: var(--overlay-dark-soft);
     opacity: 0.45;
+    transition: transform 240ms ease, opacity 240ms ease, background-color 240ms ease;
   }
   .hero-promo-dot.is-active {
     opacity: 1;
     background: var(--brand-primary);
+    transform: scale(1.22);
   }
   .hero-promo-rotator[data-reduced-motion="true"] .hero-promo-slide {
     transition: none;
@@ -563,7 +581,6 @@
     background: radial-gradient(circle at 50% 50%, var(--promo-glow-accent) 0%, transparent 72%);
   }
   .hero-promo-title {
-    grid-area: title;
     font-family: var(--font-heading-latin);
     font-size: clamp(1.35rem, 2.2vw, 1.78rem);
     color: var(--text-primary);
@@ -571,6 +588,7 @@
     margin: 0;
     max-width: 22ch;
     text-wrap: balance;
+    padding-inline-end: 0.25rem;
   }
   .hero-promo-subtitle {
     font-size: clamp(0.92rem, 1.12vw, 1.02rem);
@@ -578,19 +596,21 @@
     line-height: 1.62;
     margin: 0;
     max-width: 44ch;
+    padding-inline-end: 0.25rem;
   }
   .hero-promo-media-group {
     width: 100%;
-    display: flex;
-    align-items: center;
+    display: grid;
+    place-items: center;
+    align-content: center;
     justify-content: center;
-    gap: 0.8rem;
-    flex-wrap: wrap;
+    min-height: 200px;
+    margin-block-start: 0.35rem;
   }
   .hero-promo-image {
-    width: min(100%, 240px);
+    width: min(100%, 250px);
     max-width: 100%;
-    max-height: 320px;
+    max-height: 330px;
     border-radius: 18px;
     box-shadow:
       0 18px 34px var(--promo-shadow),
@@ -602,10 +622,41 @@
     transform-origin: center;
   }
   .hero-promo-image--packaging {
-    width: min(100%, 180px);
+    width: min(100%, 182px);
   }
-  .hero-promo-cta {
-    margin-block-start: 0.35rem;
+  .hero-promo-slide--book .hero-promo-subtitle {
+    max-width: 36ch;
+  }
+  .hero-promo-slide--book .hero-promo-media-group {
+    justify-items: center;
+  }
+  .hero-promo-slide--book .hero-promo-image {
+    width: min(100%, 260px);
+    transform: rotate(-2deg) translateY(1px);
+  }
+  .hero-promo-slide--packaging {
+    gap: 0.65rem;
+  }
+  .hero-promo-slide--packaging .hero-promo-subtitle {
+    max-width: 34ch;
+  }
+  .hero-promo-slide--packaging .hero-promo-media-group {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    justify-items: center;
+    align-items: start;
+  }
+  .hero-promo-slide--packaging .hero-promo-image {
+    width: min(100%, 230px);
+    max-width: 220px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 14px;
+    transform: none;
+  }
+  .hero-promo-slide--packaging .hero-promo-image:nth-child(2) {
+    justify-self: start;
+    transform: rotate(2deg);
   }
   @keyframes fadeUp {
     from { opacity:0; transform:translateY(22px); }
@@ -1185,6 +1236,10 @@
   [dir="rtl"] .hero-promo-image {
     transform: rotate(1.25deg) translateY(1px);
   }
+  [dir="rtl"] .hero-promo-slide--packaging .hero-promo-image:nth-child(2) {
+    justify-self: end;
+    transform: rotate(-2deg);
+  }
   html[lang="ar"] .product-tag,
   html[lang="ar"] .product-featured-badge {
     max-inline-size: calc(100% - 2rem);
@@ -1213,6 +1268,9 @@
     .hero { grid-template-columns:1fr; padding:7rem 2.5rem 4rem; gap:3rem; }
     .hero::before { width:80vw; height:60vh; top:-5%; inset-inline-end:-10%; }
     .hero-visual { max-width:500px; margin:0 auto; }
+    .hero-promo-slide {
+      min-height: 0;
+    }
 
     .why-us { grid-template-columns:1fr; gap:3rem; padding:5rem 2.5rem; }
     .why-visual { order:-1; }
@@ -1286,7 +1344,11 @@
     .hero-promo-slide {
       padding: 1.25rem;
       border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
       gap: 0.9rem;
+      min-height: 0;
     }
     .hero-promo-title {
       max-width: none;
@@ -1300,6 +1362,19 @@
       width: min(100%, 210px);
       max-height: 280px;
       transform: none;
+    }
+    .hero-promo-slide--packaging .hero-promo-media-group {
+      width: 100%;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+    .hero-promo-slide--packaging .hero-promo-image:nth-child(1),
+    .hero-promo-slide--packaging .hero-promo-image:nth-child(2) {
+      justify-self: center;
+      transform: none;
+    }
+    .hero-promo-controls {
+      margin-top: 0;
     }
 
     /* Trust bar */

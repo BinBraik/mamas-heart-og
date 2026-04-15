@@ -431,16 +431,6 @@ function renderHeroPromoRotator() {
       bookSubtitle.textContent = hasSubtitle ? subtitle : '';
     }
 
-    const bookCta = bookSlide.querySelector('.hero-promo-cta');
-    if (bookCta) {
-      if (bookPromoConfig?.ctaKey) {
-        bookCta.textContent = translate(bookPromoConfig.ctaKey);
-      }
-      if (bookPromoConfig?.ctaHref) {
-        bookCta.setAttribute('href', bookPromoConfig.ctaHref);
-      }
-    }
-
     const configuredAccentClass = bookPromoConfig?.accentClass;
     if (configuredAccentClass && !bookSlide.classList.contains(configuredAccentClass)) {
       bookSlide.classList.add(configuredAccentClass);
@@ -461,16 +451,6 @@ function renderHeroPromoRotator() {
       packagingSubtitle.textContent = hasSubtitle ? subtitle : '';
     }
 
-    const packagingCta = packagingSlide.querySelector('.hero-promo-cta');
-    if (packagingCta) {
-      if (packagingPromoConfig?.ctaKey) {
-        packagingCta.textContent = translate(packagingPromoConfig.ctaKey);
-      }
-      if (packagingPromoConfig?.ctaHref) {
-        packagingCta.setAttribute('href', packagingPromoConfig.ctaHref);
-      }
-    }
-
     const packagingAccentClass = packagingPromoConfig?.accentClass;
     if (packagingAccentClass && !packagingSlide.classList.contains(packagingAccentClass)) {
       packagingSlide.classList.add(packagingAccentClass);
@@ -480,7 +460,8 @@ function renderHeroPromoRotator() {
     if (mediaGroup) {
       mediaGroup.replaceChildren();
       const configuredImages = Array.isArray(packagingPromoConfig?.images) ? packagingPromoConfig.images : [];
-      configuredImages.forEach((imageConfig) => {
+      const selectedImages = configuredImages.filter((_, index) => index === 0 || index === 2);
+      selectedImages.forEach((imageConfig) => {
         const image = document.createElement('img');
         image.className = 'hero-promo-image hero-promo-image--packaging';
         image.loading = 'lazy';
