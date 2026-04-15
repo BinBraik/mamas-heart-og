@@ -368,8 +368,12 @@ function initAskMamaModal() {
   const sendButton = form?.querySelector('button[type="submit"]');
   const originalBodyOverflow = document.body.style.overflow;
   let lastFocusedElement = null;
-  let chatHistory = [];
-  let isSubmitting = false;
+  const chatState = {
+    messages: [],
+    isLoading: false,
+    language: languageState.current,
+    activeRequestId: 0,
+  };
 
   if (!openButton || !overlay || !modal || !closeButton || !messagesContainer || !form || !input || !sendButton) {
     return;
@@ -399,32 +403,68 @@ function initAskMamaModal() {
     return message;
   };
 
-  const setSubmittingState = (submitting) => {
-    isSubmitting = submitting;
-    input.disabled = submitting;
-    sendButton.disabled = submitting;
-    form.setAttribute('aria-busy', String(submitting));
+  const syncChatLanguage = () => {
+    chatState.language = languageState.current;
+  };
+
+  const setLoadingState = (loading) => {
+    chatState.isLoading = loading;
+    input.disabled = loading;
+    sendButton.disabled = loading;
+    form.setAttribute('aria-busy', String(loading));
   };
 
   const appendMessage = (content, role = 'assistant', options = {}) => {
+    if (!options.skipState) {
+      chatState.messages.push({ role, content });
+    }
     const message = createMessageNode(content, role, options);
     messagesContainer.appendChild(message);
     scrollMessagesToBottom();
     return message;
   };
 
-  const fetchAskMamaResponse = async (message) => {
-    const response = await fetch('/api/ask-mama', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message,
-        language: languageState.current,
-        chatHistory: chatHistory.slice(-12),
-      }),
-    });
+  const createRequestTimeoutSignal = (timeoutMs) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      controller.abort(new DOMException('Ask Mama request timed out.', 'TimeoutError'));
+    }, timeoutMs);
+    return { controller, timeoutId };
+  };
+
+  const fetchAskMamaResponse = async (message, requestId) => {
+    const requestTimeoutMs = appState.config.data.requestTimeoutMs || 10000;
+    const { controller, timeoutId } = createRequestTimeoutSignal(requestTimeoutMs);
+    const requestPayload = {
+      message,
+      language: chatState.language,
+    };
+
+    const history = chatState.messages
+      .filter((entry) => entry.role === 'assistant' || entry.role === 'user')
+      .slice(-12)
+      .map((entry) => ({ role: entry.role, content: entry.content }));
+    if (history.length) {
+      requestPayload.chatHistory = history;
+    }
+
+    let response;
+    try {
+      response = await fetch('/api/ask-mama', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestPayload),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    if (requestId !== chatState.activeRequestId) {
+      throw new Error('Stale Ask Mama response ignored.');
+    }
 
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
@@ -434,15 +474,59 @@ function initAskMamaModal() {
         : 'Ask Mama request failed');
     }
 
-    const assistantText = typeof payload?.assistantText === 'string'
-      ? payload.assistantText.trim()
-      : '';
+    const assistantText = typeof payload?.assistantText === 'string' ? payload.assistantText.trim() : '';
+    const recommendedProductIds = Array.isArray(payload?.recommendedProductIds)
+      ? payload.recommendedProductIds.filter((productId) => typeof productId === 'string' && productId.trim())
+      : [];
+    const rationaleByProductId = payload?.rationaleByProductId && typeof payload.rationaleByProductId === 'object'
+      ? payload.rationaleByProductId
+      : {};
 
     if (!assistantText) {
       throw new Error('Ask Mama response was empty.');
     }
 
-    return assistantText;
+    return {
+      assistantText,
+      recommendedProductIds,
+      rationaleByProductId,
+    };
+  };
+
+  const renderRecommendationCards = (productIds, rationaleByProductId = {}) => {
+    if (!productIds.length) {
+      return null;
+    }
+
+    const productsById = new Map(productState.allProducts.map((product) => [product.id, product]));
+    const cards = productIds
+      .map((productId) => {
+        const product = productsById.get(productId);
+        if (!product) return '';
+
+        const productName = getLocalizedProductField(product, 'name');
+        const rationale = typeof rationaleByProductId[productId] === 'string'
+          ? rationaleByProductId[productId].trim()
+          : '';
+
+        return `
+          <a href="#products" class="chat-recommendation-card" data-recommendation-product-id="${escapeHtml(productId)}">
+            <strong>${escapeHtml(productName)}</strong>
+            ${rationale ? `<span>${escapeHtml(rationale)}</span>` : ''}
+          </a>
+        `;
+      })
+      .filter(Boolean)
+      .join('');
+
+    if (!cards) {
+      return null;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'chat-recommendations';
+    wrapper.innerHTML = cards;
+    return wrapper;
   };
 
   const setModalOpen = (isOpen) => {
@@ -487,6 +571,38 @@ function initAskMamaModal() {
     }
   });
 
+  messagesContainer.addEventListener('click', (event) => {
+    const recommendation = event.target.closest('[data-recommendation-product-id]');
+    if (!recommendation) {
+      return;
+    }
+
+    event.preventDefault();
+    const productId = recommendation.dataset.recommendationProductId;
+    if (!productId) {
+      return;
+    }
+
+    const product = productState.allProducts.find((item) => item.id === productId);
+    if (!product) {
+      window.location.hash = 'products';
+      return;
+    }
+
+    applyCategory(product.category || getAllCategoryQueryValue());
+    const card = document.querySelector(`.product-card[data-product-id="${CSS.escape(productId)}"]`);
+    if (!(card instanceof HTMLElement)) {
+      window.location.hash = 'products';
+      return;
+    }
+
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.classList.add('product-card--highlight');
+    setTimeout(() => {
+      card.classList.remove('product-card--highlight');
+    }, 1500);
+  });
+
   document.addEventListener('keydown', (event) => {
     if (overlay.hidden) {
       return;
@@ -517,7 +633,7 @@ function initAskMamaModal() {
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (isSubmitting) {
+    if (chatState.isLoading) {
       return;
     }
 
@@ -527,28 +643,47 @@ function initAskMamaModal() {
       return;
     }
 
+    syncChatLanguage();
     appendMessage(message, 'user');
-    chatHistory.push({ role: 'user', content: message });
     input.value = '';
-    setSubmittingState(true);
+    setLoadingState(true);
+    chatState.activeRequestId += 1;
+    const requestId = chatState.activeRequestId;
     const loadingIndicator = appendMessage(translate('chat.loadingLabel'), 'assistant', { isStatus: true });
 
     try {
-      const assistantText = await fetchAskMamaResponse(message);
+      const { assistantText, recommendedProductIds, rationaleByProductId } = await fetchAskMamaResponse(message, requestId);
+      if (requestId !== chatState.activeRequestId) {
+        return;
+      }
       loadingIndicator.remove();
       appendMessage(assistantText, 'assistant');
-      chatHistory.push({ role: 'assistant', content: assistantText });
+      const recommendationsNode = renderRecommendationCards(recommendedProductIds, rationaleByProductId);
+      if (recommendationsNode) {
+        messagesContainer.appendChild(recommendationsNode);
+        scrollMessagesToBottom();
+      }
     } catch (error) {
+      if (requestId !== chatState.activeRequestId) {
+        return;
+      }
       loadingIndicator.remove();
       appendMessage(translate('chat.errorLabel'), 'assistant', { isStatus: true });
       if (error instanceof Error) {
         console.error(error);
       }
     } finally {
-      setSubmittingState(false);
+      if (requestId === chatState.activeRequestId) {
+        setLoadingState(false);
+      }
       input.focus();
     }
   });
+
+  const welcomeMessage = messagesContainer.querySelector('.chat-message--assistant p')?.textContent?.trim();
+  if (welcomeMessage) {
+    chatState.messages.push({ role: 'assistant', content: welcomeMessage });
+  }
 }
 
 function applyStaticTranslations(root = document) {
