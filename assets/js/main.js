@@ -449,6 +449,18 @@ function initAskMamaModal() {
         : 'Mama is taking longer than usual. Please try again.';
     }
 
+    if (error instanceof TypeError || error.message.includes('network_request_failed')) {
+      return languageState.current === 'ar'
+        ? 'تعذّر الوصول إلى خدمة اسألي ماما. تأكدي من تشغيل الخادم (مثل vercel dev) ثم حاولي مجددًا.'
+        : 'Cannot reach Ask Mama service. Make sure the API server is running (for example with `vercel dev`) and try again.';
+    }
+
+    if (error.message.includes('http_404')) {
+      return languageState.current === 'ar'
+        ? 'مسار API غير موجود (/api/ask-mama). شغّلي التطبيق عبر خادم يدعم مسارات API.'
+        : 'API route was not found (/api/ask-mama). Run the app with a server that supports API routes.';
+    }
+
     if (error.message.includes('server_misconfigured')) {
       return languageState.current === 'ar'
         ? 'ميزة اسألي ماما غير مفعّلة بعد على الخادم.'
@@ -501,6 +513,9 @@ function initAskMamaModal() {
           && (error.name === 'AbortError' || error.name === 'TimeoutError' || error instanceof TypeError);
         const isLastAttempt = attempt === MAX_ATTEMPTS;
         if (!isRetryable || isLastAttempt) {
+          if (error instanceof TypeError) {
+            throw new Error('network_request_failed');
+          }
           throw error;
         }
         await wait(250 * attempt);
@@ -523,6 +538,7 @@ function initAskMamaModal() {
       const errorMessage = payload?.error?.message;
       const details = payload?.error?.details;
       const errorParts = [
+        `http_${response.status}`,
         typeof errorCode === 'string' ? errorCode : '',
         typeof errorMessage === 'string' ? errorMessage : '',
         typeof details === 'string' ? details : '',
