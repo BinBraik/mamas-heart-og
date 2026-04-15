@@ -17,9 +17,6 @@ const DEFAULT_CONFIG = {
     cacheBustedImages: {},
   },
   ui: {
-    heroCardCount: 4,
-    enableHeroRandomCards: true,
-    enableHeroBookPromo: true,
     addButton: {
       defaultSymbol: '+',
       activeSymbol: '♡',
@@ -47,7 +44,6 @@ const languageState = {
 const productState = {
   allProducts: [],
   activeCategory: DEFAULT_CONFIG.catalog.allCategory.queryValue,
-  featuredHeroProducts: [],
 };
 
 const INTERPOLATION_TOKEN_REGEX = /\{(\w+)\}/g;
@@ -562,71 +558,6 @@ function formatStockStatus(stockStatus) {
   return readable.charAt(0).toUpperCase() + readable.slice(1);
 }
 
-function getRandomDistinctProducts(products, count) {
-  const pool = Array.isArray(products) ? [...products] : [];
-  for (let i = pool.length - 1; i > 0; i -= 1) {
-    const swapIndex = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[swapIndex]] = [pool[swapIndex], pool[i]];
-  }
-
-  return pool.slice(0, Math.max(0, count));
-}
-
-function isHeroRandomCardsEnabled() {
-  return appState.config.ui.enableHeroRandomCards !== false;
-}
-
-function renderHeroProducts(products) {
-  if (!isHeroRandomCardsEnabled()) {
-    return;
-  }
-
-  const heroContainer = document.getElementById('heroProductCards');
-  if (!heroContainer) return;
-
-  heroContainer.setAttribute('aria-busy', 'true');
-
-  if (!products.length) {
-    heroContainer.innerHTML = `
-      <article class="toy-card">
-        <div class="toy-card-name">${translate('products.featured.loadingTitle')}</div>
-        <div class="toy-card-age">${translate('products.featured.loadingDescription')}</div>
-        <div class="toy-card-price">♡</div>
-      </article>
-    `;
-    heroContainer.setAttribute('aria-busy', 'false');
-    return;
-  }
-
-  heroContainer.innerHTML = products.map((product) => {
-    const imagePath = getProductImagePath(product.image_main);
-    const ageLabel = formatAgeRange(product.age_min, product.age_max);
-    const priceLabel = formatPrice(product.price, product.currency);
-    const localizedName = getLocalizedProductField(product, 'name');
-
-    return `
-      <article class="toy-card" data-product-id="${escapeHtml(product.id)}">
-        <img
-          class="toy-thumb"
-          src="${escapeHtml(imagePath)}"
-          alt="${escapeHtml(localizedName)}"
-          loading="lazy"
-          onerror="this.onerror=null;this.src='${getFallbackProductImage()}';"
-        >
-        <div class="toy-card-name">${escapeHtml(localizedName)}</div>
-        <div class="toy-card-age">${escapeHtml(ageLabel)}</div>
-        <div class="toy-card-price">${escapeHtml(priceLabel)}</div>
-      </article>
-    `;
-  }).join('');
-
-  heroContainer.setAttribute('aria-busy', 'false');
-}
-
-function renderHeroProductsFallback() {
-  renderHeroProducts([]);
-}
-
 function renderCategoryFilterChips() {
   const filtersContainer = document.getElementById('productFilters');
   if (!filtersContainer) return;
@@ -703,9 +634,6 @@ function updateFilterControls() {
 }
 
 function applyFilters() {
-  if (isHeroRandomCardsEnabled()) {
-    renderHeroProducts(productState.featuredHeroProducts);
-  }
   renderProducts(getFilteredProducts());
   updateFilterControls();
 }
@@ -845,21 +773,9 @@ async function loadProducts() {
 
     const products = await response.json();
     productState.allProducts = Array.isArray(products) ? products : [];
-    productState.featuredHeroProducts = isHeroRandomCardsEnabled()
-      ? getRandomDistinctProducts(
-        productState.allProducts,
-        appState.config.ui.heroCardCount,
-      )
-      : [];
-
-    if (isHeroRandomCardsEnabled()) {
-      renderHeroProducts(productState.featuredHeroProducts);
-    }
     applyFilters();
   } catch (error) {
     console.error(`Unable to load products from ${appState.config.data.productsPath}`, error);
-    productState.featuredHeroProducts = [];
-    renderHeroProductsFallback();
     renderProductLoadError();
   } finally {
     clearTimeout(timeout);

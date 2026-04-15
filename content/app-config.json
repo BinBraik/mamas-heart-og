@@ -2,7 +2,10 @@
   "app": {
     "defaultLanguage": "en",
     "fallbackLanguage": "en",
-    "supportedLanguages": ["en", "ar"]
+    "supportedLanguages": [
+      "en",
+      "ar"
+    ]
   },
   "theme": {
     "defaultTheme": "light"
@@ -19,9 +22,6 @@
     }
   },
   "ui": {
-    "heroCardCount": 4,
-    "enableHeroRandomCards": false,
-    "enableHeroBookPromo": true,
     "addButton": {
       "defaultSymbol": "+",
       "activeSymbol": "♡",
