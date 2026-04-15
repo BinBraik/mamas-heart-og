@@ -1039,6 +1039,7 @@
     width: min(100%, 470px);
     min-height: 460px;
     max-height: min(86vh, 720px);
+    padding: 0;
     display: flex;
     flex-direction: column;
     border-radius: 22px;
