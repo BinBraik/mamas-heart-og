@@ -357,6 +357,74 @@ function initDarkModeToggle() {
   });
 }
 
+function initAskMamaModal() {
+  const openButton = document.getElementById('askMamaButton');
+  const overlay = document.getElementById('chatModalOverlay');
+  const modal = document.getElementById('chatModal');
+  const closeButton = document.getElementById('chatModalClose');
+  const form = document.getElementById('chatModalForm');
+  const input = document.getElementById('chatModalInput');
+  const originalBodyOverflow = document.body.style.overflow;
+  let lastFocusedElement = null;
+
+  if (!openButton || !overlay || !modal || !closeButton || !form || !input) {
+    return;
+  }
+
+  const setModalOpen = (isOpen) => {
+    if (isOpen) {
+      lastFocusedElement = document.activeElement;
+      overlay.hidden = false;
+      modal.setAttribute('aria-hidden', 'false');
+      openButton.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      window.requestAnimationFrame(() => {
+        input.focus();
+      });
+      return;
+    }
+
+    overlay.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    openButton.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = originalBodyOverflow;
+    if (lastFocusedElement instanceof HTMLElement) {
+      lastFocusedElement.focus();
+    } else {
+      openButton.focus();
+    }
+  };
+
+  openButton.setAttribute('aria-haspopup', 'dialog');
+  openButton.setAttribute('aria-controls', 'chatModal');
+  openButton.setAttribute('aria-expanded', 'false');
+
+  openButton.addEventListener('click', () => {
+    setModalOpen(true);
+  });
+
+  closeButton.addEventListener('click', () => {
+    setModalOpen(false);
+  });
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      setModalOpen(false);
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !overlay.hidden) {
+      setModalOpen(false);
+    }
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    input.focus();
+  });
+}
+
 function applyStaticTranslations(root = document) {
   root.querySelectorAll('[data-i18n]').forEach((element) => {
     element.textContent = translate(element.dataset.i18n);
@@ -1141,6 +1209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   setLanguage(getPreferredLanguage());
   initMobileMenu();
+  initAskMamaModal();
   initSmoothScroll();
   initDarkModeToggle();
   initLanguageToggle();
