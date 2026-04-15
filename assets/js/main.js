@@ -261,11 +261,32 @@ function initMobileMenu() {
 }
 
 function initSmoothScroll() {
+  const NAV_SCROLL_BUFFER_PX = 12;
+  const getNavOffset = () => {
+    const nav = document.querySelector('nav');
+    const navHeight = nav?.getBoundingClientRect().height ?? 0;
+    return navHeight + NAV_SCROLL_BUFFER_PX;
+  };
+
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', (event) => {
-      event.preventDefault();
       const targetSelector = anchor.getAttribute('href');
-      document.querySelector(targetSelector)?.scrollIntoView({ behavior: 'smooth' });
+      if (!targetSelector || targetSelector === '#') {
+        return;
+      }
+
+      const targetElement = document.querySelector(targetSelector);
+      if (!targetElement) {
+        return;
+      }
+
+      event.preventDefault();
+      const targetTop = targetElement.getBoundingClientRect().top + window.scrollY;
+      const scrollTarget = Math.max(0, targetTop - getNavOffset());
+      window.scrollTo({
+        top: scrollTarget,
+        behavior: 'smooth',
+      });
     });
   });
 }
