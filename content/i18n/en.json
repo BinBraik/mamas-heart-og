@@ -33,8 +33,6 @@
       "awardWinning": "Award-winning toys",
       "ageRange": "Perfect age range"
     },
-    "loadingTitle": "Loading featured toys…",
-    "loadingDescription": "Please wait",
     "bookPromo": {
       "ariaLabel": "Free book promotion",
       "title": "Get your FREE copy with Every Purchase",
@@ -110,9 +108,7 @@
     },
     "featured": {
       "label": "Featured product",
-      "badge": "Featured",
-      "loadingTitle": "Featured toys are loading soon",
-      "loadingDescription": "Please explore our catalog below"
+      "badge": "Featured"
     },
     "addToCartAria": "Add {name} to cart",
     "loadError": {

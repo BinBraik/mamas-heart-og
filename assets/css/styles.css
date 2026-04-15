@@ -513,37 +513,6 @@
     transform: rotate(-1.25deg) translateY(1px);
     transform-origin: center;
   }
-  .toy-card {
-    background:var(--bg-surface); border-radius:20px;
-    padding:1.4rem;
-    box-shadow:0 4px 24px var(--overlay-dark-soft);
-    transition:transform 0.3s, box-shadow 0.3s;
-    cursor:pointer;
-    display: flex;
-    flex-direction: column;
-    min-height: 320px;
-    height: 100%;
-  }
-  .toy-card:hover { transform:translateY(-6px); box-shadow:0 12px 36px var(--overlay-dark-medium); }
-  .toy-thumb {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 14px;
-    margin-bottom: 0.7rem;
-    box-shadow: 0 3px 12px var(--overlay-dark-light);
-  }
-  .toy-icon { font-size:2.6rem; margin-bottom:0.7rem; }
-  .toy-card-name {
-    font-family:var(--font-heading-latin);
-    font-size:1rem; color:var(--text-primary); margin-bottom:0.3rem;
-    min-height: 2.6rem;
-  }
-  .toy-card-age {
-    font-size:0.7rem; color:var(--text-secondary);
-    background:var(--overlay-brand-soft);
-    display:inline-block; padding:0.2rem 0.6rem; border-radius:50px;
-  }
   @keyframes fadeUp {
     from { opacity:0; transform:translateY(22px); }
     to   { opacity:1; transform:translateY(0); }

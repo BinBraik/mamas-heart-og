@@ -33,8 +33,6 @@
       "awardWinning": "ألعاب حائزة على جوائز",
       "ageRange": "الفئة العمرية المثالية"
     },
-    "loadingTitle": "جارٍ تحميل المنتجات المميزة…",
-    "loadingDescription": "يرجى الانتظار",
     "bookPromo": {
       "ariaLabel": "عرض الكتاب المجاني",
       "title": "احصل على نسختك المجانية مع كل عملية شراء",
@@ -110,9 +108,7 @@
     },
     "featured": {
       "label": "منتج مميز",
-      "badge": "مميز",
-      "loadingTitle": "سيتم عرض المنتجات المميزة قريبًا",
-      "loadingDescription": "يرجى استكشاف مجموعتنا أدناه"
+      "badge": "مميز"
     },
     "addToCartAria": "أضف {name} إلى السلة",
     "loadError": {
