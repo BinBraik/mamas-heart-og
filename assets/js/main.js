@@ -50,16 +50,8 @@ const DEFAULT_CONFIG = {
         accentClass: 'hero-promo-slide--packaging',
         images: [
           {
-            path: './images/Packaging1.png',
+            path: './images/Packaging4.png',
             altKey: 'hero.promos.packaging.images.primaryAlt',
-          },
-          {
-            path: './images/Packaging2.png',
-            altKey: 'hero.promos.packaging.images.secondaryAlt',
-          },
-          {
-            path: './images/Packaging3.png',
-            altKey: 'hero.promos.packaging.images.tertiaryAlt',
           },
         ],
       },
