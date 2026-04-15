@@ -17,6 +17,7 @@ const DEFAULT_CONFIG = {
   },
   ui: {
     heroCardCount: 4,
+    enableHeroRandomCards: true,
     addButton: {
       defaultSymbol: '+',
       activeSymbol: '♡',
@@ -526,7 +527,15 @@ function getRandomDistinctProducts(products, count) {
   return pool.slice(0, Math.max(0, count));
 }
 
+function isHeroRandomCardsEnabled() {
+  return appState.config.ui.enableHeroRandomCards !== false;
+}
+
 function renderHeroProducts(products) {
+  if (!isHeroRandomCardsEnabled()) {
+    return;
+  }
+
   const heroContainer = document.getElementById('heroProductCards');
   if (!heroContainer) return;
 
@@ -649,7 +658,9 @@ function updateFilterControls() {
 }
 
 function applyFilters() {
-  renderHeroProducts(productState.featuredHeroProducts);
+  if (isHeroRandomCardsEnabled()) {
+    renderHeroProducts(productState.featuredHeroProducts);
+  }
   renderProducts(getFilteredProducts());
   updateFilterControls();
 }
@@ -789,11 +800,16 @@ async function loadProducts() {
 
     const products = await response.json();
     productState.allProducts = Array.isArray(products) ? products : [];
-    productState.featuredHeroProducts = getRandomDistinctProducts(
-      productState.allProducts,
-      appState.config.ui.heroCardCount,
-    );
-    renderHeroProducts(productState.featuredHeroProducts);
+    productState.featuredHeroProducts = isHeroRandomCardsEnabled()
+      ? getRandomDistinctProducts(
+        productState.allProducts,
+        appState.config.ui.heroCardCount,
+      )
+      : [];
+
+    if (isHeroRandomCardsEnabled()) {
+      renderHeroProducts(productState.featuredHeroProducts);
+    }
     applyFilters();
   } catch (error) {
     console.error(`Unable to load products from ${appState.config.data.productsPath}`, error);

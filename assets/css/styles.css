@@ -55,9 +55,6 @@
     --hero-glow-secondary: #FFDDB1;
     --hero-accent-soft: rgba(111,142,99,0.16);
     --hero-accent-faint: rgba(111,142,99,0.09);
-    --toy-card-tone-one: #FFF4E4;
-    --toy-card-tone-two: #FFF8E9;
-    --toy-card-tone-three: #F6F2E6;
     --badge-mauve-bg: #FBF1E2;
     --badge-gold-bg: #FFF4DE;
     --badge-rose-bg: #FAEDE4;
@@ -163,9 +160,6 @@
     --hero-glow-secondary: #3A3368;
     --hero-accent-soft: rgba(141,185,137,0.24);
     --hero-accent-faint: rgba(141,185,137,0.13);
-    --toy-card-tone-one: #2A2648;
-    --toy-card-tone-two: #312A52;
-    --toy-card-tone-three: #26223E;
     --badge-mauve-bg: #352C58;
     --badge-gold-bg: #453351;
     --badge-rose-bg: #4A2F49;
@@ -463,39 +457,6 @@
     object-fit: cover;
     align-self: center;
   }
-  .toy-card {
-    background:var(--bg-surface); border-radius:20px;
-    padding:1.4rem;
-    box-shadow:0 4px 24px var(--overlay-dark-soft);
-    transition:transform 0.3s, box-shadow 0.3s;
-    cursor:pointer;
-    display: flex;
-    flex-direction: column;
-    min-height: 320px;
-    height: 100%;
-  }
-  .toy-card:hover { transform:translateY(-6px); box-shadow:0 12px 36px var(--overlay-dark-medium); }
-  .toy-thumb {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 14px;
-    margin-bottom: 0.7rem;
-    box-shadow: 0 3px 12px var(--overlay-dark-light);
-  }
-  .toy-icon { font-size:2.6rem; margin-bottom:0.7rem; }
-  .toy-card-name {
-    font-family:var(--font-heading-latin);
-    font-size:1rem; color:var(--text-primary); margin-bottom:0.3rem;
-    min-height: 2.6rem;
-  }
-  .toy-card-age {
-    font-size:0.7rem; color:var(--text-secondary);
-    background:var(--overlay-brand-soft);
-    display:inline-block; padding:0.2rem 0.6rem; border-radius:50px;
-  }
-  .toy-card-price { font-size:1rem; font-weight:500; color:var(--brand-accent); margin-top:0.5rem; }
-
   @keyframes fadeUp {
     from { opacity:0; transform:translateY(22px); }
     to   { opacity:1; transform:translateY(0); }
@@ -1014,7 +975,6 @@
   html[lang="ar"] h1,
   html[lang="ar"] .section-title,
   html[lang="ar"] .product-name,
-  html[lang="ar"] .toy-card-name,
   html[lang="ar"] .why-feature h4,
   html[lang="ar"] .newsletter h3 {
     font-family: var(--font-body-arabic);
@@ -1064,9 +1024,6 @@
   html[lang="ar"] .product-desc {
     min-height: 4.6rem;
   }
-  html[lang="ar"] .toy-card-name {
-    min-height: 3rem;
-  }
   html[lang="ar"] .hero-book-promo-title,
   html[lang="ar"] .hero-book-promo-subtitle {
     text-align: right;
@@ -1078,7 +1035,6 @@
     overflow-wrap: anywhere;
   }
   html[lang="ar"] .product-price,
-  html[lang="ar"] .toy-card-price,
   html[lang="ar"] .stat-num {
     direction: ltr;
     unicode-bidi: isolate;
