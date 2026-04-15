@@ -433,7 +433,8 @@ function renderHeroPromoRotator() {
     : DEFAULT_CONFIG.ui.heroPromoRotator.rotationIntervalMs;
 
   if (!heroPromoState.hasInitialized) {
-    heroPromoState.currentIndex = appState.config.ui.enableHeroBookPromo === false ? 1 : 0;
+    const startsFromGiftingLink = window.location.hash === '#heroPromoRotator';
+    heroPromoState.currentIndex = startsFromGiftingLink || appState.config.ui.enableHeroBookPromo === false ? 1 : 0;
     heroPromoState.hasInitialized = true;
   }
   heroPromoState.currentIndex = Math.min(heroPromoState.currentIndex, promoSlides.length - 1);
@@ -655,7 +656,29 @@ function initHeroPromoMotionPreference(promoContainer, promoSlides) {
   updateMotionPreference();
 }
 
+function initGiftingPromoAnchors(promoContainer, promoSlides) {
+  if (!promoContainer || promoContainer.dataset.giftingHooksBound) {
+    return;
+  }
+
+  const packagingPromoIndex = promoSlides.findIndex((slide) => slide.id === 'packagingPromo');
+  if (packagingPromoIndex < 0) {
+    return;
+  }
+
+  const activatePackagingPromo = () => {
+    goToHeroPromoSlide(packagingPromoIndex, promoContainer, promoSlides);
+  };
+
+  document.querySelectorAll('a[href="#heroPromoRotator"]').forEach((anchor) => {
+    anchor.addEventListener('click', activatePackagingPromo);
+  });
+
+  promoContainer.dataset.giftingHooksBound = 'true';
+}
+
 function initHeroPromoRotator(promoContainer, promoSlides) {
+  initGiftingPromoAnchors(promoContainer, promoSlides);
   initHeroPromoControls(promoContainer, promoSlides);
   initHeroPromoMotionPreference(promoContainer, promoSlides);
 

@@ -22,6 +22,9 @@
     }
   },
   "ui": {
+    "heroPromoRotator": {
+      "rotationIntervalMs": 4000
+    },
     "addButton": {
       "defaultSymbol": "+",
       "activeSymbol": "♡",
