@@ -445,13 +445,17 @@
   .hero-promo-rotator {
     position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    row-gap: 0.55rem;
     align-items: stretch;
     width: min(100%, 580px);
     margin-inline: auto;
     border-radius: 32px;
   }
   .hero-promo-slide {
-    grid-area: 1 / 1;
+    grid-column: 1;
+    grid-row: 2;
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -491,8 +495,9 @@
       visibility 0ms linear 380ms;
   }
   .hero-promo-controls {
-    grid-area: 1 / 1;
-    align-self: start;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
     justify-self: center;
     z-index: 4;
     display: inline-flex;
@@ -502,7 +507,7 @@
     border: 1px solid var(--border-soft);
     border-radius: 999px;
     padding: 0.3rem 0.45rem;
-    margin-top: 0.65rem;
+    margin-top: 0;
     backdrop-filter: blur(10px);
     box-shadow: 0 10px 22px var(--promo-shadow-soft);
   }
@@ -1371,7 +1376,7 @@
       transform: none;
     }
     .hero-promo-controls {
-      margin-top: 0.45rem;
+      margin-top: 0;
     }
 
     /* Trust bar */
