@@ -225,9 +225,14 @@
   "chat": {
     "title": "Ask Mama",
     "placeholder": "Ask Mama anything…",
-    "helperIntro": "Hi mama ♡ Tell me your child's age and interests, and I'll help you choose a toy.",
+    "welcomeText": "Hi mama ♡ Tell me your child's age and interests, and I'll help you choose a toy.",
     "send": "Send",
+    "loadingLabel": "Mama is thinking…",
+    "errorLabel": "Sorry mama, I couldn't answer right now. Please try again.",
     "closeAriaLabel": "Close chat",
-    "inputLabel": "Type your message"
+    "inputLabel": "Type your message",
+    "threadAriaLabel": "Chat conversation thread",
+    "inputAriaLabel": "Message input",
+    "sendAriaLabel": "Send message"
   }
 }

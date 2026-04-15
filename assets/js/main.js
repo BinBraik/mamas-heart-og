@@ -362,14 +362,88 @@ function initAskMamaModal() {
   const overlay = document.getElementById('chatModalOverlay');
   const modal = document.getElementById('chatModal');
   const closeButton = document.getElementById('chatModalClose');
+  const messagesContainer = document.getElementById('chatModalMessages');
   const form = document.getElementById('chatModalForm');
   const input = document.getElementById('chatModalInput');
+  const sendButton = form?.querySelector('button[type="submit"]');
   const originalBodyOverflow = document.body.style.overflow;
   let lastFocusedElement = null;
+  let chatHistory = [];
+  let isSubmitting = false;
 
-  if (!openButton || !overlay || !modal || !closeButton || !form || !input) {
+  if (!openButton || !overlay || !modal || !closeButton || !messagesContainer || !form || !input || !sendButton) {
     return;
   }
+
+  const getFocusableElements = () => Array.from(
+    modal.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((element) => !element.hasAttribute('hidden'));
+
+  const scrollMessagesToBottom = () => {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  };
+
+  const createMessageNode = (content, role = 'assistant', { isStatus = false } = {}) => {
+    const message = document.createElement('article');
+    message.className = `chat-message chat-message--${role}`;
+    if (isStatus) {
+      message.classList.add('chat-message--status');
+      message.setAttribute('aria-live', 'polite');
+    }
+
+    const text = document.createElement('p');
+    text.textContent = content;
+    message.appendChild(text);
+    return message;
+  };
+
+  const setSubmittingState = (submitting) => {
+    isSubmitting = submitting;
+    input.disabled = submitting;
+    sendButton.disabled = submitting;
+    form.setAttribute('aria-busy', String(submitting));
+  };
+
+  const appendMessage = (content, role = 'assistant', options = {}) => {
+    const message = createMessageNode(content, role, options);
+    messagesContainer.appendChild(message);
+    scrollMessagesToBottom();
+    return message;
+  };
+
+  const fetchAskMamaResponse = async (message) => {
+    const response = await fetch('/api/ask-mama', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message,
+        language: languageState.current,
+        chatHistory: chatHistory.slice(-12),
+      }),
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const errorMessage = payload?.error?.message;
+      throw new Error(typeof errorMessage === 'string' && errorMessage.trim()
+        ? errorMessage
+        : 'Ask Mama request failed');
+    }
+
+    const assistantText = typeof payload?.assistantText === 'string'
+      ? payload.assistantText.trim()
+      : '';
+
+    if (!assistantText) {
+      throw new Error('Ask Mama response was empty.');
+    }
+
+    return assistantText;
+  };
 
   const setModalOpen = (isOpen) => {
     if (isOpen) {
@@ -414,14 +488,66 @@ function initAskMamaModal() {
   });
 
   document.addEventListener('keydown', (event) => {
+    if (overlay.hidden) {
+      return;
+    }
+
     if (event.key === 'Escape' && !overlay.hidden) {
       setModalOpen(false);
+      return;
+    }
+
+    if (event.key === 'Tab') {
+      const focusableElements = getFocusableElements();
+      if (!focusableElements.length) {
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
     }
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    input.focus();
+    if (isSubmitting) {
+      return;
+    }
+
+    const message = input.value.trim();
+    if (!message) {
+      input.focus();
+      return;
+    }
+
+    appendMessage(message, 'user');
+    chatHistory.push({ role: 'user', content: message });
+    input.value = '';
+    setSubmittingState(true);
+    const loadingIndicator = appendMessage(translate('chat.loadingLabel'), 'assistant', { isStatus: true });
+
+    try {
+      const assistantText = await fetchAskMamaResponse(message);
+      loadingIndicator.remove();
+      appendMessage(assistantText, 'assistant');
+      chatHistory.push({ role: 'assistant', content: assistantText });
+    } catch (error) {
+      loadingIndicator.remove();
+      appendMessage(translate('chat.errorLabel'), 'assistant', { isStatus: true });
+      if (error instanceof Error) {
+        console.error(error);
+      }
+    } finally {
+      setSubmittingState(false);
+      input.focus();
+    }
   });
 }
 
